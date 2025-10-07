@@ -1,9 +1,14 @@
 {
   "name": "tourist-assistive-app",
   "version": "1.0.0",
-  "description": "Static web app - pre-built Flutter web application",
+  "description": "Tourist Assistive App for Ethiopia - Flutter Web Application",
+  "main": "build/web/index.html",
   "scripts": {
-    "build": "echo 'No build needed - using pre-built files'",
-    "install": "echo 'No install needed - using pre-built files'"
-  }
+    "build": "echo 'Build completed - using pre-built Flutter web app'",
+    "start": "echo 'Starting static server'",
+    "dev": "echo 'Development mode'"
+  },
+  "keywords": ["flutter", "ethiopia", "tourism", "amharic", "language-learning"],
+  "author": "Natiabay",
+  "license": "MIT"
 }
