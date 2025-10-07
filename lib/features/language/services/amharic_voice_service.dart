@@ -44,14 +44,16 @@ class AmharicVoiceService {
     try {
       _lastSpokenText = amharicText; // Store the last spoken text
       // Speak the Amharic text
-      await _flutterTts!.speak(amharicText);
-      
-      // If English translation provided, speak it after a delay
-      if (englishTranslation != null) {
-        await Future.delayed(const Duration(seconds: 2));
-        await _flutterTts!.setLanguage('en-US');
-        await _flutterTts!.speak(englishTranslation);
-        await _flutterTts!.setLanguage('am-ET'); // Reset to Amharic
+      if (_flutterTts != null) {
+        await _flutterTts!.speak(amharicText);
+        
+        // If English translation provided, speak it after a delay
+        if (englishTranslation != null) {
+          await Future.delayed(const Duration(seconds: 2));
+          await _flutterTts!.setLanguage('en-US');
+          await _flutterTts!.speak(englishTranslation);
+          await _flutterTts!.setLanguage('am-ET'); // Reset to Amharic
+        }
       }
     } catch (e) {
       debugPrint('❌ Error speaking Amharic: $e');
@@ -66,7 +68,9 @@ class AmharicVoiceService {
     }
 
     try {
-      await _audioPlayer!.play(UrlSource(audioUrl));
+      if (_audioPlayer != null) {
+        await _audioPlayer!.play(UrlSource(audioUrl));
+      }
     } catch (e) {
       debugPrint('❌ Error playing audio file: $e');
     }
@@ -96,8 +100,8 @@ class AmharicVoiceService {
   Future<void> resume() async {
     try {
       // flutter_tts doesn't have resume method, so we restart the speech
-      if (_lastSpokenText != null && _lastSpokenText!.isNotEmpty) {
-        await _flutterTts?.speak(_lastSpokenText!);
+      if (_lastSpokenText != null && _lastSpokenText!.isNotEmpty && _flutterTts != null) {
+        await _flutterTts!.speak(_lastSpokenText!);
       }
       await _audioPlayer?.resume();
     } catch (e) {
@@ -124,8 +128,11 @@ class AmharicVoiceService {
     if (_flutterTts == null) return [];
     
     try {
-      final languages = await _flutterTts!.getLanguages;
-      return languages.cast<String>();
+      if (_flutterTts != null) {
+        final languages = await _flutterTts!.getLanguages;
+        return languages.cast<String>();
+      }
+      return [];
     } catch (e) {
       debugPrint('❌ Error getting languages: $e');
       return [];
