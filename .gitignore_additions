@@ -1,0 +1,76 @@
+# Add these files to .gitignore
+
+# Local environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# API Keys and Secrets
+**/api_keys.json
+**/google-services.json
+**/GoogleService-Info.plist
+key.properties
+firebase_options.dart
+
+# Local configuration
+local.properties
+
+# Build outputs
+/build/
+/android/app/build/
+/ios/build/
+/web/build/
+
+# Generated files
+**/generated_plugin_registrant.dart
+**/GeneratedPluginRegistrant.*
+
+# Platform-specific
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+/test_driver/
+/integration_test/screenshots/
+
+# Coverage
+coverage/
+lcov.info
+
+# Documentation build
+/doc/api/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

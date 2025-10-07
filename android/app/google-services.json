@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "664798138963",
+    "project_id": "ethiopia-tourist-app-2024",
+    "storage_bucket": "ethiopia-tourist-app-2024.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664798138963:android:86ef208b78f6207274eca6",
+        "android_client_info": {
+          "package_name": "com.ethiopia.tourist.tourist_assistive_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaqU8wFE7xBWxcfoFN5dJvhA5cRoo6Hqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664798138963:android:86ef208b78f6207274eca6",
+        "android_client_info": {
+          "package_name": "com.ethiopia.tourist.tourist_assistive_app.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaqU8wFE7xBWxcfoFN5dJvhA5cRoo6Hqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664798138963:android:86ef208b78f6207274eca6",
+        "android_client_info": {
+          "package_name": "com.ethiopia.tourist.tourist_assistive_app.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaqU8wFE7xBWxcfoFN5dJvhA5cRoo6Hqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664798138963:android:86ef208b78f6207274eca6",
+        "android_client_info": {
+          "package_name": "com.ethiopia.tourist.tourist_assistive_app.staging.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaqU8wFE7xBWxcfoFN5dJvhA5cRoo6Hqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664798138963-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

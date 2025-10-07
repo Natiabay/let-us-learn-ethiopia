@@ -1,0 +1,28 @@
+# Ignore build artifacts
+build/
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+coverage/
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.iml
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore Flutter files
+.flutter-plugins
+.flutter-plugins-dependencies
+flutter_*.log
+
+# Keep only the web build
+!build/web/
+
+
+
+

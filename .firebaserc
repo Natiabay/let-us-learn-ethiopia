@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "ethiopia-tourist-app-2024"
+  },
+  "targets": {
+    "ethiopia-tourist-app-2024": {
+      "hosting": {
+        "ethiopia-tourist-app-2024": [
+          "ethiopia-tourist-app-2024"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
+
+
