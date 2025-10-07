@@ -346,7 +346,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
                 ),
                 child: Column(
                   children: [
-                    Expanded(
+                    Flexible(
                       child: ClipRRect(
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
                         child: Image.network(
