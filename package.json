@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "description": "Tourist Assistive App for Ethiopia - Flutter Web Application",
   "scripts": {
-    "build": "flutter build web --release",
-    "install": "flutter pub get"
-  },
-  "engines": {
-    "flutter": "3.22.2"
+    "build": "echo 'Build handled by GitHub Actions'",
+    "install": "echo 'Install handled by GitHub Actions'"
   }
 }
