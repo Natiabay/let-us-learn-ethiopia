@@ -1,18 +1,8 @@
 {
-  "version": 2,
   "builds": [
-    {
-      "src": "build/web/**",
-      "use": "@vercel/static"
-    }
+    { "src": "build/web/**", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "installCommand": "",
-  "buildCommand": "",
-  "outputDirectory": "build/web"
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
