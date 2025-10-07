@@ -1,14 +1,3 @@
-# Ignore everything except what's needed for web deployment
+# Only include the built web app
 *
-!lib/
-!web/
-!pubspec.yaml
-!pubspec.lock
-!assets/
-!analysis_options.yaml
-!README.md
-!LICENSE
-
-
-
-
+!build/web/

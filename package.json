@@ -1,9 +1,0 @@
-{
-  "name": "tourist-assistive-app",
-  "version": "1.0.0",
-  "description": "Tourist Assistive App for Ethiopia - Flutter Web Application",
-  "scripts": {
-    "build": "echo 'Build handled by GitHub Actions'",
-    "install": "echo 'Install handled by GitHub Actions'"
-  }
-}
