@@ -1,0 +1,9 @@
+{
+  "name": "tourist-assistive-app",
+  "version": "1.0.0",
+  "description": "Static web app - pre-built Flutter web application",
+  "scripts": {
+    "build": "echo 'No build needed - using pre-built files'",
+    "install": "echo 'No install needed - using pre-built files'"
+  }
+}

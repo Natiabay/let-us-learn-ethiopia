@@ -11,5 +11,8 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "installCommand": "",
+  "buildCommand": "",
+  "outputDirectory": "build/web"
 }
