@@ -8,6 +8,7 @@
 .pub-cache/
 .pub/
 /build/
+!build/web/
 
 # Android related
 **/android/**/gradle-wrapper.jar

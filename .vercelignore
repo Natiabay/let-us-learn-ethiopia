@@ -1,3 +1,5 @@
-# Only include the built web app
+# Include only the built web app and necessary files
 *
 !build/web/
+!vercel.json
+!package.json
