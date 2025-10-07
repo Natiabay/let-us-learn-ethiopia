@@ -110,7 +110,7 @@ class ChatSuggestionsWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 2),
-            Expanded(
+            Flexible(
               child: Text(
                 suggestion.subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(

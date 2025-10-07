@@ -287,7 +287,7 @@ class _EnhancedChatMessageWidgetState extends State<EnhancedChatMessageWidget>
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
+          Flexible(
             child: Text(
               widget.message.text,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -325,7 +325,7 @@ class _EnhancedChatMessageWidgetState extends State<EnhancedChatMessageWidget>
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
+          Flexible(
             child: Text(
               widget.message.text,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
