@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/features/locations/providers/locations_provider.dart';
 import 'package:tourist_assistive_app/features/locations/models/location_model.dart';
+import 'package:tourist_assistive_app/features/locations/screens/ar_location_view_screen.dart';
 
 /// Professional Location Detail Screen
 /// Navy Blue Theme | Real Photos | Comprehensive Information | No Pricing
@@ -264,9 +264,9 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.location_off_rounded, color: _textTertiary, size: 64),
+            const Icon(Icons.location_off_rounded, color: _textTertiary, size: 64),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Location not found',
               style: TextStyle(
                 fontSize: 24,
@@ -275,7 +275,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'The location you\'re looking for doesn\'t exist',
               style: TextStyle(
                 fontSize: 16,
@@ -332,7 +332,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -354,7 +354,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.7),
+                    Colors.black.withValues(alpha: 0.7),
                   ],
                 ),
               ),
@@ -394,7 +394,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -419,7 +419,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -449,10 +449,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _turquoise.withOpacity(0.3)),
+        border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -461,10 +461,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(Icons.info_rounded, color: _turquoise, size: 24),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 'Location Information',
                 style: TextStyle(
@@ -497,10 +497,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _blue.withOpacity(0.3)),
+        border: Border.all(color: _blue.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -509,10 +509,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(Icons.description_rounded, color: _blue, size: 24),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 'Detailed Description',
                 style: TextStyle(
@@ -526,7 +526,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
           const SizedBox(height: 16),
           Text(
             description,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: _textSecondary,
               height: 1.6,
@@ -546,10 +546,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _yellow.withOpacity(0.3)),
+        border: Border.all(color: _yellow.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -558,10 +558,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(Icons.star_rounded, color: _yellow, size: 24),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 'Key Highlights',
                 style: TextStyle(
@@ -578,12 +578,12 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.check_circle_rounded, color: _yellow, size: 16),
+                const Icon(Icons.check_circle_rounded, color: _yellow, size: 16),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     highlight,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: _textSecondary,
                       height: 1.4,
@@ -592,7 +592,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
                 ),
               ],
             ),
-          )).toList(),
+          )),
         ],
       ),
     );
@@ -610,10 +610,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _red.withOpacity(0.3)),
+        border: Border.all(color: _red.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -622,10 +622,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(Icons.history_rounded, color: _red, size: 24),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 'History & Significance',
                 style: TextStyle(
@@ -638,7 +638,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
           ),
           const SizedBox(height: 16),
           if (history != null) ...[
-            Text(
+            const Text(
               'Historical Background',
               style: TextStyle(
                 fontSize: 16,
@@ -649,7 +649,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
             const SizedBox(height: 8),
             Text(
               history,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: _textSecondary,
                 height: 1.5,
@@ -658,7 +658,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
             const SizedBox(height: 16),
           ],
           if (significance != null) ...[
-            Text(
+            const Text(
               'Cultural Significance',
               style: TextStyle(
                 fontSize: 16,
@@ -669,7 +669,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
             const SizedBox(height: 8),
             Text(
               significance,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: _textSecondary,
                 height: 1.5,
@@ -692,10 +692,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _turquoise.withOpacity(0.3)),
+        border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -704,10 +704,10 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(Icons.schedule_rounded, color: _turquoise, size: 24),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 'Visit Information',
                 style: TextStyle(
@@ -734,7 +734,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
           
           if (tips != null && tips.isNotEmpty) ...[
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Travel Tips',
               style: TextStyle(
                 fontSize: 16,
@@ -748,12 +748,12 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.lightbulb_rounded, color: _yellow, size: 16),
+                  const Icon(Icons.lightbulb_rounded, color: _yellow, size: 16),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       tip,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         color: _textSecondary,
                         height: 1.4,
@@ -762,7 +762,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
                   ),
                 ],
               ),
-            )).toList(),
+            )),
           ],
         ],
       ),
@@ -783,7 +783,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: _textPrimary,
@@ -792,7 +792,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
                 const SizedBox(height: 2),
                 Text(
                   value,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: _textSecondary,
                   ),
@@ -806,50 +806,81 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
   }
 
   Widget _buildActionButtons(LocationModel location) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: () {
-              // TODO: Implement directions
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Directions feature coming soon!'),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // TODO: Implement directions
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Directions feature coming soon!'),
+                      backgroundColor: _turquoise,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.directions_rounded),
+                label: const Text('Get Directions'),
+                style: ElevatedButton.styleFrom(
                   backgroundColor: _turquoise,
-                  behavior: SnackBarBehavior.floating,
+                  foregroundColor: _navyBlue,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              );
-            },
-            icon: const Icon(Icons.directions_rounded),
-            label: const Text('Get Directions'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _turquoise,
-              foregroundColor: _navyBlue,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
               ),
             ),
-          ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  // TODO: Implement share
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Share feature coming soon!'),
+                      backgroundColor: _blue,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.share_rounded),
+                label: const Text('Share'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: _blue,
+                  side: const BorderSide(color: _blue),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: OutlinedButton.icon(
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
             onPressed: () {
-              // TODO: Implement share
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Share feature coming soon!'),
-                  backgroundColor: _blue,
-                  behavior: SnackBarBehavior.floating,
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ARLocationViewScreen(
+                    locationName: location.name,
+                    locationImage: location.imageUrl,
+                  ),
                 ),
               );
             },
-            icon: const Icon(Icons.share_rounded),
-            label: const Text('Share'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: _blue,
-              side: BorderSide(color: _blue),
+            icon: const Icon(Icons.view_in_ar_rounded),
+            label: const Text('View in AR'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _yellow,
+              foregroundColor: _navyBlue,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -871,7 +902,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
             width: 100,
             child: Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: _textSecondary,
@@ -881,7 +912,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: _textPrimary,
               ),

@@ -96,14 +96,14 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: _navyCard,
-      elevation: 0,
-      leading: IconButton(
+        elevation: 0,
+        leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: _textPrimary),
-        onPressed: () => Navigator.pop(context),
-      ),
+          onPressed: () => Navigator.pop(context),
+        ),
       title: const Text(
         'Notifications',
-        style: TextStyle(
+              style: TextStyle(
           color: _textPrimary,
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -124,7 +124,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
   Widget _buildBody() {
     return Column(
-      children: [
+              children: [
         _buildSettingsSection(),
         Expanded(
           child: _buildNotificationsList(),
@@ -299,11 +299,11 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
                         Expanded(
                           child: Text(
                             notification['title'],
@@ -330,7 +330,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     const SizedBox(height: 4),
                     Text(
                       notification['message'],
-                      style: TextStyle(
+                style: TextStyle(
                         color: _textSecondary,
                         fontSize: 14,
                         height: 1.4,
@@ -410,7 +410,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           const SizedBox(height: 24),
           const Text(
             'No Notifications',
-            style: TextStyle(
+                  style: TextStyle(
               color: _textPrimary,
               fontSize: 24,
               fontWeight: FontWeight.w600,
@@ -420,11 +420,11 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           const Text(
             'You\'re all caught up!\nNew notifications will appear here.',
             textAlign: TextAlign.center,
-            style: TextStyle(
+                  style: TextStyle(
               color: _textSecondary,
               fontSize: 16,
+              ),
             ),
-          ),
         ],
       ),
     );

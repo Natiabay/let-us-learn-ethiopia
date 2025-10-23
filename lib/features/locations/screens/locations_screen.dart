@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/features/locations/providers/locations_provider.dart';
-import 'package:tourist_assistive_app/features/locations/models/location_model.dart';
+import 'package:tourist_assistive_app/features/locations/data/ethiopian_locations.dart';
 import 'package:tourist_assistive_app/features/locations/screens/location_detail_screen.dart';
+import 'package:tourist_assistive_app/features/locations/screens/tour_guides_screen.dart';
 
-/// Professional Ethiopian Tour Guide - Map-Focused Locations Screen
-/// Scrollable Image Gallery | Google Maps Integration | Real Historical Photos
-/// Navy Blue Background (#0A1929) with Turquoise Accents (#00D9B8)
+// Professional Color Palette with Better Contrast
+class LocationsColors {
+  static const deepNavy = Color(0xFF0A1929);
+  static const navyCard = Color(0xFF1A2F44);
+  static const turquoise = Color(0xFF00D9B8);
+  static const brightYellow = Color(0xFFFFD43B);
+  static const brightBlue = Color(0xFF1CB0F6);
+  static const brightGreen = Color(0xFF4CAF50);
+  static const brightRed = Color(0xFFFF4B4B);
+  static const pureWhite = Color(0xFFFFFFFF);
+  static const lightGray = Color(0xFFE2E8F0);
+  static const mediumGray = Color(0xFF94A3B8);
+  static const darkGray = Color(0xFF475569);
+  
+  // Enhanced contrast colors for better visibility
+  static const highContrastWhite = Color(0xFFFFFFFF);
+  static const highContrastBlack = Color(0xFF000000);
+  static const cardBackground = Color(0xFF1E293B);
+  static const accentBlue = Color(0xFF0EA5E9);
+  static const accentGreen = Color(0xFF10B981);
+  static const accentOrange = Color(0xFFF59E0B);
+}
+
 class LocationsScreen extends ConsumerStatefulWidget {
   const LocationsScreen({super.key});
 
@@ -16,392 +36,382 @@ class LocationsScreen extends ConsumerStatefulWidget {
   ConsumerState<LocationsScreen> createState() => _LocationsScreenState();
 }
 
-class _LocationsScreenState extends ConsumerState<LocationsScreen> {
-  // Professional color palette
-  static const Color _navyBlue = Color(0xFF0A1929);
-  static const Color _navyCard = Color(0xFF1A2F44);
-  static const Color _turquoise = Color(0xFF00D9B8);
-  static const Color _yellow = Color(0xFFFFD43B);
-  static const Color _blue = Color(0xFF1CB0F6);
-  static const Color _red = Color(0xFFFF4B4B);
-  static const Color _textPrimary = Color(0xFFFFFFFF);
-  static const Color _textSecondary = Color(0xFFB3B3B3);
-  static const Color _textTertiary = Color(0xFF8B949E);
-
-  String _selectedCategory = 'All';
-  String _searchQuery = '';
+class _LocationsScreenState extends ConsumerState<LocationsScreen>
+    with TickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
+  String _selectedView = 'grid'; // 'grid', 'list'
+  late AnimationController _fabController;
 
-  // Real historical site photos from Photos folder
-  final List<Map<String, dynamic>> _historicalPhotos = [
-    {
-      'id': 'lalibela',
-      'name': 'Lalibela Rock-Hewn Churches',
-      'image': 'assets/images/Lalibela.png',
-      'category': 'Historical',
-      'description': 'UNESCO World Heritage site with 11 monolithic churches carved from rock',
-      'location': 'Lalibela, Ethiopia',
-      'rating': 4.9,
-    },
-    {
-      'id': 'axum',
-      'name': 'Axum Obelisks',
-      'image': 'assets/images/Axum.png',
-      'category': 'Historical',
-      'description': 'Ancient capital of the Kingdom of Axum with towering obelisks',
-      'location': 'Axum, Ethiopia',
-      'rating': 4.7,
-    },
-    {
-      'id': 'bale',
-      'name': 'Bale Mountains National Park',
-      'image': 'assets/images/Bale.png',
-      'category': 'Natural',
-      'description': 'Highland park with unique wildlife and stunning landscapes',
-      'location': 'Bale, Ethiopia',
-      'rating': 4.6,
-    },
-    {
-      'id': 'jugol',
-      'name': 'Harar Jugol',
-      'image': 'assets/images/Jugol.png',
-      'category': 'Cultural',
-      'description': 'Walled city with 82 mosques and traditional houses',
-      'location': 'Harar, Ethiopia',
-      'rating': 4.8,
-    },
-    {
-      'id': 'lake_tana',
-      'name': 'Lake Tana',
-      'image': 'assets/images/lake tana.png',
-      'category': 'Natural',
-      'description': 'Source of the Blue Nile with ancient monasteries',
-      'location': 'Bahir Dar, Ethiopia',
-      'rating': 4.5,
-    },
-    {
-      'id': 'fassil_gimb',
-      'name': 'Fasil Ghebbi',
-      'image': 'assets/images/Fassil Gimb.png',
-      'category': 'Historical',
-      'description': 'Royal fortress complex of Gondar',
-      'location': 'Gondar, Ethiopia',
-      'rating': 4.4,
-    },
-    {
-      'id': 'danakil',
-      'name': 'Danakil Depression',
-      'image': 'assets/images/Danakil.png',
-      'category': 'Adventure',
-      'description': 'One of the hottest places on Earth with active volcanoes',
-      'location': 'Afar, Ethiopia',
-      'rating': 4.7,
-    },
-    {
-      'id': 'debre_damo',
-      'name': 'Debre Damo Monastery',
-      'image': 'assets/images/debre damo.png',
-      'category': 'Religious',
-      'description': 'Ancient monastery accessible only by rope',
-      'location': 'Tigray, Ethiopia',
-      'rating': 4.3,
-    },
-    {
-      'id': 'konso',
-      'name': 'Konso Cultural Landscape',
-      'image': 'assets/images/konso.png',
-      'category': 'Cultural',
-      'description': 'Traditional agricultural landscape with terraced fields',
-      'location': 'Konso, Ethiopia',
-      'rating': 4.2,
-    },
-    {
-      'id': 'semen_mountain',
-      'name': 'Semen Mountains',
-      'image': 'assets/images/Semen mountain.jpg',
-      'category': 'Natural',
-      'description': 'Dramatic mountain landscapes and wildlife',
-      'location': 'Semen, Ethiopia',
-      'rating': 4.8,
-    },
-    {
-      'id': 'blue_nile',
-      'name': 'Blue Nile Falls',
-      'image': 'assets/images/blue nile.png',
-      'category': 'Natural',
-      'description': 'Spectacular waterfall known as Tis Abay',
-      'location': 'Bahir Dar, Ethiopia',
-      'rating': 4.6,
-    },
-    {
-      'id': 'national_museum',
-      'name': 'National Museum of Ethiopia',
-      'image': 'assets/images/National museium.jpg',
-      'category': 'Cultural',
-      'description': 'Home to Lucy and other archaeological treasures',
-      'location': 'Addis Ababa, Ethiopia',
-      'rating': 4.5,
-    },
-  ];
+  // Correct Ethiopian historical site photos mapping with proper names
+  final Map<String, String> _photoMapping = {
+    // Lalibela Rock-Hewn Churches
+    'lalibela-churches': 'assets/images/Lalibela.png',
+    'lalibela': 'assets/images/Lalibela.png',
+    
+    // Axum Obelisks
+    'axum-obelisks': 'assets/images/Axum.png',
+    'axum': 'assets/images/Axum.png',
+    
+    // Gondar Castles
+    'gondar-castles': 'assets/images/Fassil Gimb.png',
+    'fassil-ghebbi': 'assets/images/Fassil Gimb.png',
+    
+    // Simien Mountains
+    'simien-mountains': 'assets/images/Semen mountain.jpg',
+    'simien': 'assets/images/Semen mountain.jpg',
+    
+    // Danakil Depression
+    'danakil-depression': 'assets/images/Danakil.png',
+    'danakil': 'assets/images/Danakil.png',
+    
+    // Bale Mountains
+    'bale-mountains': 'assets/images/Bale.png',
+    'bale': 'assets/images/Bale.png',
+    
+    // Harar Jugol
+    'harar-jugol': 'Photos/Harer.jpg',
+    'harar': 'Photos/Harer.jpg',
+    
+    // Lake Tana
+    'lake-tana': 'assets/images/lake tana.png',
+    'lake_tana': 'assets/images/lake tana.png',
+    
+    // Blue Nile Falls
+    'blue-nile-falls': 'assets/images/blue nile.png',
+    'blue_nile': 'assets/images/blue nile.png',
+    
+    // Konso Cultural Landscape
+    'konso-cultural': 'assets/images/konso.png',
+    'konso': 'assets/images/konso.png',
+    
+    // Debre Damo
+    'debre-damo': 'assets/images/debre damo.png',
+    'debre_damo': 'assets/images/debre damo.png',
+    
+    // National Museum
+    'national-museum': 'assets/images/National museium.jpg',
+    'national_museum': 'assets/images/National museium.jpg',
+    
+    // Additional Ethiopian sites with proper fallbacks
+    'tiya-archaeological': 'assets/images/Lalibela.png',
+    'yeha-temple': 'assets/images/Axum.png',
+    'abuna-yemata': 'assets/images/Lalibela.png',
+    'bete-amanuel': 'assets/images/Lalibela.png',
+    'omo-valley': 'assets/images/Bale.png',
+    'awash-national-park': 'assets/images/Bale.png',
+    'sof-omar-caves': 'assets/images/Danakil.png',
+    'entoto-mountains': 'assets/images/Semen mountain.jpg',
+    'adadi-mariam': 'assets/images/Lalibela.png',
+  };
 
-  void _showLocationDetail(Map<String, dynamic> photo) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.95,
-        decoration: const BoxDecoration(
-          color: _navyBlue,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: LocationDetailScreen(locationId: photo['id']),
-      ),
+  @override
+  void initState() {
+    super.initState();
+    _fabController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
     );
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _fabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('DEBUG: LocationsScreen build method called');
+    final locationsState = ref.watch(locationsProvider);
+    final filteredLocations = locationsState.filteredLocations;
+
     return Scaffold(
-      backgroundColor: _navyBlue,
-      body: Column(
-        children: [
-          // Professional Header
-          _buildHeader(),
-          
-          // Search and Filters
-          _buildSearchAndFilters(),
-          
-          // Main Content - Full Screen Gallery (No Map)
-          Expanded(
-            child: _buildScrollableGallery(),
-          ),
-        ],
+      backgroundColor: LocationsColors.deepNavy,
+      body: SafeArea(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            // Header
+            SliverToBoxAdapter(
+              child: _buildHeader(),
+            ),
+            // Search and Filters
+            SliverToBoxAdapter(
+              child: _buildSearchAndFilters(),
+            ),
+            // View Toggle
+            SliverToBoxAdapter(
+              child: _buildViewToggle(),
+            ),
+            // Content
+            _selectedView == 'list'
+                ? _buildListView(filteredLocations)
+                : _buildGridView(filteredLocations),
+          ],
+        ),
       ),
+      floatingActionButton: _buildFloatingActions(),
     );
   }
 
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: _navyCard,
-        border: Border(
-          bottom: BorderSide(color: _turquoise.withOpacity(0.3), width: 2),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            LocationsColors.deepNavy,
+            LocationsColors.navyCard,
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Compass Icon
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: _turquoise,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: _turquoise.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.explore_rounded,
-              color: _navyBlue,
-              size: 28,
-            ),
-          ),
-          const SizedBox(width: 16),
-          
-          // Title and Description
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Explore Ethiopia',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: _textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Discover ${_historicalPhotos.length} Historic Sites & Natural Wonders',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: _textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          // Stats Badges
           Row(
             children: [
-              _buildStatBadge('9', 'UNESCO Sites', _turquoise),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: LocationsColors.turquoise.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.explore_rounded,
+                  color: LocationsColors.turquoise,
+                  size: 28,
+                ),
+              ),
               const SizedBox(width: 12),
-              _buildStatBadge('15+', 'Natural Parks', _yellow),
-              const SizedBox(width: 12),
-              _buildStatBadge('20+', 'Historic Sites', _blue),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ethiopian Historical Sites',
+                      style: TextStyle(
+                        color: LocationsColors.pureWhite,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Welcome to Ethiopia 🇪🇹',
+                      style: TextStyle(
+                        color: LocationsColors.lightGray,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
+          const SizedBox(height: 16),
+          _buildStatsRow(),
         ],
       ),
+    ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.3, end: 0);
+  }
+
+  Widget _buildStatsRow() {
+    return Row(
+      children: [
+        _buildStatBadge(
+          icon: Icons.location_city_rounded,
+          label: '9 UNESCO Sites',
+          color: LocationsColors.turquoise,
+        ),
+        const SizedBox(width: 8),
+        _buildStatBadge(
+          icon: Icons.park_rounded,
+          label: '15+ Parks',
+          color: LocationsColors.brightGreen,
+        ),
+        const SizedBox(width: 8),
+        _buildStatBadge(
+          icon: Icons.temple_buddhist_rounded,
+          label: '20+ Historic',
+          color: LocationsColors.brightYellow,
+        ),
+      ],
     );
   }
 
-  Widget _buildStatBadge(String number, String label, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: _navyCard,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            number,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: color,
+  Widget _buildStatBadge({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: color, size: 18),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: _textSecondary,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildSearchAndFilters() {
-    return Container(
-      padding: const EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Column(
         children: [
           // Search Bar
           Container(
             decoration: BoxDecoration(
-              color: _navyCard,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: _turquoise.withOpacity(0.3)),
+              color: LocationsColors.navyCard,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: TextField(
               controller: _searchController,
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-              style: const TextStyle(color: _textPrimary),
-              decoration: InputDecoration(
-                hintText: 'Search historic sites, national parks...',
-                hintStyle: TextStyle(color: _textTertiary),
-                prefixIcon: Icon(Icons.search_rounded, color: _turquoise),
+              style: const TextStyle(color: LocationsColors.pureWhite),
+              decoration: const InputDecoration(
+                hintText: 'Search Ethiopian historical sites...',
+                hintStyle: TextStyle(color: LocationsColors.mediumGray),
+                prefixIcon: Icon(
+                  Icons.search_rounded,
+                  color: LocationsColors.turquoise,
+                ),
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.all(16),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
               ),
+              onChanged: (value) {
+                ref.read(locationsProvider.notifier).searchLocations(value);
+                setState(() {});
+              },
             ),
           ),
-          
-          const SizedBox(height: 16),
-          
-          // Category Filters - Professional Alignment
-          Container(
-            height: 50,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  'All', 'Historical', 'Natural', 'Religious', 'Cultural', 'Adventure'
-                ].map((category) {
-                  final isSelected = _selectedCategory == category;
-                  Color categoryColor = _textTertiary;
-                  if (category == 'Historical') categoryColor = _turquoise;
-                  if (category == 'Natural') categoryColor = _yellow;
-                  if (category == 'Religious') categoryColor = _blue;
-                  if (category == 'Cultural') categoryColor = _red;
-                  if (category == 'Adventure') categoryColor = const Color(0xFFFF6B35);
-                  
-                  return Container(
-                    margin: const EdgeInsets.only(right: 12),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _selectedCategory = category;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(25),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: isSelected ? categoryColor : _navyCard,
-                            borderRadius: BorderRadius.circular(25),
-                            border: Border.all(
-                              color: isSelected ? categoryColor : _textTertiary.withOpacity(0.3),
-                              width: 2,
-                            ),
-                            boxShadow: isSelected ? [
-                              BoxShadow(
-                                color: categoryColor.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ] : null,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (isSelected) ...[
-                                Icon(
-                                  Icons.check_circle_rounded,
-                                  color: _navyBlue,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 8),
-                              ],
-                              Text(
-                                category,
-                                style: TextStyle(
-                                  color: isSelected ? _navyBlue : _textPrimary,
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+          const SizedBox(height: 12),
+          // Category Filters
+          _buildCategoryFilters(),
+        ],
+      ),
+    ).animate().fadeIn(delay: 200.ms, duration: 400.ms);
+  }
+
+  Widget _buildCategoryFilters() {
+    final selectedCategory = ref.watch(locationsProvider).selectedCategory;
+    final categories = EthiopianLocations.categories;
+
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final category = categories[index];
+          final isSelected = category == selectedCategory;
+
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: FilterChip(
+              selected: isSelected,
+              label: Text(category),
+              labelStyle: TextStyle(
+                color: isSelected
+                    ? LocationsColors.deepNavy
+                    : LocationsColors.lightGray,
+                fontWeight: FontWeight.w600,
               ),
+              backgroundColor: LocationsColors.navyCard,
+              selectedColor: _getCategoryColor(category),
+              checkmarkColor: LocationsColors.deepNavy,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(
+                  color: isSelected
+                      ? _getCategoryColor(category)
+                      : LocationsColors.darkGray,
+                ),
+              ),
+              onSelected: (selected) {
+                ref.read(locationsProvider.notifier).filterByCategory(category);
+              },
+            ).animate(target: isSelected ? 1 : 0).scale(
+                  begin: const Offset(1, 1),
+                  end: const Offset(1.05, 1.05),
+                ),
+          );
+        },
+      ),
+    );
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category.toLowerCase()) {
+      case 'historical':
+        return LocationsColors.brightYellow;
+      case 'nature':
+        return LocationsColors.brightGreen;
+      case 'cultural':
+        return LocationsColors.turquoise;
+      case 'religious':
+        return LocationsColors.brightBlue;
+      case 'adventure':
+        return LocationsColors.brightRed;
+      default:
+        return LocationsColors.turquoise;
+    }
+  }
+
+  Widget _buildViewToggle() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Row(
+        children: [
+          Text(
+            '${ref.watch(locationsProvider).filteredLocations.length} Ethiopian Sites',
+            style: const TextStyle(
+              color: LocationsColors.lightGray,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const Spacer(),
+          Container(
+            decoration: BoxDecoration(
+              color: LocationsColors.navyCard,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                _buildViewButton(Icons.grid_view_rounded, 'grid'),
+                _buildViewButton(Icons.list_rounded, 'list'),
+              ],
             ),
           ),
         ],
@@ -409,298 +419,337 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
     );
   }
 
+  Widget _buildViewButton(IconData icon, String view) {
+    final isSelected = _selectedView == view;
+    return IconButton(
+      icon: Icon(icon),
+      color: isSelected ? LocationsColors.turquoise : LocationsColors.mediumGray,
+      onPressed: () {
+        setState(() {
+          _selectedView = view;
+        });
+      },
+    );
+  }
 
-  Widget _buildScrollableGallery() {
-    final filteredPhotos = _getFilteredPhotos();
-    print('DEBUG: filteredPhotos.length = ${filteredPhotos.length}');
-    print('DEBUG: _historicalPhotos.length = ${_historicalPhotos.length}');
-    print('DEBUG: _selectedCategory = $_selectedCategory');
-    print('DEBUG: _searchQuery = $_searchQuery');
-    
-    return Container(
-      margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: _navyCard,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: _turquoise.withOpacity(0.3), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
+  Widget _buildGridView(List<dynamic> locations) {
+    if (locations.isEmpty) {
+      return SliverToBoxAdapter(child: _buildEmptyState());
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(20),
+      sliver: SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.75,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final location = locations[index];
+            return _buildLocationCard(location, index);
+          },
+          childCount: locations.length,
+        ),
       ),
-      child: Column(
-        children: [
-          // Professional Gallery Header
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  _turquoise.withOpacity(0.2),
-                  _blue.withOpacity(0.1),
-                ],
-              ),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+    );
+  }
+
+  Widget _buildListView(List<dynamic> locations) {
+    if (locations.isEmpty) {
+      return SliverToBoxAdapter(child: _buildEmptyState());
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(20),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final location = locations[index];
+            return _buildLocationListTile(location, index);
+          },
+          childCount: locations.length,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLocationCard(dynamic location, int index) {
+    final imagePath = _photoMapping[location.id] ?? 'assets/images/Logo.png';
+    
+    return GestureDetector(
+      onTap: () => _showFullScreenImage(context, location, imagePath),
+      child: Container(
+        decoration: BoxDecoration(
+          color: LocationsColors.navyCard,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: LocationsColors.turquoise.withValues(alpha: 0.2),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-            child: Row(
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Real Ethiopian Historical Site Image
+            Stack(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: _turquoise,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _turquoise.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
                   ),
-                  child: const Icon(
-                    Icons.photo_library_rounded,
-                    color: _navyBlue,
-                    size: 28,
+                  child: Image.asset(
+                    imagePath,
+                    height: 140,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 140,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              _getCategoryColor(location.category),
+                              _getCategoryColor(location.category).withValues(alpha: 0.6),
+                            ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            _getCategoryIcon(location.category),
+                            color: LocationsColors.pureWhite,
+                            size: 48,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Historical Sites Gallery',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: _textPrimary,
+                // Rating Badge
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.star_rounded,
+                          color: LocationsColors.brightYellow,
+                          size: 16,
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Discover ${filteredPhotos.length} Ethiopian Heritage Sites',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: _textSecondary,
+                        const SizedBox(width: 4),
+                        Text(
+                          location.rating.toString(),
+                          style: const TextStyle(
+                            color: LocationsColors.pureWhite,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: _turquoise,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _turquoise.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                // Category Badge
+                Positioned(
+                  bottom: 8,
+                  left: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _getCategoryColor(location.category),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      location.category,
+                      style: const TextStyle(
+                        color: LocationsColors.deepNavy,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                  child: Text(
-                    '${filteredPhotos.length} Sites',
-                    style: const TextStyle(
-                      color: _navyBlue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-          
-          // Full-Screen Scrollable Gallery
-          filteredPhotos.isEmpty
-              ? Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: _navyBlue,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: _textTertiary.withOpacity(0.3)),
-                          ),
-                          child: Icon(Icons.search_off_rounded, color: _textTertiary, size: 64),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          'No sites found',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: _textPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Try a different search or category',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: _textSecondary,
-                          ),
-                        ),
-                      ],
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    location.name,
+                    style: const TextStyle(
+                      color: LocationsColors.pureWhite,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                )
-              : Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: filteredPhotos.length,
-                    itemBuilder: (context, index) {
-                      final photo = filteredPhotos[index];
-                      print('DEBUG: Building gallery item $index: ${photo['name']}');
-                      return _buildGalleryItem(photo, index);
-                    },
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on_rounded,
+                        color: LocationsColors.turquoise,
+                        size: 14,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          _getLocationCity(location),
+                          style: const TextStyle(
+                            color: LocationsColors.mediumGray,
+                            fontSize: 12,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-        ],
-      ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ).animate().fadeIn(delay: (100 * index).ms).slideY(begin: 0.3, end: 0),
     );
   }
 
-  Widget _buildGalleryItem(Map<String, dynamic> photo, int index) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: _navyCard,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: _turquoise.withOpacity(0.3)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+  Widget _buildLocationListTile(dynamic location, int index) {
+    final imagePath = _photoMapping[location.id] ?? 'assets/images/Logo.png';
+    
+    return GestureDetector(
+      onTap: () => _showFullScreenImage(context, location, imagePath),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: LocationsColors.navyCard,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: LocationsColors.turquoise.withValues(alpha: 0.2),
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => _showLocationDetail(photo),
-          borderRadius: BorderRadius.circular(20),
-          child: Row(
-            children: [
-              // Image Section
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(19),
-                  bottomLeft: Radius.circular(19),
-                ),
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      photo['image'],
-                      width: 150,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 150,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [_navyBlue, _navyCard],
-                            ),
-                          ),
-                          child: const Center(
-                            child: Icon(Icons.landscape_rounded, color: _textTertiary, size: 48),
-                          ),
-                        );
-                      },
-                    ),
-                    
-                    // Category Badge
-                    Positioned(
-                      top: 12,
-                      right: 12,
-                      child: _buildCategoryBadge(photo['category']),
-                    ),
-                    
-                    // Rating Badge
-                    Positioned(
-                      top: 12,
-                      left: 12,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: _yellow,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.star_rounded, color: _navyBlue, size: 14),
-                            const SizedBox(width: 4),
-                            Text(
-                              photo['rating'].toString(),
-                              style: const TextStyle(
-                                color: _navyBlue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+        ),
+        child: Row(
+          children: [
+            // Real Ethiopian Historical Site Image
+            ClipRRect(
+              borderRadius: const BorderRadius.horizontal(
+                left: Radius.circular(16),
+              ),
+              child: Image.asset(
+                imagePath,
+                height: 100,
+                width: 100,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          _getCategoryColor(location.category),
+                          _getCategoryColor(location.category).withValues(alpha: 0.6),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                    child: Icon(
+                      _getCategoryIcon(location.category),
+                      color: LocationsColors.pureWhite,
+                      size: 40,
+                    ),
+                  );
+                },
               ),
-              
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(16),
+            ),
+            // Content
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      photo['name'],
+                      location.name,
                       style: const TextStyle(
+                        color: LocationsColors.pureWhite,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: _textPrimary,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      location.description,
+                      style: const TextStyle(
+                        color: LocationsColors.mediumGray,
+                        fontSize: 12,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      photo['description'],
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: _textSecondary,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 12),
                     Row(
                       children: [
-                        Icon(Icons.location_on_rounded, color: _blue, size: 16),
-                        const SizedBox(width: 4),
-                        Expanded(
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _getCategoryColor(location.category).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: Text(
-                            photo['location'],
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: _textSecondary,
+                            location.category,
+                            style: TextStyle(
+                              color: _getCategoryColor(location.category),
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
                             ),
-                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(
+                          Icons.star_rounded,
+                          color: LocationsColors.brightYellow,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          location.rating.toString(),
+                          style: const TextStyle(
+                            color: LocationsColors.pureWhite,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -708,55 +757,204 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
                   ],
                 ),
               ),
-            ],
+            ),
+            const Padding(
+              padding: EdgeInsets.all(12),
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: LocationsColors.turquoise,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
+      ).animate().fadeIn(delay: (50 * index).ms).slideX(begin: 0.3, end: 0),
+    );
+  }
+
+  // Full-screen image viewer
+  void _showFullScreenImage(BuildContext context, dynamic location, String imagePath) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FullScreenImageViewer(
+          location: location,
+          imagePath: imagePath,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.search_off_rounded,
+            size: 80,
+            color: LocationsColors.mediumGray.withValues(alpha: 0.5),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'No Ethiopian sites found',
+            style: TextStyle(
+              color: LocationsColors.lightGray,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Try adjusting your search or filters',
+            style: TextStyle(
+              color: LocationsColors.mediumGray,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFloatingActions() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const TourGuidesScreen(),
+              ),
+            );
+          },
+          backgroundColor: LocationsColors.turquoise,
+          icon: const Icon(Icons.tour_rounded),
+          label: const Text(
+            'Imaginative Tour',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ).animate().fadeIn(delay: 400.ms).scale(),
+      ],
+    );
+  }
+
+  IconData _getCategoryIcon(String category) {
+    switch (category.toLowerCase()) {
+      case 'historical':
+        return Icons.account_balance_rounded;
+      case 'nature':
+        return Icons.landscape_rounded;
+      case 'cultural':
+        return Icons.theater_comedy_rounded;
+      case 'religious':
+        return Icons.temple_buddhist_rounded;
+      case 'adventure':
+        return Icons.terrain_rounded;
+      default:
+        return Icons.place_rounded;
+    }
+  }
+
+  String _getLocationCity(dynamic location) {
+    if (location.city != null && location.city.isNotEmpty) {
+      return location.city;
+    }
+    if (location.address != null && location.address.isNotEmpty) {
+      return location.address.split(',').first;
+    }
+    return 'Ethiopia';
+  }
+}
+
+// Full-screen image viewer widget
+class FullScreenImageViewer extends StatelessWidget {
+  final dynamic location;
+  final String imagePath;
+
+  const FullScreenImageViewer({
+    super.key,
+    required this.location,
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black.withValues(alpha: 0.5),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          location.name,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline_rounded, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LocationDetailScreen(locationId: location.id),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Center(
+        child: InteractiveViewer(
+          minScale: 0.5,
+          maxScale: 4.0,
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.image_not_supported_rounded,
+                      color: Colors.white,
+                      size: 80,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Image not available',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      location.name,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildCategoryBadge(String category) {
-    Color color = _textTertiary;
-    if (category == 'Historical') color = _turquoise;
-    if (category == 'Natural') color = _yellow;
-    if (category == 'Religious') color = _blue;
-    if (category == 'Cultural') color = _red;
-    if (category == 'Adventure') color = const Color(0xFFFF6B35);
-    
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        category,
-        style: const TextStyle(
-          color: _navyBlue,
-          fontWeight: FontWeight.bold,
-          fontSize: 10,
-        ),
-      ),
-    );
-  }
-
-  List<Map<String, dynamic>> _getFilteredPhotos() {
-    var filtered = _historicalPhotos;
-    
-    // Apply search filter
-    if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((photo) {
-        return photo['name'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
-               photo['description'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
-               photo['location'].toLowerCase().contains(_searchQuery.toLowerCase());
-      }).toList();
-    }
-    
-    // Apply category filter
-    if (_selectedCategory != 'All') {
-      filtered = filtered.where((photo) => photo['category'] == _selectedCategory).toList();
-    }
-    
-    return filtered;
   }
 }

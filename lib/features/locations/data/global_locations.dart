@@ -1,4 +1,3 @@
-import 'package:tourist_assistive_app/features/locations/data/ethiopian_locations.dart';
 
 /// Global tourist locations with emphasis on Ethiopian sites
 /// This class provides comprehensive global tourist destinations

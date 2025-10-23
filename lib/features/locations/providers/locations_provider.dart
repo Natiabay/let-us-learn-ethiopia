@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tourist_assistive_app/features/locations/models/location_model.dart';
-import 'package:tourist_assistive_app/features/locations/data/ethiopian_locations.dart';
 import 'package:tourist_assistive_app/features/locations/data/global_locations.dart';
 
 class LocationsState {
@@ -62,10 +61,8 @@ class LocationsNotifier extends StateNotifier<LocationsState> {
     try {
       // Load global locations with Ethiopian emphasis
       final globalLocations = GlobalLocations.all;
-      print('🌍 Loading ${globalLocations.length} global locations...');
       
       if (globalLocations.isEmpty) {
-        print('⚠️ No global locations found');
         state = state.copyWith(
           isLoading: false,
           error: 'No locations available',
@@ -96,9 +93,6 @@ class LocationsNotifier extends StateNotifier<LocationsState> {
         tags: location.tags,
       )).toList();
       
-      print('🌍 Successfully loaded ${locations.length} global locations');
-      print('🇪🇹 Ethiopian locations: ${locations.where((l) => l.isEthiopian == true).length}');
-      print('🌍 Other locations: ${locations.where((l) => l.isEthiopian != true).length}');
       
       state = state.copyWith(
         locations: locations,
@@ -106,7 +100,6 @@ class LocationsNotifier extends StateNotifier<LocationsState> {
         isLoading: false,
       );
     } catch (e) {
-      print('❌ Error loading global locations: $e');
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
