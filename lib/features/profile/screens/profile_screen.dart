@@ -29,97 +29,61 @@ class ProfileScreen extends ConsumerWidget {
 
   // Modal methods to show screens while keeping bottom navigation
   void _showEditProfile(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: _navyBlue,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: const EditProfileScreen(),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditProfileScreen(),
+        fullscreenDialog: true,
       ),
     );
   }
 
   void _showFavoriteLocations(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: _navyBlue,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: const FavoriteLocationsScreen(),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const FavoriteLocationsScreen(),
+        fullscreenDialog: true,
       ),
     );
   }
 
   void _showLearningProgress(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: _navyBlue,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: const LearningProgressScreen(),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LearningProgressScreen(),
+        fullscreenDialog: true,
       ),
     );
   }
 
   void _showSubscription(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: _navyBlue,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: const SubscriptionScreen(),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SubscriptionScreen(),
+        fullscreenDialog: true,
       ),
     );
   }
 
   void _showNotifications(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: _navyBlue,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: const NotificationsScreen(),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const NotificationsScreen(),
+        fullscreenDialog: true,
       ),
     );
   }
 
   void _showHelpSupport(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: const BoxDecoration(
-          color: _navyBlue,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: const HelpSupportScreen(),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HelpSupportScreen(),
+        fullscreenDialog: true,
       ),
     );
   }

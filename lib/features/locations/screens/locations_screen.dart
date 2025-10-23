@@ -168,22 +168,22 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('DEBUG: LocationsScreen build method called');
     return Scaffold(
       backgroundColor: _navyBlue,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            // Professional Header
-            _buildHeader(),
-            
-            // Search and Filters
-            _buildSearchAndFilters(),
-            
-            // Main Content - Full Screen Gallery (No Map)
-            _buildScrollableGallery(),
-          ],
-        ),
+      body: Column(
+        children: [
+          // Professional Header
+          _buildHeader(),
+          
+          // Search and Filters
+          _buildSearchAndFilters(),
+          
+          // Main Content - Full Screen Gallery (No Map)
+          Expanded(
+            child: _buildScrollableGallery(),
+          ),
+        ],
       ),
     );
   }
@@ -412,6 +412,10 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
 
   Widget _buildScrollableGallery() {
     final filteredPhotos = _getFilteredPhotos();
+    print('DEBUG: filteredPhotos.length = ${filteredPhotos.length}');
+    print('DEBUG: _historicalPhotos.length = ${_historicalPhotos.length}');
+    print('DEBUG: _selectedCategory = $_selectedCategory');
+    print('DEBUG: _searchQuery = $_searchQuery');
     
     return Container(
       margin: const EdgeInsets.all(20),
@@ -516,8 +520,7 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
           
           // Full-Screen Scrollable Gallery
           filteredPhotos.isEmpty
-              ? Container(
-                  height: 200,
+              ? Expanded(
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -552,15 +555,16 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
                     ),
                   ),
                 )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(20),
-                  itemCount: filteredPhotos.length,
-                  itemBuilder: (context, index) {
-                    final photo = filteredPhotos[index];
-                    return _buildGalleryItem(photo, index);
-                  },
+              : Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: filteredPhotos.length,
+                    itemBuilder: (context, index) {
+                      final photo = filteredPhotos[index];
+                      print('DEBUG: Building gallery item $index: ${photo['name']}');
+                      return _buildGalleryItem(photo, index);
+                    },
+                  ),
                 ),
         ],
       ),
