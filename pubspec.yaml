@@ -40,6 +40,11 @@ dependencies:
   audioplayers: ^6.1.0
   # speech_to_text: ^6.6.0  # Temporarily disabled due to build issues
   
+  # Offline Support (dependencies already added above)
+  
+  # Fonts
+  google_fonts: ^6.2.1
+  
   # Google Cloud APIs
   googleapis: ^15.0.0
   googleapis_auth: ^2.0.0
@@ -93,7 +98,8 @@ flutter:
     - assets/images/
     - assets/animations/
     - assets/audio/
-    - assets/icons/
+    - Photos/
+    - assets/images/lessons/
     - EthiopiaHandbook.pdf
     - amhariclearning.pdf
 
@@ -107,6 +113,3 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/images/ethio_assist_logo.png"
-  
-
-

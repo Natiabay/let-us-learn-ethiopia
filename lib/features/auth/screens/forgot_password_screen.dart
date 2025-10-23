@@ -73,7 +73,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color(0xFF58CC02),
+                      Color(0xFF00D9B8),
                       Color(0xFF1CB0F6),
                       Color(0xFFCE82FF),
                     ],
@@ -143,7 +143,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                       child: const Icon(
                         Icons.lock_reset_rounded,
                         size: 40,
-                        color: Color(0xFF58CC02),
+                        color: Color(0xFF00D9B8),
                       ),
                     ),
                     SizedBox(height: size.height < 700 ? 16 : 24),
@@ -197,10 +197,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF58CC02).withValues(alpha: 0.1),
+                            color: const Color(0xFF00D9B8).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: const Color(0xFF58CC02).withValues(alpha: 0.2),
+                              color: const Color(0xFF00D9B8).withValues(alpha: 0.2),
                               width: 1,
                             ),
                           ),
@@ -209,12 +209,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF58CC02).withValues(alpha: 0.2),
+                                  color: const Color(0xFF00D9B8).withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Icon(
                                   Icons.info_outline_rounded,
-                                  color: Color(0xFF58CC02),
+                                  color: Color(0xFF00D9B8),
                                   size: 20,
                                 ),
                               ),
@@ -291,7 +291,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                    colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -356,7 +356,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+            color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -385,7 +385,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                     end: Alignment.bottomRight,
                   )
                 : const LinearGradient(
-                    colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                    colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -493,7 +493,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
             ),
           ],
         ),
-        backgroundColor: isError ? const Color(0xFFE53E3E) : const Color(0xFF58CC02),
+        backgroundColor: isError ? const Color(0xFFE53E3E) : const Color(0xFF00D9B8),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(16),

@@ -624,10 +624,10 @@ class _ProfessionalAuthScreenState extends ConsumerState<ProfessionalAuthScreen>
       height: 56,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF58CC02),
-          foregroundColor: Colors.white,
+          backgroundColor: const Color(0xFF00D9B8), // Vibrant turquoise
+          foregroundColor: const Color(0xFF0A1929), // Dark navy text for better contrast
           elevation: 8,
-          shadowColor: const Color(0xFF58CC02).withValues(alpha: 0.3),
+          shadowColor: const Color(0xFF00D9B8).withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -673,7 +673,7 @@ class _ProfessionalAuthScreenState extends ConsumerState<ProfessionalAuthScreen>
                 onTap: () => setState(() => _isLoginView = !_isLoginView),
                 child: Text(
                   _isLoginView ? 'Sign Up' : 'Login',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color(0xFF58CC02),
                     fontWeight: FontWeight.bold,
                   ),

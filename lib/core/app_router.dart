@@ -16,7 +16,7 @@ import 'package:tourist_assistive_app/features/payment/screens/payment_dashboard
 import 'package:tourist_assistive_app/features/home/screens/main_screen.dart';
 import 'package:tourist_assistive_app/features/home/screens/home_dashboard.dart';
 import 'package:tourist_assistive_app/features/language/screens/language_learning_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/duolingo_lesson_screen.dart';
+import 'package:tourist_assistive_app/features/language/screens/enhanced_amharic_lesson_screen.dart';
 import 'package:tourist_assistive_app/features/language/screens/english_amharic_lessons_screen.dart';
 import 'package:tourist_assistive_app/features/language/screens/multilingual_amharic_lessons_screen.dart';
 import 'package:tourist_assistive_app/features/language/screens/language_selection_screen.dart';
@@ -29,11 +29,9 @@ import 'package:tourist_assistive_app/features/language/screens/portuguese_amhar
 import 'package:tourist_assistive_app/features/language/screens/russian_amharic_lessons_screen.dart';
 import 'package:tourist_assistive_app/features/language/screens/japanese_amharic_lessons_screen.dart';
 import 'package:tourist_assistive_app/features/language/screens/english_amharic_dictionary_screen.dart';
-import 'package:tourist_assistive_app/features/locations/screens/locations_screen.dart';
-import 'package:tourist_assistive_app/features/locations/screens/location_detail_screen.dart';
 import 'package:tourist_assistive_app/features/locations/screens/location_detail_screen_enhanced.dart';
-import 'package:tourist_assistive_app/features/locations/screens/modern_locations_screen.dart';
-import 'package:tourist_assistive_app/features/chat/screens/advanced_chatbot_screen.dart';
+import 'package:tourist_assistive_app/features/locations/screens/locations_screen.dart';
+import 'package:tourist_assistive_app/features/home/screens/main_screen.dart';
 import 'package:tourist_assistive_app/features/chat/screens/modern_chat_screen.dart';
 import 'package:tourist_assistive_app/features/profile/screens/profile_screen.dart';
 import 'package:tourist_assistive_app/features/profile/screens/edit_profile_screen.dart';
@@ -226,7 +224,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'amharic/lesson/:lessonId',
             builder: (context, state) {
-              return DuolingoLessonScreen(
+              return EnhancedAmharicLessonScreen(
                 lessonId: state.pathParameters['lessonId']!,
               );
             },
@@ -290,7 +288,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/locations',
-        builder: (context, state) => const ModernLocationsScreen(),
+        builder: (context, state) => const MainScreen(child: LocationsScreen()),
         routes: [
           GoRoute(
             path: 'detail/:locationId',

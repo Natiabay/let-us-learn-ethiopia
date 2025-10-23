@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 import 'package:tourist_assistive_app/features/language/data/amharic_lessons_data.dart';
 import 'package:tourist_assistive_app/features/language/models/comprehensive_lesson_model.dart';
 import 'package:tourist_assistive_app/features/language/services/amharic_voice_service.dart';
-import 'package:tourist_assistive_app/features/language/services/amharic_image_service.dart';
 import 'package:tourist_assistive_app/features/subscription/providers/subscription_provider.dart';
+import 'package:tourist_assistive_app/features/language/providers/duolingo_progress_provider.dart';
+// import 'package:tourist_assistive_app/features/language/widgets/duolingo_dashboard_widget.dart';
 
 class MultilingualLearningDashboard extends ConsumerStatefulWidget {
   const MultilingualLearningDashboard({super.key});
@@ -47,9 +49,9 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
   Future<void> _initializeAmharicServices() async {
     try {
       await AmharicVoiceService().initialize();
-      debugPrint('✅ Amharic services initialized');
+      // Amharic services initialized
     } catch (e) {
-      debugPrint('❌ Failed to initialize Amharic services: $e');
+      // Failed to initialize Amharic services: $e
     }
   }
 
@@ -64,8 +66,29 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A1A), // Dark theme like Duolingo
+      backgroundColor: AppColors.duolingoDark,
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1A1A1A),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+            size: 20,
+          ),
+          onPressed: () => context.go('/home'),
+        ),
+        title: const Text(
+          'Learn Amharic',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -75,6 +98,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
               _buildTopBar(),
               _buildWelcomeSection(),
               _buildLanguageSelection(),
+              _buildComprehensiveLearningSection(),
               _buildLessonsSection(),
               const SizedBox(height: 20), // Reduced space since we have padding
             ],
@@ -114,7 +138,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: const Color(0xFF58CC02),
+              color: const Color(0xFF00D9B8),
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 2),
             ),
@@ -220,14 +244,14 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF58CC02), Color(0xFF4CAF50)],
+          colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+            color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -302,85 +326,13 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
             ],
           ),
           const SizedBox(height: 20),
-          // Level and Progress
-          Row(
-            children: [
-              // Level indicator
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Text(
-                    '1',
-                    style: TextStyle(
-                      color: Color(0xFF58CC02),
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Level 1',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      '0 / 50 XP',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    // Progress bar
-                    Container(
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: FractionallySizedBox(
-                        alignment: Alignment.centerLeft,
-                        widthFactor: 0.0, // 0% progress
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      '50 XP to next level',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          // Duolingo Dashboard Widget
+          // const DuolingoDashboardWidget(), // Commented out - widget not found
         ],
       ),
     ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.3, end: 0);
   }
+
 
   Widget _buildLanguageSelection() {
     return Container(
@@ -410,9 +362,6 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
           _buildLanguageSelectionButton(),
           const SizedBox(height: 20),
           
-          // Comprehensive Amharic Lessons Section
-          _buildComprehensiveAmharicLessons(),
-          const SizedBox(height: 20),
           
           _buildTrialAccessButton(),
         ],
@@ -432,7 +381,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -751,26 +700,15 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '12',
-                                style: TextStyle(
-                                  color: Color(0xFF1CB0F6),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          child: const Center(
+                            child: Text(
+                              '12',
+                              style: TextStyle(
+                                color: Color(0xFF1CB0F6),
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text(
-                                '34',
-                                style: TextStyle(
-                                  color: Color(0xFF1CB0F6),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -804,7 +742,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
                 LinearProgressIndicator(
                   value: 0.0, // 0% complete
                   backgroundColor: const Color(0xFF1A1A1A),
-                  valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF58CC02)),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00D9B8)),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 const SizedBox(height: 4),
@@ -881,187 +819,123 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
     context.push('/language/dictionary');
   }
 
-  Widget _buildComprehensiveAmharicLessons() {
-    final allLessons = AmharicLessonsData.getAllAmharicLessons();
-    final beginnerLessons = allLessons.where((lesson) => lesson.level == LanguageLevel.beginner).length;
-    final intermediateLessons = allLessons.where((lesson) => lesson.level == LanguageLevel.intermediate).length;
-    final advancedLessons = allLessons.where((lesson) => lesson.level == LanguageLevel.advanced).length;
-    final totalEstimatedMinutes = allLessons.fold(0, (sum, lesson) => sum + lesson.estimatedMinutes);
-    
+  Widget _buildComprehensiveLearningSection() {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF1CB0F6),
-            Color(0xFFCE82FF),
-            Color(0xFF58CC02),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
+      margin: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.menu_book_rounded,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Comprehensive Amharic Lessons',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                           Text(
-                             '${allLessons.length} professional lessons with real images & voice',
-                             style: TextStyle(
-                               color: Colors.white.withValues(alpha: 0.9),
-                               fontSize: 14,
-                             ),
-                           ),
-                  ],
-                ),
-              ),
-            ],
+          const Text(
+            'Advanced Learning',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          const SizedBox(height: 20),
-          
-          // Lesson Statistics
+          const SizedBox(height: 16),
           Row(
             children: [
-                     Expanded(
-                       child: _buildStatCard(
-                         'Beginner',
-                         '$beginnerLessons lessons',
-                         Icons.play_circle_outline,
-                       ),
-                     ),
-                     const SizedBox(width: 12),
-                     Expanded(
-                       child: _buildStatCard(
-                         'Intermediate',
-                         '$intermediateLessons lessons',
-                         Icons.school_outlined,
-                       ),
-                     ),
+              Expanded(
+                child: _buildAdvancedLearningCard(
+                  title: 'Comprehensive',
+                  subtitle: '500+ lessons',
+                  icon: Icons.school,
+                  color: const Color(0xFF00D9B8),
+                  onTap: () => context.push('/language/comprehensive'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildAdvancedLearningCard(
+                  title: 'Combined',
+                  subtitle: '200+ lessons',
+                  icon: Icons.library_books,
+                  color: const Color(0xFF1CB0F6),
+                  onTap: () => context.push('/language/combined'),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
           Row(
             children: [
-                     Expanded(
-                       child: _buildStatCard(
-                         'Advanced',
-                         '$advancedLessons lessons',
-                         Icons.star_outline,
-                       ),
-                     ),
-                     const SizedBox(width: 12),
-                     Expanded(
-                       child: _buildStatCard(
-                         'Total Time',
-                         '$totalEstimatedMinutes min',
-                         Icons.access_time,
-                       ),
-                     ),
+              Expanded(
+                child: _buildAdvancedLearningCard(
+                  title: 'Intermediate',
+                  subtitle: 'Advanced lessons',
+                  icon: Icons.trending_up,
+                  color: const Color(0xFFCE82FF),
+                  onTap: () => context.push('/language/intermediate'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildAdvancedLearningCard(
+                  title: 'Dictionary',
+                  subtitle: '10,000+ words',
+                  icon: Icons.book,
+                  color: const Color(0xFFFF6B6B),
+                  onTap: _openDictionary,
+                ),
+              ),
             ],
-          ),
-          const SizedBox(height: 20),
-          
-          // Start Learning Button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () => _startComprehensiveLessons(),
-              icon: const Icon(Icons.rocket_launch, color: Colors.white),
-              label: const Text(
-                'Start Comprehensive Learning',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white.withValues(alpha: 0.2),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 1000.ms).slideY(begin: 0.3, end: 0);
-  }
-
-  Widget _buildStatCard(String title, String value, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.white, size: 20),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 10,
-            ),
           ),
         ],
       ),
     );
   }
 
-  void _startComprehensiveLessons() {
-    // Navigate to Amharic lessons
-    context.push('/language/amharic');
+  Widget _buildAdvancedLearningCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: color.withValues(alpha: 0.3),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 32,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[400],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
+
+
+
 
   Widget _buildTrialAccessButton() {
     // Remove access restrictions - show welcome message instead
@@ -1069,10 +943,10 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF58CC02).withValues(alpha: 0.1),
+        color: const Color(0xFF00D9B8).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+          color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
           width: 2,
         ),
       ),
@@ -1080,7 +954,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
         children: [
           const Icon(
             Icons.school,
-            color: Color(0xFF58CC02),
+            color: Color(0xFF00D9B8),
             size: 32,
           ),
           const SizedBox(height: 8),
@@ -1114,11 +988,11 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('🎉 Free trial started! You now have 24 hours of full access.'),
-          backgroundColor: Color(0xFF58CC02),
+          backgroundColor: Color(0xFF00D9B8),
         ),
       );
     } catch (e) {
-      print('Error starting free trial: $e');
+      // Error starting free trial: $e
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error starting trial: $e'),
@@ -1190,7 +1064,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
     required VoidCallback onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: const Color(0xFF58CC02)),
+      leading: Icon(icon, color: const Color(0xFF00D9B8)),
       title: Text(
         title,
         style: const TextStyle(color: Colors.white),

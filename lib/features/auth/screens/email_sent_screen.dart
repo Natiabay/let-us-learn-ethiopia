@@ -68,7 +68,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color(0xFF58CC02),
+                      Color(0xFF00D9B8),
                       Color(0xFF1CB0F6),
                       Color(0xFFCE82FF),
                     ],
@@ -145,7 +145,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
                               child: const Icon(
                                 Icons.mark_email_read_rounded,
                                 size: 50,
-                                color: Color(0xFF58CC02),
+                                color: Color(0xFF00D9B8),
                               ),
                             ),
                           ),
@@ -228,7 +228,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     gradient: const LinearGradient(
-                                      colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                                      colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -289,7 +289,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: const Color(0xFF58CC02),
+                                color: const Color(0xFF00D9B8),
                                 width: 2,
                               ),
                             ),
@@ -297,7 +297,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
                               onPressed: _handleResendEmail,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
-                                foregroundColor: const Color(0xFF58CC02),
+                                foregroundColor: const Color(0xFF00D9B8),
                                 elevation: 0,
                                 shadowColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
@@ -331,7 +331,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+                                  color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -351,7 +351,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
                               child: Container(
                                 decoration: const BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                                    colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                                   ),
                                   borderRadius: BorderRadius.all(Radius.circular(12)),
                                 ),
@@ -438,7 +438,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
           width: 24,
           height: 24,
           decoration: const BoxDecoration(
-            color: Color(0xFF58CC02),
+            color: Color(0xFF00D9B8),
             shape: BoxShape.circle,
           ),
           child: Center(
@@ -486,7 +486,7 @@ class _EmailSentScreenState extends ConsumerState<EmailSentScreen>
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Reset email sent again!'),
-        backgroundColor: Color(0xFF58CC02),
+        backgroundColor: Color(0xFF00D9B8),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
         margin: EdgeInsets.all(16),

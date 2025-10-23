@@ -67,7 +67,7 @@ class AudioService {
         await _callWebTTS(text, languageCode);
       } else {
         print('🔊 Web TTS: Speaking $languageCode - $text');
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
         print('✅ TTS completed for: $text');
       }
     } catch (e) {
@@ -81,7 +81,7 @@ class AudioService {
       // This would use js interop in a real implementation
       // For now, we'll simulate the TTS
       print('🔊 Web TTS: Speaking $languageCode - $text');
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
       print('✅ TTS completed for: $text');
     } catch (e) {
       print('JavaScript TTS error: $e');

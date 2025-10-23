@@ -91,7 +91,7 @@ class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScree
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+          colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -193,7 +193,7 @@ class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScree
         'name': 'Arabic',
         'native': 'العربية',
         'flag': '🇸🇦',
-        'color': const Color(0xFF58CC02),
+        'color': const Color(0xFF00D9B8),
       },
       {
         'code': 'fr',

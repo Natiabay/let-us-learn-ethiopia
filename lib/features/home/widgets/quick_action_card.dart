@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:tourist_assistive_app/core/theme/app_theme.dart';
 
+/// Professional quick action card with smooth animations
+/// Provides interactive feedback and consistent styling
 class QuickActionCard extends StatefulWidget {
+  /// The icon to display in the card
   final IconData icon;
+  
+  /// The main title text
   final String title;
+  
+  /// The subtitle or description text
   final String subtitle;
+  
+  /// The primary color theme for the card
   final Color color;
+  
+  /// Callback function when the card is tapped
   final VoidCallback onTap;
 
   const QuickActionCard({
@@ -103,8 +115,8 @@ class _QuickActionCardState extends State<QuickActionCard>
                           widget.color.withValues(alpha: 0.2),
                         ]
                       : [
-                          Colors.white,
-                          widget.color.withValues(alpha: 0.05),
+                          AppColors.duolingoCard,
+                          widget.color.withValues(alpha: 0.1),
                         ],
                 ),
                 borderRadius: BorderRadius.circular(20),
@@ -121,7 +133,7 @@ class _QuickActionCardState extends State<QuickActionCard>
                     offset: Offset(0, _elevationAnimation.value),
                   ),
                   BoxShadow(
-                    color: Colors.white.withValues(alpha: 0.8),
+                    color: AppColors.duolingoDark.withValues(alpha: 0.8),
                     blurRadius: 1,
                     offset: const Offset(0, -1),
                   ),
@@ -154,7 +166,7 @@ class _QuickActionCardState extends State<QuickActionCard>
                     ),
                     child: Icon(
                       widget.icon,
-                      color: Colors.white,
+                      color: AppColors.duolingoTextPrimary,
                       size: 20,
                     ),
                   ),
@@ -165,7 +177,7 @@ class _QuickActionCardState extends State<QuickActionCard>
                     widget.title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D3748),
+                      color: AppColors.duolingoTextPrimary,
                       fontSize: 12,
                     ),
                     maxLines: 1,
@@ -177,7 +189,7 @@ class _QuickActionCardState extends State<QuickActionCard>
                   Text(
                     widget.subtitle,
                     style: TextStyle(
-                      color: const Color(0xFF718096),
+                      color: AppColors.duolingoTextSecondary,
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),

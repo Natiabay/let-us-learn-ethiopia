@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 import 'package:confetti/confetti.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/features/language/models/amharic_lesson_model.dart';
@@ -48,7 +49,7 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
     final lessons = AmharicLessonsData.getLessons();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF58CC02), // Duolingo green background
+      backgroundColor: AppColors.duolingoDark,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -59,11 +60,11 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
               // Duolingo-style header with Duo mascot
               _buildDuolingoHeader(amharicProvider),
               
-              // Main content area with white background
+              // Main content area with dark background
               Container(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: AppColors.duolingoCard,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(24),
                     topRight: Radius.circular(24),
@@ -122,7 +123,7 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
             ),
             child: const Icon(
               Icons.pets, // Duo mascot icon
-              color: Color(0xFF58CC02),
+              color: Color(0xFF00D9B8),
               size: 28,
             ),
           ),
@@ -209,10 +210,10 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF58CC02).withValues(alpha: 0.1),
+        color: const Color(0xFF00D9B8).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+          color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
           width: 2,
         ),
       ),
@@ -223,7 +224,7 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
             width: 60,
             height: 60,
             decoration: const BoxDecoration(
-              color: Color(0xFF58CC02),
+              color: Color(0xFF00D9B8),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -315,7 +316,7 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
     IconData nodeIcon;
     
     if (isCompleted) {
-      nodeColor = const Color(0xFF58CC02); // Green for completed
+      nodeColor = const Color(0xFF00D9B8); // Green for completed
       nodeIcon = Icons.check;
     } else if (isCurrent) {
       nodeColor = const Color(0xFF1CB0F6); // Blue for current
@@ -495,14 +496,14 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF58CC02), Color(0xFF4CAF50)],
+          colors: [Color(0xFF00D9B8), Color(0xFF4CAF50)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+            color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -537,7 +538,7 @@ class _DuolingoStyleDashboardState extends ConsumerState<DuolingoStyleDashboard>
             onPressed: _openTranslationScreen,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF58CC02),
+              foregroundColor: const Color(0xFF00D9B8),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),

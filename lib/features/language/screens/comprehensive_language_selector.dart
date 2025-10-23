@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 
 class ComprehensiveLanguageSelector extends ConsumerStatefulWidget {
   const ComprehensiveLanguageSelector({super.key});
@@ -41,7 +42,7 @@ class _ComprehensiveLanguageSelectorState extends ConsumerState<ComprehensiveLan
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A1A), // Dark theme
+      backgroundColor: AppColors.duolingoDark,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -76,7 +77,7 @@ class _ComprehensiveLanguageSelectorState extends ConsumerState<ComprehensiveLan
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFF58CC02),
+            color: const Color(0xFF00D9B8),
             shape: BoxShape.circle,
           ),
           child: const Icon(
@@ -142,14 +143,14 @@ class _ComprehensiveLanguageSelectorState extends ConsumerState<ComprehensiveLan
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF58CC02), Color(0xFF4CAF50)],
+          colors: [Color(0xFF00D9B8), Color(0xFF4CAF50)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+            color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -186,7 +187,7 @@ class _ComprehensiveLanguageSelectorState extends ConsumerState<ComprehensiveLan
             child: const Text(
               'Start Learning',
               style: TextStyle(
-                color: Color(0xFF58CC02),
+                color: Color(0xFF00D9B8),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),

@@ -69,7 +69,7 @@ class _PortugueseAmharicLessonsScreenState extends ConsumerState<PortugueseAmhar
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
               )
             : SingleChildScrollView(
@@ -267,7 +267,7 @@ class _PortugueseAmharicLessonsScreenState extends ConsumerState<PortugueseAmhar
               'Tempo',
               '${totalMinutes}min',
               Icons.access_time,
-              const Color(0xFF58CC02),
+              const Color(0xFF00D9B8),
             ),
           ),
         ],
@@ -333,8 +333,8 @@ class _PortugueseAmharicLessonsScreenState extends ConsumerState<PortugueseAmhar
     Color borderColor = const Color(0xFF2A2A2A);
     
     if (isCompleted) {
-      backgroundColor = const Color(0xFF58CC02);
-      borderColor = const Color(0xFF58CC02);
+      backgroundColor = const Color(0xFF00D9B8);
+      borderColor = const Color(0xFF00D9B8);
     } else if (isUnlocked) {
       backgroundColor = const Color(0xFF1CB0F6).withValues(alpha: 0.1);
       borderColor = const Color(0xFF1CB0F6).withValues(alpha: 0.3);
@@ -462,7 +462,7 @@ class _PortugueseAmharicLessonsScreenState extends ConsumerState<PortugueseAmhar
               else if (isCompleted)
                 const Icon(
                   Icons.check_circle,
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   size: 24,
                 )
               else

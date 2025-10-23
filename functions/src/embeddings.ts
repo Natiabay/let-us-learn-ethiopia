@@ -240,3 +240,6 @@ export async function batchGenerateEmbeddings(req: functions.Request, res: funct
 
 
 
+
+
+

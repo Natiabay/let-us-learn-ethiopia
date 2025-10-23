@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:tourist_assistive_app/features/chat/models/chat_message.dart';
 import 'package:tourist_assistive_app/features/chat/providers/chatbot_provider.dart';
@@ -65,7 +66,7 @@ class _DuolingoChatScreenState extends ConsumerState<DuolingoChatScreen>
     final chatState = ref.watch(chatProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A1A),
+      backgroundColor: AppColors.duolingoDark,
       body: SafeArea(
         child: Column(
           children: [
@@ -106,7 +107,7 @@ class _DuolingoChatScreenState extends ConsumerState<DuolingoChatScreen>
             width: 120,
             height: 120,
             decoration: const BoxDecoration(
-              color: Color(0xFF58CC02),
+              color: Color(0xFF00D9B8),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -169,7 +170,7 @@ class _DuolingoChatScreenState extends ConsumerState<DuolingoChatScreen>
             decoration: BoxDecoration(
               color: const Color(0xFF2A2A2A),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF58CC02), width: 1),
+              border: Border.all(color: const Color(0xFF00D9B8), width: 1),
             ),
             child: Text(
               suggestion,
@@ -211,7 +212,7 @@ class _DuolingoChatScreenState extends ConsumerState<DuolingoChatScreen>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: const Color(0xFF58CC02),
+              color: const Color(0xFF00D9B8),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -238,7 +239,7 @@ class _DuolingoChatScreenState extends ConsumerState<DuolingoChatScreen>
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      const Color(0xFF58CC02),
+                      const Color(0xFF00D9B8),
                     ),
                   ),
                 ),
@@ -275,7 +276,7 @@ class _DuolingoChatScreenState extends ConsumerState<DuolingoChatScreen>
               decoration: BoxDecoration(
                 color: const Color(0xFF2A2A2A),
                 borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: const Color(0xFF58CC02), width: 1),
+                border: Border.all(color: const Color(0xFF00D9B8), width: 1),
               ),
               child: TextField(
                 controller: _messageController,
@@ -303,11 +304,11 @@ class _DuolingoChatScreenState extends ConsumerState<DuolingoChatScreen>
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: const Color(0xFF58CC02), // Duolingo green
+                color: const Color(0xFF00D9B8), // Duolingo green
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF58CC02).withOpacity(0.3),
+                    color: const Color(0xFF00D9B8).withOpacity(0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),

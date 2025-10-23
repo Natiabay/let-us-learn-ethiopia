@@ -96,3 +96,6 @@ class DuolingoProgressWidget extends StatelessWidget {
   }
 }
 
+
+
+

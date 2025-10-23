@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/features/language/models/comprehensive_lesson_model.dart' as lesson_model;
-import 'package:tourist_assistive_app/features/language/screens/enhanced_amharic_lesson_screen.dart';
 import 'package:tourist_assistive_app/features/language/services/language_image_service.dart';
 
 class FrenchAmharicLessonsScreen extends ConsumerStatefulWidget {
@@ -71,7 +70,7 @@ class _FrenchAmharicLessonsScreenState extends ConsumerState<FrenchAmharicLesson
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
               )
             : SingleChildScrollView(
@@ -269,7 +268,7 @@ class _FrenchAmharicLessonsScreenState extends ConsumerState<FrenchAmharicLesson
               'Temps',
               '${totalMinutes}min',
               Icons.access_time,
-              const Color(0xFF58CC02),
+              const Color(0xFF00D9B8),
             ),
           ),
         ],
@@ -335,8 +334,8 @@ class _FrenchAmharicLessonsScreenState extends ConsumerState<FrenchAmharicLesson
     Color borderColor = const Color(0xFF2A2A2A);
     
     if (isCompleted) {
-      backgroundColor = const Color(0xFF58CC02);
-      borderColor = const Color(0xFF58CC02);
+      backgroundColor = const Color(0xFF00D9B8);
+      borderColor = const Color(0xFF00D9B8);
     } else if (isUnlocked) {
       backgroundColor = const Color(0xFF1CB0F6).withValues(alpha: 0.1);
       borderColor = const Color(0xFF1CB0F6).withValues(alpha: 0.3);
@@ -464,7 +463,7 @@ class _FrenchAmharicLessonsScreenState extends ConsumerState<FrenchAmharicLesson
               else if (isCompleted)
                 const Icon(
                   Icons.check_circle,
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   size: 24,
                 )
               else

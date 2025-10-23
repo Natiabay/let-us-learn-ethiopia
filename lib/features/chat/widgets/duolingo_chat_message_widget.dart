@@ -54,11 +54,11 @@ class DuolingoChatMessageWidget extends StatelessWidget {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: const Color(0xFF58CC02), // Duolingo green
+        color: const Color(0xFF00D9B8), // Duolingo green
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF58CC02).withOpacity(0.3),
+            color: const Color(0xFF00D9B8).withOpacity(0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -109,12 +109,12 @@ class DuolingoChatMessageWidget extends StatelessWidget {
         border: Border.all(
           color: message.isUser 
               ? const Color(0xFF1CB0F6)
-              : const Color(0xFF58CC02).withOpacity(0.3),
+              : const Color(0xFF00D9B8).withOpacity(0.3),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: (message.isUser ? const Color(0xFF1CB0F6) : const Color(0xFF58CC02))
+            color: (message.isUser ? const Color(0xFF1CB0F6) : const Color(0xFF00D9B8))
                 .withOpacity(0.2),
             blurRadius: 8,
             offset: const Offset(0, 2),
@@ -168,7 +168,7 @@ class DuolingoChatMessageWidget extends StatelessWidget {
             child: CircularProgressIndicator(
               strokeWidth: 2,
               valueColor: AlwaysStoppedAnimation<Color>(
-                const Color(0xFF58CC02),
+                const Color(0xFF00D9B8),
               ),
             ),
           ),

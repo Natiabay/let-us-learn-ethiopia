@@ -78,7 +78,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
               )
             : SingleChildScrollView(
@@ -131,7 +131,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+          colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -244,7 +244,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF58CC02) : Colors.transparent,
+            color: isSelected ? const Color(0xFF00D9B8) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -292,7 +292,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
               Text(
                 '${(progress * 100).toInt()}%',
                 style: const TextStyle(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   fontFamily: null,
@@ -304,7 +304,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
           LinearProgressIndicator(
             value: progress,
             backgroundColor: const Color(0xFF3A3A3A),
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF58CC02)),
+            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00D9B8)),
             minHeight: 8,
           ),
           const SizedBox(height: 8),
@@ -361,7 +361,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: lesson.isCompleted 
-                    ? const Color(0xFF58CC02).withValues(alpha: 0.3)
+                    ? const Color(0xFF00D9B8).withValues(alpha: 0.3)
                     : const Color(0xFF3A3A3A),
                 width: 1,
               ),
@@ -374,7 +374,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
                   height: 50,
                   decoration: BoxDecoration(
                     color: lesson.isCompleted 
-                        ? const Color(0xFF58CC02)
+                        ? const Color(0xFF00D9B8)
                         : const Color(0xFF3A3A3A),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -451,14 +451,14 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
                               const SizedBox(width: 12),
                               Icon(
                                 Icons.star,
-                                color: const Color(0xFF58CC02),
+                                color: const Color(0xFF00D9B8),
                                 size: 16,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 '${lesson.xpReward} XP',
                                 style: const TextStyle(
-                                  color: Color(0xFF58CC02),
+                                  color: Color(0xFF00D9B8),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                   fontFamily: null,
@@ -482,7 +482,7 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
   Color _getCategoryColor(String category) {
     switch (category.toLowerCase()) {
       case 'greetings':
-        return const Color(0xFF58CC02);
+        return const Color(0xFF00D9B8);
       case 'numbers':
         return const Color(0xFF1CB0F6);
       case 'family':
@@ -516,13 +516,13 @@ class _EnglishAmharicLessonsScreenState extends ConsumerState<EnglishAmharicLess
       case 'business':
         return const Color(0xFFAED6F1);
       default:
-        return const Color(0xFF58CC02);
+        return const Color(0xFF00D9B8);
     }
   }
 
   void _startLesson(lesson_model.Lesson lesson) {
-    // Navigate to lesson screen
-    context.push('/language/amharic/lesson/${lesson.id}?native=English');
+    // Navigate to enhanced lesson screen
+    context.push('/language/enhanced-lesson/${lesson.id}?native=English');
   }
 }
 

@@ -108,7 +108,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
                               _selectedStatus = status;
                             });
                           },
-                          selectedColor: const Color(0xFF58CC02),
+                          selectedColor: const Color(0xFF00D9B8),
                           backgroundColor: const Color(0xFF3A3A3A),
                           checkmarkColor: Colors.white,
                         ),
@@ -174,7 +174,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Search feedback...',
-          hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+          hintStyle: TextStyle(color: Colors.white.withValues(alpha:0.5)),
           prefixIcon: const Icon(Icons.search, color: Colors.white70),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
@@ -242,7 +242,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(
-              color: Color(0xFF58CC02),
+              color: Color(0xFF00D9B8),
             ),
           );
         }
@@ -274,7 +274,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
                   _searchQuery.isNotEmpty 
                       ? 'No feedback found matching "$_searchQuery"'
                       : 'No feedback found',
-                  style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                  style: TextStyle(color: Colors.white.withValues(alpha:0.7)),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -310,7 +310,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
         color: const Color(0xFF2A2A2A),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _getStatusColor(status).withOpacity(0.3),
+          color: _getStatusColor(status).withValues(alpha:0.3),
           width: 2,
         ),
       ),
@@ -355,9 +355,9 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1CB0F6).withOpacity(0.2),
+                    color: const Color(0xFF1CB0F6).withValues(alpha:0.2),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFF1CB0F6).withOpacity(0.5)),
+                    border: Border.all(color: const Color(0xFF1CB0F6).withValues(alpha:0.5)),
                   ),
                   child: Text(
                     category,
@@ -384,7 +384,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
                 Text(
                   _formatTimestamp(timestamp),
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha:0.6),
                     fontSize: 12,
                   ),
                 ),
@@ -394,7 +394,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
             Text(
               userEmail,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha:0.8),
                 fontSize: 14,
               ),
             ),
@@ -423,7 +423,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
                 Text(
                   message,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha:0.9),
                     fontSize: 14,
                     height: 1.5,
                   ),
@@ -452,7 +452,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
                         icon: const Icon(Icons.check, size: 16),
                         label: const Text('Resolve'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF58CC02),
+                          backgroundColor: const Color(0xFF00D9B8),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -489,7 +489,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
     switch (status.toLowerCase()) {
       case 'pending': return const Color(0xFFFFD93D);
       case 'in_progress': return const Color(0xFF1CB0F6);
-      case 'resolved': return const Color(0xFF58CC02);
+      case 'resolved': return const Color(0xFF00D9B8);
       case 'closed': return const Color(0xFF6C757D);
       default: return const Color(0xFFFFD93D);
     }
@@ -536,7 +536,7 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Status updated to $newStatus'),
-            backgroundColor: const Color(0xFF58CC02),
+            backgroundColor: const Color(0xFF00D9B8),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -560,6 +560,14 @@ class _AdminFeedbackScreenState extends ConsumerState<AdminFeedbackScreen> {
     }
   }
 }
+
+
+
+
+
+
+
+
 
 
 

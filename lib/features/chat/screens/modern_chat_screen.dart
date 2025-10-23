@@ -76,13 +76,13 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF58CC02), // Duolingo green
+            const Color(0xFF00D9B8), // Duolingo green
             const Color(0xFF1CB0F6), // Duolingo blue
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+            color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -113,7 +113,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
             ),
             child: Icon(
               Icons.support_agent_rounded,
-              color: const Color(0xFF58CC02),
+              color: const Color(0xFF00D9B8),
               size: 32,
             ),
           ).animate().scale(delay: 200.ms),
@@ -215,7 +215,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+                      color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
                       width: 2,
                     ),
                     boxShadow: [
@@ -306,7 +306,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
             'Selam is typing...',
             style: TextStyle(
               fontSize: 13,
-              color: const Color(0xFF58CC02),
+              color: const Color(0xFF00D9B8),
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.italic,
             ),
@@ -321,7 +321,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
       width: 8,
       height: 8,
       decoration: BoxDecoration(
-        color: const Color(0xFF58CC02),
+        color: const Color(0xFF00D9B8),
         shape: BoxShape.circle,
       ),
     ).animate(onPlay: (controller) => controller.repeat())
@@ -393,7 +393,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
           ),
           const SizedBox(width: 8),
           Material(
-            color: const Color(0xFF58CC02),
+            color: const Color(0xFF00D9B8),
             borderRadius: BorderRadius.circular(24),
             child: InkWell(
               onTap: _sendMessage,
@@ -421,13 +421,13 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF58CC02).withValues(alpha: 0.1),
+              color: const Color(0xFF00D9B8).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.chat_bubble_outline_rounded,
               size: 64,
-              color: const Color(0xFF58CC02),
+              color: const Color(0xFF00D9B8),
             ),
           ).animate().scale(delay: 200.ms),
           const SizedBox(height: 24),
@@ -463,7 +463,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
         ),
         title: Row(
           children: [
-            Icon(Icons.info_outline, color: const Color(0xFF58CC02)),
+            Icon(Icons.info_outline, color: const Color(0xFF00D9B8)),
             const SizedBox(width: 8),
             const Text('About Selam'),
           ],

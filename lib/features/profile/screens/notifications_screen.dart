@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:tourist_assistive_app/core/theme/app_theme.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
@@ -11,212 +10,202 @@ class NotificationsScreen extends ConsumerStatefulWidget {
 }
 
 class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
+  // Professional navy blue theme colors
+  static const Color _navyBlue = Color(0xFF0A1929);
+  static const Color _navyCard = Color(0xFF1A2F44);
+  static const Color _turquoise = Color(0xFF00D9B8);
+  static const Color _yellow = Color(0xFFFFD43B);
+  static const Color _blue = Color(0xFF1CB0F6);
+  static const Color _red = Color(0xFFFF4B4B);
+  static const Color _textPrimary = Color(0xFFFFFFFF);
+  static const Color _textSecondary = Color(0xFFB3B3B3);
+  static const Color _textTertiary = Color(0xFF8B949E);
+
+  // Notification settings
   bool _pushNotifications = true;
   bool _emailNotifications = true;
-  bool _lessonReminders = true;
+  bool _smsNotifications = false;
+  bool _learningReminders = true;
   bool _locationUpdates = true;
-  bool _promotionalOffers = false;
-  bool _culturalEvents = true;
-  bool _weatherAlerts = true;
-  bool _emergencyAlerts = true;
+  bool _achievementAlerts = true;
+  bool _weeklyReports = false;
+
+  // Sample notifications data
+  final List<Map<String, dynamic>> _notifications = [
+    {
+      'id': '1',
+      'title': 'Learning Streak!',
+      'message': 'Great job! You\'ve maintained a 7-day learning streak.',
+      'time': '2 hours ago',
+      'type': 'achievement',
+      'isRead': false,
+      'icon': Icons.local_fire_department,
+      'color': _red,
+    },
+    {
+      'id': '2',
+      'title': 'New Location Added',
+      'message': 'Simien Mountains National Park has been added to your favorites.',
+      'time': '1 day ago',
+      'type': 'location',
+      'isRead': false,
+      'icon': Icons.location_on,
+      'color': _blue,
+    },
+    {
+      'id': '3',
+      'title': 'Lesson Reminder',
+      'message': 'Don\'t forget to practice your Amharic lessons today!',
+      'time': '2 days ago',
+      'type': 'learning',
+      'isRead': true,
+      'icon': Icons.school,
+      'color': _turquoise,
+    },
+    {
+      'id': '4',
+      'title': 'Achievement Unlocked',
+      'message': 'Congratulations! You\'ve completed 10 lessons.',
+      'time': '3 days ago',
+      'type': 'achievement',
+      'isRead': true,
+      'icon': Icons.emoji_events,
+      'color': _yellow,
+    },
+    {
+      'id': '5',
+      'title': 'Weather Update',
+      'message': 'Perfect weather for visiting Lalibela today!',
+      'time': '1 week ago',
+      'type': 'weather',
+      'isRead': true,
+      'icon': Icons.wb_sunny,
+      'color': _yellow,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          TextButton(
-            onPressed: _saveSettings,
-            child: const Text(
-              'Save',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // General Settings
-            _buildSectionCard(
-              title: 'General Settings',
-              children: [
-                _buildNotificationToggle(
-                  title: 'Push Notifications',
-                  subtitle: 'Receive notifications on your device',
-                  value: _pushNotifications,
-                  onChanged: (value) {
-                    setState(() {
-                      _pushNotifications = value;
-                    });
-                  },
-                ),
-                _buildNotificationToggle(
-                  title: 'Email Notifications',
-                  subtitle: 'Receive notifications via email',
-                  value: _emailNotifications,
-                  onChanged: (value) {
-                    setState(() {
-                      _emailNotifications = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            
-            // Learning Settings
-            _buildSectionCard(
-              title: 'Learning & Progress',
-              children: [
-                _buildNotificationToggle(
-                  title: 'Lesson Reminders',
-                  subtitle: 'Daily reminders to practice Amharic',
-                  value: _lessonReminders,
-                  onChanged: (value) {
-                    setState(() {
-                      _lessonReminders = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            
-            // Location Settings
-            _buildSectionCard(
-              title: 'Location & Travel',
-              children: [
-                _buildNotificationToggle(
-                  title: 'Location Updates',
-                  subtitle: 'Updates about nearby attractions',
-                  value: _locationUpdates,
-                  onChanged: (value) {
-                    setState(() {
-                      _locationUpdates = value;
-                    });
-                  },
-                ),
-                _buildNotificationToggle(
-                  title: 'Weather Alerts',
-                  subtitle: 'Weather updates for your location',
-                  value: _weatherAlerts,
-                  onChanged: (value) {
-                    setState(() {
-                      _weatherAlerts = value;
-                    });
-                  },
-                ),
-                _buildNotificationToggle(
-                  title: 'Emergency Alerts',
-                  subtitle: 'Important safety and emergency information',
-                  value: _emergencyAlerts,
-                  onChanged: (value) {
-                    setState(() {
-                      _emergencyAlerts = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            
-            // Cultural Settings
-            _buildSectionCard(
-              title: 'Cultural & Events',
-              children: [
-                _buildNotificationToggle(
-                  title: 'Cultural Events',
-                  subtitle: 'Notifications about local cultural events',
-                  value: _culturalEvents,
-                  onChanged: (value) {
-                    setState(() {
-                      _culturalEvents = value;
-                    });
-                  },
-                ),
-                _buildNotificationToggle(
-                  title: 'Promotional Offers',
-                  subtitle: 'Special offers and discounts',
-                  value: _promotionalOffers,
-                  onChanged: (value) {
-                    setState(() {
-                      _promotionalOffers = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            
-            // Notification History
-            _buildNotificationHistory(),
-            const SizedBox(height: 20),
-            
-            // Clear All Button
-            _buildClearAllButton(),
-          ],
-        ),
-      ),
+      backgroundColor: _navyBlue,
+      appBar: _buildAppBar(),
+      body: _buildBody(),
     );
   }
 
-  Widget _buildSectionCard({
-    required String title,
-    required List<Widget> children,
-  }) {
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: _navyCard,
+      elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: _textPrimary),
+        onPressed: () => Navigator.pop(context),
+      ),
+      title: const Text(
+        'Notifications',
+        style: TextStyle(
+          color: _textPrimary,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings, color: _textPrimary),
+          onPressed: () => _showSettingsDialog(),
+        ),
+        IconButton(
+          icon: const Icon(Icons.mark_email_read, color: _textPrimary),
+          onPressed: () => _markAllAsRead(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return Column(
+      children: [
+        _buildSettingsSection(),
+        Expanded(
+          child: _buildNotificationsList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSettingsSection() {
     return Container(
+      margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: _navyCard,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: _turquoise.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: _turquoise.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.notifications, color: _turquoise, size: 20),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Notification Settings',
+                style: TextStyle(
+                  color: _textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
-          ...children,
+          _buildSettingItem(
+            title: 'Push Notifications',
+            subtitle: 'Receive notifications on your device',
+            value: _pushNotifications,
+            onChanged: (value) => setState(() => _pushNotifications = value),
+          ),
+          _buildSettingItem(
+            title: 'Email Notifications',
+            subtitle: 'Receive notifications via email',
+            value: _emailNotifications,
+            onChanged: (value) => setState(() => _emailNotifications = value),
+          ),
+          _buildSettingItem(
+            title: 'Learning Reminders',
+            subtitle: 'Daily reminders to practice',
+            value: _learningReminders,
+            onChanged: (value) => setState(() => _learningReminders = value),
+          ),
         ],
       ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
+    );
   }
 
-  Widget _buildNotificationToggle({
+  Widget _buildSettingItem({
     required String title,
     required String subtitle,
     required bool value,
     required ValueChanged<bool> onChanged,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Expanded(
@@ -226,17 +215,16 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 16,
+                    color: _textPrimary,
+                    fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
+                  style: const TextStyle(
+                    color: _textSecondary,
+                    fontSize: 12,
                   ),
                 ),
               ],
@@ -245,267 +233,339 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: AppColors.primary,
+            activeColor: _turquoise,
+            activeTrackColor: _turquoise.withValues(alpha: 0.3),
+            inactiveThumbColor: _textTertiary,
+            inactiveTrackColor: _textTertiary.withValues(alpha: 0.3),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildNotificationHistory() {
-    final notifications = [
-      {
-        'title': 'Daily Lesson Reminder',
-        'message': 'Time to practice your Amharic!',
-        'time': '2 hours ago',
-        'read': false,
-        'type': 'lesson',
-      },
-      {
-        'title': 'Weather Update',
-        'message': 'Sunny weather expected in Addis Ababa today',
-        'time': '4 hours ago',
-        'read': true,
-        'type': 'weather',
-      },
-      {
-        'title': 'Cultural Event',
-        'message': 'Traditional coffee ceremony at Meskel Square',
-        'time': '1 day ago',
-        'read': true,
-        'type': 'event',
-      },
-      {
-        'title': 'Location Recommendation',
-        'message': 'You\'re near the National Museum of Ethiopia',
-        'time': '2 days ago',
-        'read': true,
-        'type': 'location',
-      },
-    ];
+  Widget _buildNotificationsList() {
+    if (_notifications.isEmpty) {
+      return _buildEmptyState();
+    }
 
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      itemCount: _notifications.length,
+      itemBuilder: (context, index) {
+        final notification = _notifications[index];
+        return _buildNotificationCard(notification);
+      },
+    );
+  }
+
+  Widget _buildNotificationCard(Map<String, dynamic> notification) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: _navyCard,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: notification['isRead'] 
+            ? _textTertiary.withValues(alpha: 0.3)
+            : notification['color'].withValues(alpha: 0.3),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: notification['color'].withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: InkWell(
+        onTap: () => _markAsRead(notification),
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
             children: [
-              const Text(
-                'Recent Notifications',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: notification['color'].withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  notification['icon'],
+                  color: notification['color'],
+                  size: 24,
                 ),
               ),
-              TextButton(
-                onPressed: _markAllAsRead,
-                child: const Text(
-                  'Mark all as read',
-                  style: TextStyle(color: AppColors.primary),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            notification['title'],
+                            style: TextStyle(
+                              color: _textPrimary,
+                              fontSize: 16,
+                              fontWeight: notification['isRead'] 
+                                ? FontWeight.w500 
+                                : FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        if (!notification['isRead'])
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: _turquoise,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      notification['message'],
+                      style: TextStyle(
+                        color: _textSecondary,
+                        fontSize: 14,
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      notification['time'],
+                      style: const TextStyle(
+                        color: _textTertiary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: _textTertiary),
+                onSelected: (value) => _handleNotificationAction(value, notification),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 'mark_read',
+                    child: Row(
+                      children: [
+                        Icon(
+                          notification['isRead'] ? Icons.mark_email_unread : Icons.mark_email_read,
+                          color: _textPrimary,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          notification['isRead'] ? 'Mark as unread' : 'Mark as read',
+                          style: const TextStyle(color: _textPrimary),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.delete, color: _red, size: 16),
+                        const SizedBox(width: 8),
+                        const Text('Delete', style: TextStyle(color: _red)),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          ...notifications.map((notification) => _buildNotificationItem(
-            title: notification['title'] as String,
-            message: notification['message'] as String,
-            time: notification['time'] as String,
-            isRead: notification['read'] as bool,
-            type: notification['type'] as String,
-          )).toList(),
-        ],
+        ),
       ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
+    );
   }
 
-  Widget _buildNotificationItem({
-    required String title,
-    required String message,
-    required String time,
-    required bool isRead,
-    required String type,
-  }) {
-    IconData icon;
-    Color color;
-    
-    switch (type) {
-      case 'lesson':
-        icon = Icons.school;
-        color = AppColors.primary;
-        break;
-      case 'weather':
-        icon = Icons.wb_sunny;
-        color = Colors.orange;
-        break;
-      case 'event':
-        icon = Icons.event;
-        color = Colors.purple;
-        break;
-      case 'location':
-        icon = Icons.location_on;
-        color = Colors.green;
-        break;
-      default:
-        icon = Icons.notifications;
-        color = AppColors.grey400;
-    }
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isRead ? Colors.transparent : AppColors.primary.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: isRead ? null : Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
-      ),
-      child: Row(
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 120,
+            height: 120,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
+              color: _turquoise.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: color,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 16),
-          
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: isRead ? FontWeight.normal : FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  message,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
+            child: const Icon(
+              Icons.notifications_none,
+              size: 60,
+              color: _turquoise,
             ),
           ),
-          
-          if (!isRead)
-            Container(
-              width: 8,
-              height: 8,
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-              ),
+          const SizedBox(height: 24),
+          const Text(
+            'No Notifications',
+            style: TextStyle(
+              color: _textPrimary,
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
             ),
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'You\'re all caught up!\nNew notifications will appear here.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: _textSecondary,
+              fontSize: 16,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildClearAllButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: OutlinedButton(
-        onPressed: _clearAllNotifications,
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: AppColors.error),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: const Text(
-          'Clear All Notifications',
-          style: TextStyle(
-            color: AppColors.error,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
-  }
-
-  void _saveSettings() {
-    // TODO: Implement save settings functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Notification settings saved'),
-        backgroundColor: Colors.green,
-      ),
-    );
+  void _markAsRead(Map<String, dynamic> notification) {
+    setState(() {
+      notification['isRead'] = true;
+    });
   }
 
   void _markAllAsRead() {
-    // TODO: Implement mark all as read functionality
+    setState(() {
+      for (var notification in _notifications) {
+        notification['isRead'] = true;
+      }
+    });
+    
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('All notifications marked as read'),
-        backgroundColor: Colors.blue,
+        backgroundColor: _turquoise,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
 
-  void _clearAllNotifications() {
+  void _handleNotificationAction(String action, Map<String, dynamic> notification) {
+    switch (action) {
+      case 'mark_read':
+        setState(() {
+          notification['isRead'] = !notification['isRead'];
+        });
+        break;
+      case 'delete':
+        setState(() {
+          _notifications.removeWhere((n) => n['id'] == notification['id']);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Notification deleted'),
+            backgroundColor: _red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        break;
+    }
+  }
+
+  void _showSettingsDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Clear All Notifications'),
-        content: const Text('Are you sure you want to clear all notifications? This action cannot be undone.'),
+        backgroundColor: _navyCard,
+        title: const Text('Notification Settings', style: TextStyle(color: _textPrimary)),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDialogSettingItem(
+                title: 'Push Notifications',
+                value: _pushNotifications,
+                onChanged: (value) => setState(() => _pushNotifications = value),
+              ),
+              _buildDialogSettingItem(
+                title: 'Email Notifications',
+                value: _emailNotifications,
+                onChanged: (value) => setState(() => _emailNotifications = value),
+              ),
+              _buildDialogSettingItem(
+                title: 'SMS Notifications',
+                value: _smsNotifications,
+                onChanged: (value) => setState(() => _smsNotifications = value),
+              ),
+              _buildDialogSettingItem(
+                title: 'Learning Reminders',
+                value: _learningReminders,
+                onChanged: (value) => setState(() => _learningReminders = value),
+              ),
+              _buildDialogSettingItem(
+                title: 'Location Updates',
+                value: _locationUpdates,
+                onChanged: (value) => setState(() => _locationUpdates = value),
+              ),
+              _buildDialogSettingItem(
+                title: 'Achievement Alerts',
+                value: _achievementAlerts,
+                onChanged: (value) => setState(() => _achievementAlerts = value),
+              ),
+              _buildDialogSettingItem(
+                title: 'Weekly Reports',
+                value: _weeklyReports,
+                onChanged: (value) => setState(() => _weeklyReports = value),
+              ),
+            ],
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: _textSecondary)),
           ),
-          ElevatedButton(
+          TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement clear all functionality
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('All notifications cleared'),
-                  backgroundColor: Colors.orange,
+                  content: Text('Settings saved'),
+                  backgroundColor: _turquoise,
+                  behavior: SnackBarBehavior.floating,
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
-            child: const Text('Clear All'),
+            child: const Text('Save', style: TextStyle(color: _turquoise)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDialogSettingItem({
+    required String title,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(color: _textPrimary),
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeColor: _turquoise,
+            activeTrackColor: _turquoise.withValues(alpha: 0.3),
+            inactiveThumbColor: _textTertiary,
+            inactiveTrackColor: _textTertiary.withValues(alpha: 0.3),
           ),
         ],
       ),

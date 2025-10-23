@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/features/language/models/comprehensive_lesson_model.dart' as lesson_model;
-import 'package:tourist_assistive_app/features/language/screens/enhanced_amharic_lesson_screen.dart';
 
 class GermanAmharicLessonsScreen extends ConsumerStatefulWidget {
   const GermanAmharicLessonsScreen({super.key});
@@ -70,7 +69,7 @@ class _GermanAmharicLessonsScreenState extends ConsumerState<GermanAmharicLesson
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
               )
             : SingleChildScrollView(
@@ -268,7 +267,7 @@ class _GermanAmharicLessonsScreenState extends ConsumerState<GermanAmharicLesson
               'Zeit',
               '${totalMinutes}min',
               Icons.access_time,
-              const Color(0xFF58CC02),
+              const Color(0xFF00D9B8),
             ),
           ),
         ],
@@ -334,14 +333,11 @@ class _GermanAmharicLessonsScreenState extends ConsumerState<GermanAmharicLesson
     Color borderColor = const Color(0xFF2A2A2A);
     
     if (isCompleted) {
-      backgroundColor = const Color(0xFF58CC02);
-      borderColor = const Color(0xFF58CC02);
-    } else if (isUnlocked) {
+      backgroundColor = const Color(0xFF00D9B8);
+      borderColor = const Color(0xFF00D9B8);
+    } else {
       backgroundColor = const Color(0xFFCE82FF).withValues(alpha: 0.1);
       borderColor = const Color(0xFFCE82FF).withValues(alpha: 0.3);
-    } else {
-      backgroundColor = const Color(0xFF1A1A1A);
-      borderColor = const Color(0xFF2A2A2A);
     }
 
     return Container(
@@ -463,7 +459,7 @@ class _GermanAmharicLessonsScreenState extends ConsumerState<GermanAmharicLesson
               else if (isCompleted)
                 const Icon(
                   Icons.check_circle,
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   size: 24,
                 )
               else

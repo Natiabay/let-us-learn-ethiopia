@@ -266,7 +266,7 @@ class ComprehensiveLessonData {
         totalMinutes: 150,
         totalLessons: 25,
         totalXP: 2500,
-        color: const Color(0xFF58CC02),
+        color: const Color(0xFF00D9B8),
         icon: '🌱',
       ),
       LanguageLevelData(

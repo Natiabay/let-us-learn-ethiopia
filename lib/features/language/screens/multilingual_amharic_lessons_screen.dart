@@ -104,7 +104,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
               )
             : SingleChildScrollView(
@@ -173,7 +173,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+          colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -382,7 +382,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF58CC02) : Colors.transparent,
+            color: isSelected ? const Color(0xFF00D9B8) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -430,7 +430,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
               Text(
                 '${(progress * 100).toInt()}%',
                 style: const TextStyle(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   fontFamily: null,
@@ -442,7 +442,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
           LinearProgressIndicator(
             value: progress,
             backgroundColor: const Color(0xFF3A3A3A),
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF58CC02)),
+            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00D9B8)),
             minHeight: 8,
           ),
           const SizedBox(height: 8),
@@ -531,7 +531,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: lesson.isCompleted 
-                    ? const Color(0xFF58CC02).withValues(alpha: 0.3)
+                    ? const Color(0xFF00D9B8).withValues(alpha: 0.3)
                     : const Color(0xFF3A3A3A),
                 width: 1,
               ),
@@ -544,7 +544,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
                   height: 50,
                   decoration: BoxDecoration(
                     color: lesson.isCompleted 
-                        ? const Color(0xFF58CC02)
+                        ? const Color(0xFF00D9B8)
                         : const Color(0xFF3A3A3A),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -621,14 +621,14 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
                               const SizedBox(width: 12),
                               Icon(
                                 Icons.star,
-                                color: const Color(0xFF58CC02),
+                                color: const Color(0xFF00D9B8),
                                 size: 16,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 '${lesson.xpReward} XP',
                                 style: const TextStyle(
-                                  color: Color(0xFF58CC02),
+                                  color: Color(0xFF00D9B8),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                   fontFamily: null,
@@ -662,7 +662,7 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
       case '挨拶':
       case '인사':
       case 'अभिवादन':
-        return const Color(0xFF58CC02);
+        return const Color(0xFF00D9B8);
       case 'الأرقام':
       case 'nombres':
       case 'números':
@@ -670,7 +670,6 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
       case 'numeri':
       case 'números':
       case 'числа':
-      case '数字':
       case '数字':
       case '숫자':
       case 'संख्या':
@@ -688,12 +687,12 @@ class _MultilingualAmharicLessonsScreenState extends ConsumerState<MultilingualA
       case 'परिवार':
         return const Color(0xFFFF6B6B);
       default:
-        return const Color(0xFF58CC02);
+        return const Color(0xFF00D9B8);
     }
   }
 
   void _startLesson(lesson_model.Lesson lesson) {
-    // Navigate to lesson screen
-    context.push('/language/amharic/lesson/${lesson.id}?native=${lesson.languageCode}');
+    // Navigate to enhanced lesson screen
+    context.push('/language/enhanced-lesson/${lesson.id}?native=${lesson.languageCode}');
   }
 }

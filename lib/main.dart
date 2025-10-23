@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tourist_assistive_app/core/app_router.dart';
-import 'package:tourist_assistive_app/core/theme/app_theme.dart';
+import 'package:tourist_assistive_app/core/theme/professional_theme.dart';
+import 'package:tourist_assistive_app/core/utils/error_handler_global.dart';
+import 'package:tourist_assistive_app/core/utils/render_fix.dart';
+import 'package:tourist_assistive_app/core/utils/professional_layout_fix.dart';
 import 'package:tourist_assistive_app/core/services/firebase_service.dart';
 import 'package:tourist_assistive_app/core/config/environment_config.dart';
-import 'package:tourist_assistive_app/core/services/auto_setup_service.dart';
 import 'package:tourist_assistive_app/core/services/automated_google_maps_service.dart';
 import 'package:tourist_assistive_app/features/language/providers/language_provider.dart';
 import 'package:tourist_assistive_app/features/auth/services/auth_service.dart';
@@ -13,6 +15,15 @@ import 'package:tourist_assistive_app/features/auth/services/auth_service.dart';
 void main() async {
   // Ensure Flutter is properly initialized
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize global error handling for mouse tracker issues
+  GlobalErrorHandler.initialize();
+  
+  // Initialize render fixes for layout assertion errors
+  RenderFix.initialize();
+  
+  // Initialize professional layout fixes
+  ProfessionalLayoutFix.initialize();
   
   // Initialize Firebase with comprehensive error handling
   print('🚀 Initializing Tourist Assistive App...');
@@ -109,29 +120,33 @@ class _TouristAssistiveAppState extends ConsumerState<TouristAssistiveApp> {
     final router = ref.watch(appRouterProvider);
     final currentLanguage = ref.watch(languageProvider);
     
-    return MaterialApp.router(
-      title: 'Tourist Assistive App',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      routerConfig: router,
-      locale: Locale(currentLanguage),
-      supportedLocales: const [
-        Locale('en', ''), // English
-        Locale('am', ''), // Amharic
-      ],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-          child: child!,
-        );
-      },
+    return MouseTrackingErrorBoundary(
+      child: ProfessionalLayoutFix.professionalWidget(
+        MaterialApp.router(
+          title: 'Tourist Assistive App',
+          debugShowCheckedModeBanner: false,
+          theme: ProfessionalTheme.darkTheme,
+          darkTheme: ProfessionalTheme.darkTheme,
+          themeMode: ThemeMode.dark,
+          routerConfig: router,
+          locale: Locale(currentLanguage),
+          supportedLocales: const [
+            Locale('en', ''), // English
+            Locale('am', ''), // Amharic
+          ],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+              child: ProfessionalLayoutFix.professionalWidget(child!),
+            );
+          },
+        ),
+      ),
     );
   }
 }

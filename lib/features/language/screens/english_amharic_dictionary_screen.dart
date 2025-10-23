@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/core/services/audio_service.dart';
+import 'package:flutter/foundation.dart';
 
 class EnglishAmharicDictionaryScreen extends ConsumerStatefulWidget {
   const EnglishAmharicDictionaryScreen({super.key});
@@ -189,7 +190,7 @@ class _EnglishAmharicDictionaryScreenState extends ConsumerState<EnglishAmharicD
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF58CC02) : const Color(0xFF2A2A2A),
+                        color: isSelected ? const Color(0xFF00D9B8) : const Color(0xFF2A2A2A),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -268,13 +269,13 @@ class _EnglishAmharicDictionaryScreenState extends ConsumerState<EnglishAmharicD
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF58CC02).withValues(alpha: 0.2),
+                            color: const Color(0xFF00D9B8).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             word.category,
                             style: const TextStyle(
-                              color: Color(0xFF58CC02),
+                              color: Color(0xFF00D9B8),
                               fontSize: 10,
                               fontWeight: FontWeight.w500,
                             ),
@@ -347,7 +348,7 @@ class _EnglishAmharicDictionaryScreenState extends ConsumerState<EnglishAmharicD
     try {
       await _audioService.playAmharicText(amharicText);
     } catch (e) {
-      print('Error playing audio: $e');
+      // debugPrint('Error playing audio: $e');
     }
   }
 
@@ -438,13 +439,13 @@ class _EnglishAmharicDictionaryScreenState extends ConsumerState<EnglishAmharicD
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF58CC02).withValues(alpha: 0.2),
+                color: const Color(0xFF00D9B8).withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 word.category,
                 style: const TextStyle(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
@@ -523,7 +524,7 @@ class _EnglishAmharicDictionaryScreenState extends ConsumerState<EnglishAmharicD
             onPressed: () => context.pop(),
             child: const Text(
               'OK',
-              style: TextStyle(color: Color(0xFF58CC02)),
+              style: TextStyle(color: Color(0xFF00D9B8)),
             ),
           ),
         ],

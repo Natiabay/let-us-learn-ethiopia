@@ -86,7 +86,7 @@ class LocationsNotifier extends StateNotifier<LocationsState> {
         imageUrl: location.imageUrl,
         isFavorite: location.isFavorite,
         openingHours: location.openingHours,
-        entryFee: location.entryFee,
+        entryFee: location.entryFee, // GlobalLocation has entryFee
         features: location.features,
         // Add global-specific fields
         country: location.country,

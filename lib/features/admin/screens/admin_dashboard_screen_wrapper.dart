@@ -44,7 +44,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                  colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -83,12 +83,12 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                    colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF58CC02).withOpacity(0.3),
+                      color: const Color(0xFF00D9B8).withOpacity(0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -179,7 +179,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
                     context,
                     label: 'Feedback Management',
                     icon: Icons.feedback,
-                    color: const Color(0xFF58CC02),
+                    color: const Color(0xFF00D9B8),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -244,7 +244,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.library_books, color: Color(0xFF58CC02), size: 24),
+                        Icon(Icons.library_books, color: Color(0xFF00D9B8), size: 24),
                         SizedBox(width: 12),
                         Text(
                           'Documentation',
@@ -366,7 +366,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          const Icon(Icons.arrow_right, color: Color(0xFF58CC02), size: 20),
+          const Icon(Icons.arrow_right, color: Color(0xFF00D9B8), size: 20),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -421,12 +421,12 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+              colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF58CC02).withOpacity(0.3),
+                color: const Color(0xFF00D9B8).withOpacity(0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),

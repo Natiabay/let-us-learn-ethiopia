@@ -129,7 +129,7 @@ class _EnhancedLearningWidgetState extends State<EnhancedLearningWidget>
       ),
       child: const Center(
         child: CircularProgressIndicator(
-          color: Color(0xFF58CC02),
+          color: Color(0xFF00D9B8),
         ),
       ),
     );
@@ -195,7 +195,7 @@ class _EnhancedLearningWidgetState extends State<EnhancedLearningWidget>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFF58CC02),
+              color: const Color(0xFF00D9B8),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -300,14 +300,14 @@ class _EnhancedLearningWidgetState extends State<EnhancedLearningWidget>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF58CC02).withValues(alpha: 0.1),
+                color: const Color(0xFF00D9B8).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 _wordData!['culturalContext'],
                 style: const TextStyle(
                   fontSize: 10,
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -353,7 +353,7 @@ class EnhancedLessonCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isCompleted 
-                ? const Color(0xFF58CC02)
+                ? const Color(0xFF00D9B8)
                 : isUnlocked 
                     ? Colors.grey[300]!
                     : Colors.grey[200]!,

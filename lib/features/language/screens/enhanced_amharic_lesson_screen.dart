@@ -4,10 +4,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/core/services/audio_service.dart';
 import 'package:tourist_assistive_app/features/language/widgets/speaker_button.dart';
-import 'package:tourist_assistive_app/features/language/services/voice_service.dart';
-import 'package:tourist_assistive_app/features/language/services/lesson_avatar_service.dart';
 import 'package:tourist_assistive_app/features/language/data/english_amharic_lessons.dart';
 import 'package:tourist_assistive_app/features/language/models/comprehensive_lesson_model.dart';
+import 'package:flutter/foundation.dart';
 
 class EnhancedAmharicLessonScreen extends ConsumerStatefulWidget {
   final String lessonId;
@@ -65,7 +64,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
   
   /// Load lesson data from the new comprehensive lessons
   void _loadLessonData() {
-    print('📚 Loading lesson with ID: ${widget.lessonId}');
+    // debugPrint('📚 Loading lesson with ID: ${widget.lessonId}');
     
     // Get lesson from NEW 60 lessons
     _currentLesson = EnglishAmharicLessons.getLessonById(widget.lessonId);
@@ -75,9 +74,9 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
         _exercises = _currentLesson!.exercises;
         _isLoading = false;
       });
-      print('✅ Loaded NEW lesson: "${_currentLesson!.title}" with ${_exercises.length} exercises');
+      // debugPrint('✅ Loaded NEW lesson: "${_currentLesson!.title}" with ${_exercises.length} exercises');
     } else {
-      print('❌ ERROR: Lesson "${widget.lessonId}" not found in NEW 60 lessons!');
+      // debugPrint('❌ ERROR: Lesson "${widget.lessonId}" not found in NEW 60 lessons!');
       setState(() {
         _isLoading = false;
       });
@@ -100,7 +99,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
       return Scaffold(
         backgroundColor: const Color(0xFF1A1A1A),
         body: const Center(
-          child: CircularProgressIndicator(color: Color(0xFF58CC02)),
+          child: CircularProgressIndicator(color: Color(0xFF00D9B8)),
         ),
       );
     }
@@ -203,7 +202,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
               widthFactor: progress,
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF58CC02),
+                  color: const Color(0xFF00D9B8),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -257,7 +256,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF58CC02),
+                  color: const Color(0xFF00D9B8),
                   borderRadius: BorderRadius.circular(40),
                 ),
                 child: const Icon(
@@ -334,12 +333,12 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
               child: Container(
                 decoration: BoxDecoration(
                   color: _selectedAnswer == option.text 
-                      ? const Color(0xFF58CC02).withValues(alpha: 0.3)
+                      ? const Color(0xFF00D9B8).withValues(alpha: 0.3)
                       : const Color(0xFF2A2A2A),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: _selectedAnswer == option.text 
-                        ? const Color(0xFF58CC02)
+                        ? const Color(0xFF00D9B8)
                         : const Color(0xFF2A2A2A),
                     width: 2,
                   ),
@@ -391,7 +390,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
             onPressed: _selectedAnswer != null ? () => _checkAnswer() : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: _selectedAnswer != null 
-                  ? const Color(0xFF58CC02)
+                  ? const Color(0xFF00D9B8)
                   : const Color(0xFF2A2A2A),
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -426,12 +425,12 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: _selectedAnswer == option.text 
-                      ? const Color(0xFF58CC02)
+                      ? const Color(0xFF00D9B8)
                       : const Color(0xFF2A2A2A),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: _selectedAnswer == option.text 
-                        ? const Color(0xFF58CC02)
+                        ? const Color(0xFF00D9B8)
                         : const Color(0xFF2A2A2A),
                     width: 1,
                   ),
@@ -457,7 +456,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
             onPressed: _selectedAnswer != null ? () => _checkAnswer() : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: _selectedAnswer != null 
-                  ? const Color(0xFF58CC02)
+                  ? const Color(0xFF00D9B8)
                   : const Color(0xFF2A2A2A),
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -489,7 +488,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: _isCorrect ? const Color(0xFF58CC02) : const Color(0xFFFF4B4B),
+              color: _isCorrect ? const Color(0xFF00D9B8) : const Color(0xFFFF4B4B),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -503,7 +502,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
           Text(
             _isCorrect ? 'Good job!' : 'Incorrect',
             style: TextStyle(
-              color: _isCorrect ? const Color(0xFF58CC02) : const Color(0xFFFF4B4B),
+              color: _isCorrect ? const Color(0xFF00D9B8) : const Color(0xFFFF4B4B),
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -539,7 +538,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
             child: ElevatedButton(
               onPressed: () => _nextExercise(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isCorrect ? const Color(0xFF58CC02) : const Color(0xFFFF4B4B),
+                backgroundColor: _isCorrect ? const Color(0xFF00D9B8) : const Color(0xFFFF4B4B),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -657,7 +656,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
             onPressed: () => context.pop(),
             child: const Text(
               'Continue',
-              style: TextStyle(color: Color(0xFF58CC02)),
+              style: TextStyle(color: Color(0xFF00D9B8)),
             ),
           ),
         ],
@@ -669,7 +668,7 @@ class _EnhancedAmharicLessonScreenState extends ConsumerState<EnhancedAmharicLes
     try {
       await _audioService.playAmharicText(amharicText);
     } catch (e) {
-      print('Error playing audio: $e');
+      // debugPrint('Error playing audio: $e');
     }
   }
 

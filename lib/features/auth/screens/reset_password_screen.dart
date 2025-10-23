@@ -574,7 +574,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen>
                     end: Alignment.bottomRight,
                   )
                 : const LinearGradient(
-                    colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                    colors: [Color(0xFF00D9B8), Color(0xFF3B82F6)], // Turquoise to blue
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),

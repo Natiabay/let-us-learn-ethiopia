@@ -10,8 +10,8 @@ class AdminApiService {
   
   AdminApiService() : _dio = Dio(BaseOptions(
     baseUrl: baseUrl,
-    connectTimeout: 30000,
-    receiveTimeout: 30000,
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
   )) {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {

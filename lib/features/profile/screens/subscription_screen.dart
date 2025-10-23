@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
-import 'package:tourist_assistive_app/core/theme/app_theme.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 
 class SubscriptionScreen extends ConsumerStatefulWidget {
   const SubscriptionScreen({super.key});
@@ -12,134 +10,149 @@ class SubscriptionScreen extends ConsumerStatefulWidget {
 }
 
 class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
-  String _selectedPlan = 'monthly';
-  bool _isLoading = false;
+  // Professional navy blue theme colors
+  static const Color _navyBlue = Color(0xFF0A1929);
+  static const Color _navyCard = Color(0xFF1A2F44);
+  static const Color _turquoise = Color(0xFF00D9B8);
+  static const Color _yellow = Color(0xFFFFD43B);
+  static const Color _blue = Color(0xFF1CB0F6);
+  static const Color _red = Color(0xFFFF4B4B);
+  static const Color _textPrimary = Color(0xFFFFFFFF);
+  static const Color _textSecondary = Color(0xFFB3B3B3);
+  static const Color _textTertiary = Color(0xFF8B949E);
 
-  final Map<String, Map<String, dynamic>> _plans = {
-    'daily': {
-      'name': 'Daily Access',
-      'price': 50,
+  // Current subscription status
+  bool _isPremium = false;
+  String _currentPlan = 'Free';
+  DateTime? _expiryDate;
+
+  // Subscription plans
+  final List<Map<String, dynamic>> _plans = [
+    {
+      'name': 'Free',
+      'price': '0',
       'currency': 'ETB',
-      'period': '1 day',
-      'description': 'Perfect for a quick visit',
+      'period': 'Forever',
       'features': [
-        'Full app access',
-        'Basic language lessons',
-        'Location information',
-        'Chatbot assistance',
+        'Basic Amharic lessons',
+        'Limited location access',
+        'Standard support',
+        'Basic progress tracking',
       ],
-      'popular': false,
+      'color': _textTertiary,
+      'isPopular': false,
     },
-    'weekly': {
-      'name': 'Weekly Access',
-      'price': 300,
+    {
+      'name': 'Explorer',
+      'price': '299',
       'currency': 'ETB',
-      'period': '7 days',
-      'description': 'Great for a week-long stay',
+      'period': 'per month',
       'features': [
-        'Full app access',
-        'All language lessons',
-        'Advanced location features',
-        'Premium chatbot',
-        'Offline maps',
-      ],
-      'popular': false,
-    },
-    'monthly': {
-      'name': 'Monthly Access',
-      'price': 1000,
-      'currency': 'ETB',
-      'period': '30 days',
-      'description': 'Best value for extended stays',
-      'features': [
-        'Full app access',
-        'All language lessons',
-        'Advanced location features',
-        'Premium chatbot',
-        'Offline maps',
+        'All Amharic lessons',
+        'All location access',
+        'Offline downloads',
         'Priority support',
+        'Advanced progress tracking',
         'Exclusive content',
       ],
-      'popular': true,
+      'color': _turquoise,
+      'isPopular': true,
     },
-    'quarterly': {
-      'name': 'Quarterly Access',
-      'price': 2500,
+    {
+      'name': 'Adventurer',
+      'price': '2,999',
       'currency': 'ETB',
-      'period': '90 days',
-      'description': 'Ultimate Ethiopian experience',
+      'period': 'per year',
       'features': [
-        'Full app access',
+        'Everything in Explorer',
         'All language lessons',
-        'Advanced location features',
-        'Premium chatbot',
-        'Offline maps',
-        'Priority support',
-        'Exclusive content',
-        'Personal guide recommendations',
-        'Cultural event notifications',
+        'Unlimited downloads',
+        '24/7 premium support',
+        'Advanced analytics',
+        'Early access to new features',
+        'Personal tour guide AI',
       ],
-      'popular': false,
+      'color': _blue,
+      'isPopular': false,
     },
-  };
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
-      appBar: AppBar(
-        title: const Text('Subscription'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => context.pop(),
+      backgroundColor: _navyBlue,
+      appBar: _buildAppBar(),
+      body: _buildBody(),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: _navyCard,
+      elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: _textPrimary),
+        onPressed: () => Navigator.pop(context),
+      ),
+      title: const Text(
+        'Subscription',
+        style: TextStyle(
+          color: _textPrimary,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Current Status
-            _buildCurrentStatusCard(),
-            const SizedBox(height: 24),
-            
-            // Plan Selection
-            _buildPlanSelectionSection(),
-            const SizedBox(height: 24),
-            
-            // Features Comparison
-            _buildFeaturesSection(),
-            const SizedBox(height: 24),
-            
-            // Subscribe Button
-            _buildSubscribeButton(),
-            const SizedBox(height: 20),
-            
-            // Terms and Conditions
-            _buildTermsSection(),
-          ],
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.help_outline, color: _textPrimary),
+          onPressed: () => _showHelpDialog(),
         ),
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCurrentStatus(),
+          const SizedBox(height: 24),
+          _buildPlansSection(),
+          const SizedBox(height: 24),
+          _buildFeaturesComparison(),
+          const SizedBox(height: 24),
+          _buildFAQSection(),
+        ],
       ),
     );
   }
 
-  Widget _buildCurrentStatusCard() {
+  Widget _buildCurrentStatus() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
+          colors: _isPremium 
+            ? [_turquoise.withValues(alpha: 0.1), _blue.withValues(alpha: 0.1)]
+            : [_textTertiary.withValues(alpha: 0.1), _textTertiary.withValues(alpha: 0.05)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.primary, Color(0xFF1CB0F6)],
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: _isPremium 
+            ? _turquoise.withValues(alpha: 0.3)
+            : _textTertiary.withValues(alpha: 0.3),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+            color: _isPremium 
+              ? _turquoise.withValues(alpha: 0.2)
+              : _textTertiary.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -148,314 +161,239 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.star,
-                color: Colors.white,
-                size: 24,
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: _isPremium 
+                    ? _turquoise.withValues(alpha: 0.2)
+                    : _textTertiary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(
+                  _isPremium ? Icons.diamond : Icons.person,
+                  color: _isPremium ? _turquoise : _textTertiary,
+                  size: 30,
+                ),
               ),
-              const SizedBox(width: 8),
-              const Text(
-                'Current Plan',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _isPremium ? 'Premium Member' : 'Free User',
+                      style: const TextStyle(
+                        color: _textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      _isPremium 
+                        ? 'Enjoying all premium features'
+                        : 'Upgrade to unlock premium features',
+                      style: const TextStyle(
+                        color: _textSecondary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          const Text(
-            'Free Trial',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'Expires in 3 days',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Text(
-              'Limited Features',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
+          if (_isPremium && _expiryDate != null) ...[
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: _navyCard,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.schedule, color: _turquoise, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Expires: ${_expiryDate!.day}/${_expiryDate!.month}/${_expiryDate!.year}',
+                    style: const TextStyle(
+                      color: _textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
+          ],
         ],
       ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
+    );
   }
 
-  Widget _buildPlanSelectionSection() {
+  Widget _buildPlansSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           'Choose Your Plan',
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: _textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 16),
-        ..._plans.entries.map((entry) => _buildPlanCard(entry.key, entry.value)).toList(),
+        ..._plans.map((plan) => _buildPlanCard(plan)),
       ],
     );
   }
 
-  Widget _buildPlanCard(String planKey, Map<String, dynamic> plan) {
-    final isSelected = _selectedPlan == planKey;
-    final isPopular = plan['popular'] as bool;
+  Widget _buildPlanCard(Map<String, dynamic> plan) {
+    final isCurrentPlan = plan['name'] == _currentPlan;
+    final isPopular = plan['isPopular'] as bool;
     
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: isSelected ? Border.all(color: AppColors.primary, width: 2) : null,
+        border: Border.all(
+          color: isCurrentPlan 
+            ? _turquoise.withValues(alpha: 0.5)
+            : isPopular 
+              ? plan['color'].withValues(alpha: 0.5)
+              : _textTertiary.withValues(alpha: 0.3),
+          width: isCurrentPlan || isPopular ? 2 : 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: isCurrentPlan 
+              ? _turquoise.withValues(alpha: 0.2)
+              : isPopular 
+                ? plan['color'].withValues(alpha: 0.2)
+                : _textTertiary.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _selectedPlan = planKey;
-          });
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            if (isPopular)
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(16),
-                      bottomLeft: Radius.circular(16),
-                    ),
+      child: Stack(
+        children: [
+          if (isPopular)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: plan['color'],
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
                   ),
-                  child: const Text(
-                    'POPULAR',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                child: const Text(
+                  'POPULAR',
+                  style: TextStyle(
+                    color: _textPrimary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-            
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              plan['name'],
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              plan['description'],
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${plan['price']} ${plan['currency']}',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          Text(
-                            'per ${plan['period']}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  // Features
-                  ...(plan['features'] as List<String>).map((feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.check_circle,
-                          color: AppColors.primary,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            feature,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )).toList(),
-                ],
-              ),
             ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideX(begin: 0.3, end: 0);
-  }
-
-  Widget _buildFeaturesSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'What You Get',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          
-          _buildFeatureItem(
-            icon: Icons.school,
-            title: 'Complete Language Learning',
-            description: 'Access to all Amharic lessons and vocabulary',
-          ),
-          _buildFeatureItem(
-            icon: Icons.location_on,
-            title: 'Advanced Location Features',
-            description: 'Detailed information about Ethiopian attractions',
-          ),
-          _buildFeatureItem(
-            icon: Icons.chat,
-            title: 'Premium AI Assistant',
-            description: '24/7 chatbot support for your travels',
-          ),
-          _buildFeatureItem(
-            icon: Icons.offline_bolt,
-            title: 'Offline Access',
-            description: 'Download content for offline use',
-          ),
-          _buildFeatureItem(
-            icon: Icons.support_agent,
-            title: 'Priority Support',
-            description: 'Get help when you need it most',
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
-  }
-
-  Widget _buildFeatureItem({
-    required IconData icon,
-    required String title,
-    required String description,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Icon(
-              icon,
-              color: AppColors.primary,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            plan['name'],
+                            style: const TextStyle(
+                              color: _textPrimary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '${plan['currency']} ${plan['price']}',
+                                style: TextStyle(
+                                  color: plan['color'],
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                plan['period'],
+                                style: const TextStyle(
+                                  color: _textSecondary,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isCurrentPlan)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: _turquoise.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
+                        ),
+                        child: const Text(
+                          'CURRENT',
+                          style: TextStyle(
+                            color: _turquoise,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
+                const SizedBox(height: 16),
+                ...(plan['features'] as List<String>).map((feature) => _buildFeatureItem(feature)),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: isCurrentPlan ? null : () => _selectPlan(plan),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isCurrentPlan 
+                        ? _textTertiary.withValues(alpha: 0.3)
+                        : plan['color'],
+                      foregroundColor: isCurrentPlan 
+                        ? _textTertiary
+                        : _textPrimary,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      isCurrentPlan ? 'Current Plan' : 'Select Plan',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -466,109 +404,236 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     );
   }
 
-  Widget _buildSubscribeButton() {
-    final selectedPlan = _plans[_selectedPlan]!;
-    
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        onPressed: _isLoading ? null : _subscribeToPlan,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+  Widget _buildFeatureItem(String feature) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.check_circle,
+            color: _turquoise,
+            size: 16,
           ),
-          elevation: 0,
-        ),
-        child: _isLoading
-            ? const CircularProgressIndicator(color: Colors.white)
-            : Text(
-                'Subscribe - ${selectedPlan['price']} ${selectedPlan['currency']}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              feature,
+              style: const TextStyle(
+                color: _textSecondary,
+                fontSize: 14,
               ),
+            ),
+          ),
+        ],
       ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
+    );
   }
 
-  Widget _buildTermsSection() {
-    return Column(
-      children: [
-        Text(
-          'By subscribing, you agree to our Terms of Service and Privacy Policy',
-          style: TextStyle(
-            fontSize: 12,
-            color: AppColors.textSecondary,
+  Widget _buildFeaturesComparison() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _navyCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
+        boxShadow: [
+          BoxShadow(
+            color: _turquoise.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
-          textAlign: TextAlign.center,
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Feature Comparison',
+            style: TextStyle(
+              color: _textPrimary,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildComparisonRow('Amharic Lessons', [true, true, true]),
+          _buildComparisonRow('All Languages', [false, false, true]),
+          _buildComparisonRow('Offline Access', [false, true, true]),
+          _buildComparisonRow('Priority Support', [false, true, true]),
+          _buildComparisonRow('Advanced Analytics', [false, false, true]),
+          _buildComparisonRow('Personal AI Guide', [false, false, true]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComparisonRow(String feature, List<bool> availability) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              feature,
+              style: const TextStyle(
+                color: _textPrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          ...availability.map((available) => Expanded(
+            child: Center(
+              child: Icon(
+                available ? Icons.check : Icons.close,
+                color: available ? _turquoise : _textTertiary,
+                size: 20,
+              ),
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFAQSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Frequently Asked Questions',
+          style: TextStyle(
+            color: _textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () {
-                // TODO: Navigate to terms
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Terms of Service')),
-                );
-              },
-              child: const Text(
-                'Terms of Service',
-                style: TextStyle(color: AppColors.primary),
-              ),
-            ),
-            const Text(' • '),
-            TextButton(
-              onPressed: () {
-                // TODO: Navigate to privacy policy
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Privacy Policy')),
-                );
-              },
-              child: const Text(
-                'Privacy Policy',
-                style: TextStyle(color: AppColors.primary),
-              ),
-            ),
-          ],
+        const SizedBox(height: 16),
+        _buildFAQItem(
+          'Can I cancel anytime?',
+          'Yes, you can cancel your subscription at any time. You\'ll continue to have access to premium features until the end of your billing period.',
+        ),
+        _buildFAQItem(
+          'What payment methods do you accept?',
+          'We accept all major credit cards, debit cards, and mobile payment methods including Telebirr and Chapa.',
+        ),
+        _buildFAQItem(
+          'Is there a free trial?',
+          'Yes! New users get a 7-day free trial of the Explorer plan. No credit card required.',
+        ),
+        _buildFAQItem(
+          'Can I change my plan later?',
+          'Absolutely! You can upgrade or downgrade your plan at any time. Changes take effect immediately.',
         ),
       ],
     );
   }
 
-  Future<void> _subscribeToPlan() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // TODO: Implement actual subscription logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-      
-      if (mounted) {
-        // Navigate to payment screen
-        context.push('/payment/method');
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error subscribing: $e'),
-            backgroundColor: Colors.red,
+  Widget _buildFAQItem(String question, String answer) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: _navyCard,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: _textTertiary.withValues(alpha: 0.3)),
+      ),
+      child: ExpansionTile(
+        title: Text(
+          question,
+          style: const TextStyle(
+            color: _textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
-        );
+        ),
+        iconColor: _turquoise,
+        collapsedIconColor: _textTertiary,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Text(
+              answer,
+              style: const TextStyle(
+                color: _textSecondary,
+                fontSize: 14,
+                height: 1.5,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _selectPlan(Map<String, dynamic> plan) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: _navyCard,
+        title: Text(
+          'Subscribe to ${plan['name']}',
+          style: const TextStyle(color: _textPrimary),
+        ),
+        content: Text(
+          'You will be charged ${plan['currency']} ${plan['price']} ${plan['period']}. Continue?',
+          style: const TextStyle(color: _textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: _textSecondary)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _processSubscription(plan);
+            },
+            child: Text(
+              'Subscribe',
+              style: TextStyle(color: plan['color']),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _processSubscription(Map<String, dynamic> plan) {
+    setState(() {
+      _isPremium = plan['name'] != 'Free';
+      _currentPlan = plan['name'];
+      if (_isPremium) {
+        _expiryDate = DateTime.now().add(const Duration(days: 30));
       }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Successfully subscribed to ${plan['name']}!'),
+        backgroundColor: plan['color'],
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _showHelpDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: _navyCard,
+        title: const Text('Subscription Help', style: TextStyle(color: _textPrimary)),
+        content: const Text(
+          'Need help with your subscription? Contact our support team for assistance.',
+          style: TextStyle(color: _textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK', style: TextStyle(color: _turquoise)),
+          ),
+        ],
+      ),
+    );
   }
 }

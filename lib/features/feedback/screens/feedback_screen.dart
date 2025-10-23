@@ -405,7 +405,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
       child: ElevatedButton(
         onPressed: _isSubmitting ? null : _submitFeedback,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF58CC02),
+          backgroundColor: const Color(0xFF00D9B8), // Vibrant turquoise
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

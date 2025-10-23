@@ -67,7 +67,7 @@ class _PasswordResetSuccessScreenState extends ConsumerState<PasswordResetSucces
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color(0xFF58CC02),
+                      Color(0xFF00D9B8),
                       Color(0xFF1CB0F6),
                       Color(0xFFCE82FF),
                     ],
@@ -104,7 +104,7 @@ class _PasswordResetSuccessScreenState extends ConsumerState<PasswordResetSucces
                               child: const Icon(
                                 Icons.check_circle_rounded,
                                 size: 60,
-                                color: Color(0xFF58CC02),
+                                color: Color(0xFF00D9B8),
                               ),
                             ),
                           ),
@@ -191,7 +191,7 @@ class _PasswordResetSuccessScreenState extends ConsumerState<PasswordResetSucces
                               height: 80,
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                                  colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
@@ -306,7 +306,7 @@ class _PasswordResetSuccessScreenState extends ConsumerState<PasswordResetSucces
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+                                  color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
                                   blurRadius: 15,
                                   offset: const Offset(0, 8),
                                 ),
@@ -326,7 +326,7 @@ class _PasswordResetSuccessScreenState extends ConsumerState<PasswordResetSucces
                               child: Container(
                                 decoration: const BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                                    colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                   ),
@@ -362,7 +362,7 @@ class _PasswordResetSuccessScreenState extends ConsumerState<PasswordResetSucces
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: const Color(0xFF58CC02),
+                                color: const Color(0xFF00D9B8),
                                 width: 2,
                               ),
                             ),
@@ -370,7 +370,7 @@ class _PasswordResetSuccessScreenState extends ConsumerState<PasswordResetSucces
                               onPressed: () => context.go('/home'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
-                                foregroundColor: const Color(0xFF58CC02),
+                                foregroundColor: const Color(0xFF00D9B8),
                                 elevation: 0,
                                 shadowColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(

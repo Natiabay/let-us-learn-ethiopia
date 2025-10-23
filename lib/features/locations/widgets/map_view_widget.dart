@@ -183,7 +183,7 @@ class _MapViewWidgetState extends State<MapViewWidget> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF58CC02).withValues(alpha: 0.1),
+            const Color(0xFF00D9B8).withValues(alpha: 0.1),
             const Color(0xFF1CB0F6).withValues(alpha: 0.1),
           ],
         ),
@@ -234,7 +234,7 @@ class _MapViewWidgetState extends State<MapViewWidget> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
+                      colors: [Color(0xFF00D9B8), Color(0xFF1CB0F6)],
                     ),
                     borderRadius: BorderRadius.circular(20),
                   ),

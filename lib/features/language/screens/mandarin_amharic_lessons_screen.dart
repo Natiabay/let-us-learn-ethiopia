@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:tourist_assistive_app/features/language/models/comprehensive_lesson_model.dart' as lesson_model;
-import 'package:tourist_assistive_app/features/language/services/language_image_service.dart';
 
 class MandarinAmharicLessonsScreen extends ConsumerStatefulWidget {
   const MandarinAmharicLessonsScreen({super.key});
@@ -71,7 +70,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
               )
             : SingleChildScrollView(
@@ -142,7 +141,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
         Text(
           'Learn Amharic from Mandarin Chinese',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha:0.7),
             fontSize: 16,
           ),
         ),
@@ -150,7 +149,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
         Text(
           '${_selectedLevel.name.toUpperCase()} Level • ${_lessons.length} Lessons • 400+ Minutes',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha:0.7),
             fontSize: 14,
           ),
         ),
@@ -177,7 +176,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
         Text(
           '$completedLessons of $totalLessons lessons completed',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white.withValues(alpha:0.7),
             fontSize: 14,
           ),
         ),
@@ -233,7 +232,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
         color: const Color(0xFF2A2A2A),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFFCE82FF).withOpacity(0.3),
+          color: const Color(0xFFCE82FF).withValues(alpha:0.3),
           width: 1,
         ),
       ),
@@ -250,7 +249,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
           Container(
             width: 1,
             height: 40,
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha:0.2),
           ),
           Expanded(
             child: _buildStatItem(
@@ -263,14 +262,14 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
           Container(
             width: 1,
             height: 40,
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha:0.2),
           ),
           Expanded(
             child: _buildStatItem(
               '时间',
               '${totalMinutes}分钟',
               Icons.access_time,
-              const Color(0xFF58CC02),
+              const Color(0xFF00D9B8),
             ),
           ),
         ],
@@ -336,11 +335,11 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
     Color borderColor = const Color(0xFF2A2A2A);
     
     if (isCompleted) {
-      backgroundColor = const Color(0xFF58CC02);
-      borderColor = const Color(0xFF58CC02);
+      backgroundColor = const Color(0xFF00D9B8);
+      borderColor = const Color(0xFF00D9B8);
     } else if (isUnlocked) {
-      backgroundColor = const Color(0xFFCE82FF).withOpacity(0.1);
-      borderColor = const Color(0xFFCE82FF).withOpacity(0.3);
+      backgroundColor = const Color(0xFFCE82FF).withValues(alpha:0.1);
+      borderColor = const Color(0xFFCE82FF).withValues(alpha:0.3);
     } else {
       backgroundColor = const Color(0xFF1A1A1A);
       borderColor = const Color(0xFF2A2A2A);
@@ -358,7 +357,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
             border: Border.all(color: borderColor, width: 2),
             boxShadow: [
               BoxShadow(
-                color: borderColor.withOpacity(0.1),
+                color: borderColor.withValues(alpha:0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -451,7 +450,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFCE82FF).withOpacity(0.2),
+                    color: const Color(0xFFCE82FF).withValues(alpha:0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Center(
@@ -468,7 +467,7 @@ class _MandarinAmharicLessonsScreenState extends ConsumerState<MandarinAmharicLe
               else if (isCompleted)
                 const Icon(
                   Icons.check_circle,
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   size: 24,
                 )
               else

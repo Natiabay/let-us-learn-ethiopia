@@ -27,7 +27,7 @@ class LessonAvatarService {
     'ethiopian_man': CharacterAvatar(
       name: 'Abebe',
       icon: Icons.person_4,
-      color: Color(0xFF58CC02),
+      color: Color(0xFF00D9B8),
       description: 'Ethiopian man',
     ),
     'elder_male': CharacterAvatar(

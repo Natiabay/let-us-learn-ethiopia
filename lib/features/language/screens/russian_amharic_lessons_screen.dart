@@ -69,7 +69,7 @@ class _RussianAmharicLessonsScreenState extends ConsumerState<RussianAmharicLess
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                 ),
               )
             : SingleChildScrollView(
@@ -267,7 +267,7 @@ class _RussianAmharicLessonsScreenState extends ConsumerState<RussianAmharicLess
               'Время',
               '${totalMinutes}мин',
               Icons.access_time,
-              const Color(0xFF58CC02),
+              const Color(0xFF00D9B8),
             ),
           ),
         ],
@@ -333,14 +333,11 @@ class _RussianAmharicLessonsScreenState extends ConsumerState<RussianAmharicLess
     Color borderColor = const Color(0xFF2A2A2A);
     
     if (isCompleted) {
-      backgroundColor = const Color(0xFF58CC02);
-      borderColor = const Color(0xFF58CC02);
-    } else if (isUnlocked) {
+      backgroundColor = const Color(0xFF00D9B8);
+      borderColor = const Color(0xFF00D9B8);
+    } else {
       backgroundColor = const Color(0xFFCE82FF).withValues(alpha: 0.1);
       borderColor = const Color(0xFFCE82FF).withValues(alpha: 0.3);
-    } else {
-      backgroundColor = const Color(0xFF1A1A1A);
-      borderColor = const Color(0xFF2A2A2A);
     }
 
     return Container(
@@ -462,7 +459,7 @@ class _RussianAmharicLessonsScreenState extends ConsumerState<RussianAmharicLess
               else if (isCompleted)
                 const Icon(
                   Icons.check_circle,
-                  color: Color(0xFF58CC02),
+                  color: Color(0xFF00D9B8),
                   size: 24,
                 )
               else
@@ -701,48 +698,6 @@ class _RussianAmharicLessonsScreenState extends ConsumerState<RussianAmharicLess
     return lessons;
   }
 
-  List<lesson_model.Lesson> _generateRussianBeginnerLessonsOld() {
-    return [
-      lesson_model.Lesson(
-        id: 'ru_beginner_1',
-        title: 'Основные приветствия',
-        description: 'Изучите основные приветствия на амхарском',
-        level: lesson_model.LanguageLevel.beginner,
-        languageCode: 'ru',
-        estimatedMinutes: 6,
-        xpReward: 100,
-        category: 'Basics',
-        exercises: _generateGreetingExercises(),
-        vocabulary: ['ሰላም', 'እንዴት ናችሁ', 'እንደምን አለ', 'ታዲያስ', 'እንደምን አለች'],
-      ),
-      
-      lesson_model.Lesson(
-        id: 'ru_beginner_2',
-        title: 'Числа 1-10',
-        description: 'Научитесь считать от 1 до 10 на амхарском',
-        level: lesson_model.LanguageLevel.beginner,
-        languageCode: 'ru',
-        estimatedMinutes: 6,
-        xpReward: 100,
-        category: 'Numbers',
-        exercises: _generateNumberExercises(),
-        vocabulary: ['አንድ', 'ሁለት', 'ሶስት', 'አራት', 'አምስት', 'ስድስት', 'ሰባት', 'ስምንት', 'ዘጠኝ', 'አስር'],
-      ),
-      
-      lesson_model.Lesson(
-        id: 'ru_beginner_3',
-        title: 'Члены семьи',
-        description: 'Изучите названия членов семьи на амхарском',
-        level: lesson_model.LanguageLevel.beginner,
-        languageCode: 'ru',
-        estimatedMinutes: 6,
-        xpReward: 100,
-        category: 'Family',
-        exercises: _generateFamilyExercises(),
-        vocabulary: ['አባት', 'እናት', 'ወንድም', 'እህት', 'ልጅ', 'ወላጅ'],
-      ),
-    ];
-  }
 
   List<lesson_model.Lesson> _generateRussianIntermediateLessons() {
     // Generate 50 intermediate lessons efficiently in Russian

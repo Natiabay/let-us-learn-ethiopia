@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tourist_assistive_app/features/subscription/providers/subscription_provider.dart';
 import 'package:tourist_assistive_app/core/app_router.dart';
+import 'package:flutter/foundation.dart';
 
 class PaymentScreen extends ConsumerStatefulWidget {
   const PaymentScreen({super.key});
@@ -19,7 +20,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   Future<void> _waitForSubscriptionUpdate() async {
     int attempts = 0;
     const maxAttempts = 10;
-    const delay = Duration(milliseconds: 500);
+    const delay = const Duration(milliseconds: 500);
 
     while (attempts < maxAttempts) {
       final trialStatus = ref.read(trialStatusProvider);
@@ -33,7 +34,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       final hasAccess = trialData['hasAccess'] ?? false;
       
       if (hasAccess) {
-        print('✅ Subscription updated successfully');
+        // debugPrint('✅ Subscription updated successfully');
         return;
       }
       
@@ -41,7 +42,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       await Future.delayed(delay);
     }
     
-    print('⚠️ Subscription update timeout, proceeding with navigation');
+    // debugPrint('⚠️ Subscription update timeout, proceeding with navigation');
   }
 
   @override
@@ -53,7 +54,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFF58CC02),
+              Color(0xFF00D9B8),
               Color(0xFF1CB0F6),
               Color(0xFFCE82FF),
               Color(0xFF4CAF50),
@@ -228,7 +229,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                                 const SnackBar(
                                   content: Text('🎉 Free trial started! Enjoy 24 hours of premium features.'),
                                   backgroundColor: Colors.green,
-                                  duration: Duration(seconds: 2),
+                                  duration: const Duration(seconds: 2),
                                 ),
                               );
                               

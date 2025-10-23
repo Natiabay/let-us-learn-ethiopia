@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:tourist_assistive_app/core/theme/app_theme.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 
 class HelpSupportScreen extends ConsumerStatefulWidget {
   const HelpSupportScreen({super.key});
@@ -12,294 +10,144 @@ class HelpSupportScreen extends ConsumerStatefulWidget {
 }
 
 class _HelpSupportScreenState extends ConsumerState<HelpSupportScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  final TextEditingController _messageController = TextEditingController();
-  final TextEditingController _subjectController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  
-  String _selectedCategory = 'General';
-  bool _isExpanded = false;
+  // Professional navy blue theme colors
+  static const Color _navyBlue = Color(0xFF0A1929);
+  static const Color _navyCard = Color(0xFF1A2F44);
+  static const Color _turquoise = Color(0xFF00D9B8);
+  static const Color _yellow = Color(0xFFFFD43B);
+  static const Color _blue = Color(0xFF1CB0F6);
+  static const Color _red = Color(0xFFFF4B4B);
+  static const Color _textPrimary = Color(0xFFFFFFFF);
+  static const Color _textSecondary = Color(0xFFB3B3B3);
+  static const Color _textTertiary = Color(0xFF8B949E);
 
-  final List<Map<String, dynamic>> _faqs = [
+  final List<Map<String, dynamic>> _faqItems = [
     {
       'question': 'How do I start learning Amharic?',
-      'answer': 'Go to the Language section and select your native language. Choose from beginner, intermediate, or advanced lessons based on your level.',
+      'answer': 'Go to the Language section and select Amharic lessons. Start with basic greetings and common phrases.',
       'category': 'Learning',
     },
     {
-      'question': 'Can I use the app offline?',
-      'answer': 'Yes! You can download lessons and location information for offline use. Go to Settings > Offline Content to manage your downloads.',
-      'category': 'Features',
-    },
-    {
-      'question': 'How do I find tourist attractions?',
-      'answer': 'Use the Locations section to browse by category or search for specific places. The app will show you nearby attractions based on your location.',
+      'question': 'How can I find tourist locations?',
+      'answer': 'Use the Locations tab to explore historical sites, natural wonders, and cultural attractions in Ethiopia.',
       'category': 'Locations',
     },
     {
-      'question': 'Is my data secure?',
-      'answer': 'Yes, we use industry-standard encryption to protect your personal information. We never share your data with third parties.',
-      'category': 'Privacy',
+      'question': 'Is the app available offline?',
+      'answer': 'Yes! Download lessons and location data for offline access. Some features require internet connection.',
+      'category': 'Technical',
     },
     {
-      'question': 'How do I contact support?',
-      'answer': 'You can reach us through the Contact Us form in this screen, or email us directly at support@touristassistiveapp.com',
-      'category': 'Support',
+      'question': 'How do I save favorite locations?',
+      'answer': 'Tap the heart icon on any location card to add it to your favorites. Access them from your profile.',
+      'category': 'Features',
     },
     {
-      'question': 'Can I change my subscription plan?',
-      'answer': 'Yes, you can upgrade or downgrade your plan at any time. Go to Profile > Subscription to manage your plan.',
-      'category': 'Billing',
+      'question': 'Can I use the app without internet?',
+      'answer': 'Yes, downloaded content works offline. You can access saved lessons and location information.',
+      'category': 'Technical',
     },
   ];
 
-  final List<String> _categories = [
-    'General',
-    'Learning',
-    'Features',
-    'Locations',
-    'Privacy',
-    'Support',
-    'Billing',
+  final List<Map<String, dynamic>> _contactOptions = [
+    {
+      'title': 'Live Chat',
+      'subtitle': 'Get instant help from our support team',
+      'icon': Icons.chat,
+      'color': _turquoise,
+      'action': 'Start Chat',
+    },
+    {
+      'title': 'Email Support',
+      'subtitle': 'Send us a detailed message',
+      'icon': Icons.email,
+      'color': _blue,
+      'action': 'Send Email',
+    },
+    {
+      'title': 'Phone Support',
+      'subtitle': 'Call us for urgent assistance',
+      'icon': Icons.phone,
+      'color': _red,
+      'action': 'Call Now',
+    },
+    {
+      'title': 'Video Call',
+      'subtitle': 'Schedule a video consultation',
+      'icon': Icons.video_call,
+      'color': _yellow,
+      'action': 'Schedule',
+    },
   ];
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _messageController.dispose();
-    _subjectController.dispose();
-    _emailController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    final filteredFaqs = _searchController.text.isEmpty
-        ? _faqs
-        : _faqs.where((faq) =>
-            faq['question'].toLowerCase().contains(_searchController.text.toLowerCase()) ||
-            faq['answer'].toLowerCase().contains(_searchController.text.toLowerCase())).toList();
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
-      appBar: AppBar(
-        title: const Text('Help & Support'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Search Section
-            _buildSearchSection(),
-            const SizedBox(height: 20),
-            
-            // Quick Actions
-            _buildQuickActions(),
-            const SizedBox(height: 20),
-            
-            // FAQ Section
-            _buildFAQSection(filteredFaqs),
-            const SizedBox(height: 20),
-            
-            // Contact Us Section
-            _buildContactSection(),
-            const SizedBox(height: 20),
-            
-            // Emergency Contacts
-            _buildEmergencyContacts(),
-          ],
-        ),
-      ),
+      backgroundColor: _navyBlue,
+      appBar: _buildAppBar(),
+      body: _buildBody(),
     );
   }
 
-  Widget _buildSearchSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: _navyCard,
+      elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: _textPrimary),
+        onPressed: () => Navigator.pop(context),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Search Help',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _searchController,
-            onChanged: (value) {
-              setState(() {});
-            },
-            decoration: InputDecoration(
-              hintText: 'Search for help topics...',
-              prefixIcon: const Icon(Icons.search, color: AppColors.primary),
-              suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {});
-                      },
-                    )
-                  : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: AppColors.grey100,
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
-  }
-
-  Widget _buildQuickActions() {
-    final actions = [
-      {
-        'title': 'Getting Started',
-        'subtitle': 'Learn the basics',
-        'icon': Icons.play_circle_outline,
-        'color': AppColors.primary,
-        'onTap': () => _showGettingStarted(),
-      },
-      {
-        'title': 'Report Bug',
-        'subtitle': 'Found an issue?',
-        'icon': Icons.bug_report,
-        'color': Colors.orange,
-        'onTap': () => _showBugReport(),
-      },
-      {
-        'title': 'Feature Request',
-        'subtitle': 'Suggest improvements',
-        'icon': Icons.lightbulb_outline,
-        'color': Colors.amber,
-        'onTap': () => _showFeatureRequest(),
-      },
-      {
-        'title': 'Live Chat',
-        'subtitle': 'Chat with support',
-        'icon': Icons.chat,
-        'color': Colors.green,
-        'onTap': () => _startLiveChat(),
-      },
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Quick Actions',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
+      title: const Text(
+        'Help & Support',
+        style: TextStyle(
+          color: _textPrimary,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
         ),
-        const SizedBox(height: 16),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.2,
-          ),
-          itemCount: actions.length,
-          itemBuilder: (context, index) {
-            final action = actions[index];
-            return _buildQuickActionCard(action, index);
-          },
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search, color: _textPrimary),
+          onPressed: () => _showSearchDialog(),
         ),
       ],
     );
   }
 
-  Widget _buildQuickActionCard(Map<String, dynamic> action, int index) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 1),
-          ),
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildQuickHelpSection(),
+          const SizedBox(height: 24),
+          _buildContactSection(),
+          const SizedBox(height: 24),
+          _buildFAQSection(),
+          const SizedBox(height: 24),
+          _buildResourcesSection(),
         ],
       ),
-      child: InkWell(
-        onTap: action['onTap'],
-        borderRadius: BorderRadius.circular(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              action['icon'],
-              color: action['color'],
-              size: 32,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              action['title'],
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              action['subtitle'],
-              style: TextStyle(
-                fontSize: 12,
-                color: AppColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    ).animate(delay: Duration(milliseconds: index * 100)).fadeIn(duration: 600.ms).scale();
+    );
   }
 
-  Widget _buildFAQSection(List<Map<String, dynamic>> faqs) {
+  Widget _buildQuickHelpSection() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: [_turquoise.withValues(alpha: 0.1), _blue.withValues(alpha: 0.1)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: _turquoise.withValues(alpha: 0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -307,64 +155,267 @@ class _HelpSupportScreenState extends ConsumerState<HelpSupportScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Frequently Asked Questions',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: _turquoise.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.help_outline,
+                  color: _turquoise,
+                  size: 30,
                 ),
               ),
-              DropdownButton<String>(
-                value: _selectedCategory,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCategory = value!;
-                  });
-                },
-                items: _categories.map((category) {
-                  return DropdownMenuItem(
-                    value: category,
-                    child: Text(category),
-                  );
-                }).toList(),
+              const SizedBox(width: 16),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Need Help?',
+                      style: TextStyle(
+                        color: _textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      'We\'re here to help you explore Ethiopia!',
+                      style: TextStyle(
+                        color: _textSecondary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          ...faqs.where((faq) => _selectedCategory == 'General' || faq['category'] == _selectedCategory)
-              .map((faq) => _buildFAQItem(faq)).toList(),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: _buildQuickAction(
+                  icon: Icons.search,
+                  label: 'Search FAQ',
+                  onTap: () => _showSearchDialog(),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildQuickAction(
+                  icon: Icons.chat,
+                  label: 'Live Chat',
+                  onTap: () => _startLiveChat(),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
+    );
+  }
+
+  Widget _buildQuickAction({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: _navyCard,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: _turquoise, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: const TextStyle(
+                color: _textPrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Contact Support',
+          style: TextStyle(
+            color: _textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ..._contactOptions.map((option) => _buildContactOption(option)),
+      ],
+    );
+  }
+
+  Widget _buildContactOption(Map<String, dynamic> option) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: _navyCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: option['color'].withValues(alpha: 0.3)),
+        boxShadow: [
+          BoxShadow(
+            color: option['color'].withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () => _handleContactAction(option),
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: option['color'].withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  option['icon'],
+                  color: option['color'],
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      option['title'],
+                      style: const TextStyle(
+                        color: _textPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      option['subtitle'],
+                      style: const TextStyle(
+                        color: _textSecondary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: option['color'].withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: option['color'].withValues(alpha: 0.3)),
+                ),
+                child: Text(
+                  option['action'],
+                  style: TextStyle(
+                    color: option['color'],
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFAQSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Frequently Asked Questions',
+              style: TextStyle(
+                color: _textPrimary,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextButton(
+              onPressed: () => _viewAllFAQ(),
+              child: const Text(
+                'View All',
+                style: TextStyle(color: _turquoise),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        ..._faqItems.take(3).map((faq) => _buildFAQItem(faq)),
+      ],
+    );
   }
 
   Widget _buildFAQItem(Map<String, dynamic> faq) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AppColors.grey50,
+        color: _navyCard,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: _textTertiary.withValues(alpha: 0.3)),
       ),
       child: ExpansionTile(
         title: Text(
           faq['question'],
           style: const TextStyle(
+            color: _textPrimary,
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: AppColors.textPrimary,
           ),
         ),
+        subtitle: Text(
+          faq['category'],
+          style: const TextStyle(
+            color: _textSecondary,
+            fontSize: 12,
+          ),
+        ),
+        iconColor: _turquoise,
+        collapsedIconColor: _textTertiary,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Text(
               faq['answer'],
-              style: TextStyle(
+              style: const TextStyle(
+                color: _textSecondary,
                 fontSize: 14,
-                color: AppColors.textSecondary,
                 height: 1.5,
               ),
             ),
@@ -374,17 +425,18 @@ class _HelpSupportScreenState extends ConsumerState<HelpSupportScreen> {
     );
   }
 
-  Widget _buildContactSection() {
+  Widget _buildResourcesSection() {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: _navyCard,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: _turquoise.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -392,265 +444,196 @@ class _HelpSupportScreenState extends ConsumerState<HelpSupportScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Contact Us',
+            'Additional Resources',
             style: TextStyle(
+              color: _textPrimary,
               fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 16),
-          
-          TextField(
-            controller: _subjectController,
-            decoration: const InputDecoration(
-              labelText: 'Subject',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.subject),
-            ),
+          _buildResourceItem(
+            icon: Icons.book,
+            title: 'User Guide',
+            subtitle: 'Complete guide to using the app',
+            onTap: () => _openUserGuide(),
           ),
-          const SizedBox(height: 16),
-          
-          TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Your Email',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.email),
-            ),
-            keyboardType: TextInputType.emailAddress,
+          const Divider(color: _textTertiary, height: 24),
+          _buildResourceItem(
+            icon: Icons.video_library,
+            title: 'Video Tutorials',
+            subtitle: 'Watch step-by-step tutorials',
+            onTap: () => _openVideoTutorials(),
           ),
-          const SizedBox(height: 16),
-          
-          TextField(
-            controller: _messageController,
-            decoration: const InputDecoration(
-              labelText: 'Message',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.message),
-            ),
-            maxLines: 4,
-          ),
-          const SizedBox(height: 20),
-          
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _sendMessage,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Send Message',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
-  }
-
-  Widget _buildEmergencyContacts() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.emergency,
-                color: Colors.red,
-                size: 24,
-              ),
-              const SizedBox(width: 8),
-              const Text(
-                'Emergency Contacts',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          _buildEmergencyContact(
-            title: 'Police',
-            number: '911',
-            onTap: () => _makeCall('911'),
-          ),
-          _buildEmergencyContact(
-            title: 'Ambulance',
-            number: '907',
-            onTap: () => _makeCall('907'),
-          ),
-          _buildEmergencyContact(
-            title: 'Fire Department',
-            number: '939',
-            onTap: () => _makeCall('939'),
-          ),
-          _buildEmergencyContact(
-            title: 'Tourist Police',
-            number: '+251 11 551 5151',
-            onTap: () => _makeCall('+251115515151'),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3, end: 0);
-  }
-
-  Widget _buildEmergencyContact({
-    required String title,
-    required String number,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                Text(
-                  number,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            onPressed: onTap,
-            icon: const Icon(
-              Icons.call,
-              color: Colors.red,
-            ),
+          const Divider(color: _textTertiary, height: 24),
+          _buildResourceItem(
+            icon: Icons.feedback,
+            title: 'Send Feedback',
+            subtitle: 'Help us improve the app',
+            onTap: () => _sendFeedback(),
           ),
         ],
       ),
     );
   }
 
-  void _showGettingStarted() {
+  Widget _buildResourceItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: _turquoise.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: _turquoise, size: 20),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: _textPrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: _textSecondary,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: _textTertiary,
+              size: 16,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showSearchDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Getting Started'),
-        content: const SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Welcome to Tourist Assistive App! Here\'s how to get started:'),
-              SizedBox(height: 16),
-              Text('1. Complete your profile setup'),
-              Text('2. Choose your native language'),
-              Text('3. Start with beginner Amharic lessons'),
-              Text('4. Explore Ethiopian locations'),
-              Text('5. Use the AI chatbot for help'),
-            ],
+        backgroundColor: _navyCard,
+        title: const Text('Search Help', style: TextStyle(color: _textPrimary)),
+        content: const TextField(
+          style: TextStyle(color: _textPrimary),
+          decoration: InputDecoration(
+            hintText: 'What can we help you with?',
+            hintStyle: TextStyle(color: _textSecondary),
+            prefixIcon: Icon(Icons.search, color: _turquoise),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Got it'),
+            child: const Text('Cancel', style: TextStyle(color: _textSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Search', style: TextStyle(color: _turquoise)),
           ),
         ],
       ),
     );
   }
 
-  void _showBugReport() {
-    _subjectController.text = 'Bug Report';
-    _messageController.text = 'Please describe the bug you encountered:\n\n';
-    setState(() {});
-  }
-
-  void _showFeatureRequest() {
-    _subjectController.text = 'Feature Request';
-    _messageController.text = 'I would like to suggest the following feature:\n\n';
-    setState(() {});
-  }
-
   void _startLiveChat() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Live chat feature coming soon!'),
-        backgroundColor: Colors.blue,
+        content: Text('Starting live chat...'),
+        backgroundColor: _turquoise,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
 
-  void _sendMessage() {
-    if (_subjectController.text.isEmpty || _messageController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
+  void _handleContactAction(Map<String, dynamic> option) {
+    String message = '';
+    switch (option['title']) {
+      case 'Live Chat':
+        message = 'Starting live chat...';
+        break;
+      case 'Email Support':
+        message = 'Opening email client...';
+        break;
+      case 'Phone Support':
+        message = 'Calling support...';
+        break;
+      case 'Video Call':
+        message = 'Scheduling video call...';
+        break;
     }
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: option['color'],
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
 
-    // TODO: Implement send message functionality
+  void _viewAllFAQ() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Message sent successfully! We\'ll get back to you soon.'),
-        backgroundColor: Colors.green,
+        content: Text('Opening all FAQ...'),
+        backgroundColor: _blue,
+        behavior: SnackBarBehavior.floating,
       ),
     );
-
-    _subjectController.clear();
-    _messageController.clear();
-    _emailController.clear();
   }
 
-  Future<void> _makeCall(String number) async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: number);
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Cannot make call to $number'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+  void _openUserGuide() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Opening user guide...'),
+        backgroundColor: _turquoise,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _openVideoTutorials() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Opening video tutorials...'),
+        backgroundColor: _blue,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _sendFeedback() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Opening feedback form...'),
+        backgroundColor: _yellow,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }

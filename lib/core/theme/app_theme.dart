@@ -2,93 +2,102 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppColors {
-  // Modern Ethiopian-inspired palette with better contrast
-  static const Color primary = Color(0xFF1B5E20); // Rich forest green
-  static const Color primaryLight = Color(0xFF4CAF50); // Vibrant green
-  static const Color primaryDark = Color(0xFF0D3B0D); // Deep forest
-  static const Color primaryContainer = Color(0xFFE8F5E8); // Light green background
+  // Professional color palette (matching reference app)
+  static const Color primary = Color(0xFF00D9B8); // Vibrant turquoise (PRIMARY ACTION)
+  static const Color primaryLight = Color(0xFF00F5D4); // Lighter turquoise
+  static const Color primaryDark = Color(0xFF00BFA5); // Darker turquoise
+  static const Color primaryContainer = Color(0xFF1A2F44); // Navy container
   
-  static const Color secondary = Color(0xFFFFC107); // Warm amber
-  static const Color secondaryLight = Color(0xFFFFE082); // Light amber
-  static const Color secondaryDark = Color(0xFFE65100); // Deep orange
-  static const Color secondaryContainer = Color(0xFFFFF8E1); // Light amber background
+  static const Color secondary = Color(0xFF3B82F6); // Blue
+  static const Color secondaryLight = Color(0xFF60A5FA); // Lighter blue
+  static const Color secondaryDark = Color(0xFF2563EB); // Darker blue
+  static const Color secondaryContainer = Color(0xFF1A2F44); // Navy container
   
-  static const Color accent = Color(0xFFD32F2F); // Rich red
-  static const Color accentLight = Color(0xFFEF5350); // Light red
-  static const Color accentDark = Color(0xFFB71C1C); // Deep red
-  static const Color accentContainer = Color(0xFFFFEBEE); // Light red background
+  static const Color accent = Color(0xFF8B5CF6); // Purple
+  static const Color accentLight = Color(0xFFA78BFA); // Light purple
+  static const Color accentDark = Color(0xFF7C3AED); // Dark purple
+  static const Color accentContainer = Color(0xFF1A2F44); // Navy container
   
-  // Modern neutral palette
+  // Modern neutral palette (DARK THEME)
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF1A1A1A);
-  static const Color grey50 = Color(0xFFFAFAFA);
-  static const Color grey100 = Color(0xFFF5F5F5);
-  static const Color grey200 = Color(0xFFEEEEEE);
-  static const Color grey300 = Color(0xFFE0E0E0);
-  static const Color grey400 = Color(0xFFBDBDBD);
-  static const Color grey500 = Color(0xFF9E9E9E);
-  static const Color grey600 = Color(0xFF757575);
-  static const Color grey700 = Color(0xFF616161);
-  static const Color grey800 = Color(0xFF424242);
-  static const Color grey900 = Color(0xFF212121);
+  static const Color grey50 = Color(0xFF404040);
+  static const Color grey100 = Color(0xFF4D4D4D);
+  static const Color grey200 = Color(0xFF666666);
+  static const Color grey300 = Color(0xFF808080);
+  static const Color grey400 = Color(0xFF999999);
+  static const Color grey500 = Color(0xFFB3B3B3);
+  static const Color grey600 = Color(0xFFCCCCCC);
+  static const Color grey700 = Color(0xFFE0E0E0);
+  static const Color grey800 = Color(0xFF333333);
+  static const Color grey900 = Color(0xFF2A2A2A);
   
-  // Background Colors
-  static const Color background = Color(0xFFFAFAFA);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFF8F9FA);
-  static const Color surfaceContainer = Color(0xFFF1F3F4);
+  // Background Colors (PROFESSIONAL DARK NAVY THEME - like reference app)
+  static const Color background = Color(0xFF0A1929); // Deep navy blue (like reference app)
+  static const Color surface = Color(0xFF1A2F44); // Lighter navy for cards
+  static const Color surfaceVariant = Color(0xFF243B53);
+  static const Color surfaceContainer = Color(0xFF1A2F44);
   
-  // Text Colors with better contrast
-  static const Color textPrimary = Color(0xFF1A1A1A);
-  static const Color textSecondary = Color(0xFF5F6368);
-  static const Color textTertiary = Color(0xFF9AA0A6);
-  static const Color textDisabled = Color(0xFFBDBDBD);
+  // Text Colors for DARK THEME
+  static const Color textPrimary = Color(0xFFFFFFFF); // White text on dark
+  static const Color textSecondary = Color(0xFFB3B3B3); // Light gray
+  static const Color textTertiary = Color(0xFF808080); // Medium gray
+  static const Color textDisabled = Color(0xFF666666); // Dark gray
   static const Color textOnPrimary = Color(0xFFFFFFFF);
-  static const Color textOnSecondary = Color(0xFF1A1A1A);
+  static const Color textOnSecondary = Color(0xFFFFFFFF);
   
-  // Duolingo Colors (exact match from photo)
-  static const Color duolingoGreen = Color(0xFF58CC02); // Primary Duolingo green
-  static const Color duolingoBlue = Color(0xFF1CB0F6); // Duolingo blue
-  static const Color duolingoRed = Color(0xFFFF4B4B); // Duolingo red for hearts
-  static const Color duolingoPurple = Color(0xFFCE82FF); // Duolingo purple
-  static const Color duolingoOrange = Color(0xFFFF6B35); // Duolingo orange
-  static const Color duolingoDark = Color(0xFF1A1A1A); // Duolingo dark background
-  static const Color duolingoCard = Color(0xFF2A2A2A); // Duolingo card background
+  // Professional Action Colors (like reference app - vibrant turquoise)
+  static const Color duolingoGreen = Color(0xFF00D9B8); // Vibrant turquoise (PRIMARY ACTION)
+  static const Color duolingoBlue = Color(0xFF3B82F6); // Blue
+  static const Color duolingoRed = Color(0xFFEF4444); // Red for errors
+  static const Color duolingoPurple = Color(0xFF8B5CF6); // Purple
+  static const Color duolingoOrange = Color(0xFFF59E0B); // Orange for warnings
+  static const Color duolingoYellow = Color(0xFFFBBF24); // Yellow for highlights
+  static const Color duolingoPink = Color(0xFFEC4899); // Pink
   
-  // Status Colors (modern and accessible)
-  static const Color success = Color(0xFF00C853);
-  static const Color successLight = Color(0xFF69F0AE);
-  static const Color successContainer = Color(0xFFE8F5E8);
+  // Professional Dark Navy Background Colors (like reference app)
+  static const Color duolingoDark = Color(0xFF0A1929); // Deep navy blue background
+  static const Color duolingoCard = Color(0xFF1A2F44); // Navy card background
+  static const Color duolingoSurface = Color(0xFF243B53); // Surface color
+  static const Color duolingoBorder = Color(0xFF334155); // Border color
   
-  static const Color warning = Color(0xFFFF9800);
-  static const Color warningLight = Color(0xFFFFB74D);
-  static const Color warningContainer = Color(0xFFFFF3E0);
+  // Duolingo Text Colors for Dark Theme
+  static const Color duolingoTextPrimary = Color(0xFFFFFFFF); // White text
+  static const Color duolingoTextSecondary = Color(0xFFB3B3B3); // Light gray text
+  static const Color duolingoTextTertiary = Color(0xFF808080); // Medium gray text
+  static const Color duolingoTextDisabled = Color(0xFF666666); // Disabled text
   
-  static const Color error = Color(0xFFE53935);
-  static const Color errorLight = Color(0xFFEF5350);
-  static const Color errorContainer = Color(0xFFFFEBEE);
+  // Status Colors (Duolingo style for dark theme)
+  static const Color success = Color(0xFF58CC02); // Duolingo green
+  static const Color successLight = Color(0xFF7FCC27);
+  static const Color successContainer = Color(0xFF2A2A2A);
   
-  static const Color info = Color(0xFF2196F3);
-  static const Color infoLight = Color(0xFF64B5F6);
-  static const Color infoContainer = Color(0xFFE3F2FD);
+  static const Color warning = Color(0xFFFFD93D); // Duolingo yellow
+  static const Color warningLight = Color(0xFFFFE680);
+  static const Color warningContainer = Color(0xFF2A2A2A);
   
-  // Gradient colors for modern effects
+  static const Color error = Color(0xFFFF4B4B); // Duolingo red
+  static const Color errorLight = Color(0xFFFF7373);
+  static const Color errorContainer = Color(0xFF2A2A2A);
+  
+  static const Color info = Color(0xFF1CB0F6); // Duolingo blue
+  static const Color infoLight = Color(0xFF64C5FF);
+  static const Color infoContainer = Color(0xFF2A2A2A);
+  
+  // Gradient colors for modern effects (Duolingo style)
   static const List<Color> primaryGradient = [
-    Color(0xFF1B5E20),
-    Color(0xFF2E7D32),
-    Color(0xFF4CAF50),
+    Color(0xFF58CC02), // Duolingo green
+    Color(0xFF1CB0F6), // Duolingo blue
   ];
   
   static const List<Color> secondaryGradient = [
-    Color(0xFFFFC107),
-    Color(0xFFFFD54F),
-    Color(0xFFFFE082),
+    Color(0xFF1CB0F6), // Duolingo blue
+    Color(0xFFCE82FF), // Duolingo purple
   ];
   
   static const List<Color> accentGradient = [
-    Color(0xFFD32F2F),
-    Color(0xFFE53935),
-    Color(0xFFEF5350),
+    Color(0xFFCE82FF), // Duolingo purple
+    Color(0xFFFF6B9D), // Duolingo pink
   ];
   
   // Shadow colors
@@ -98,12 +107,12 @@ class AppColors {
   
   // Additional missing colors
   static const Color errorDark = Color(0xFFB71C1C);
-  static const Color grey = Color(0xFF9E9E9E);
-  static const Color lightGrey = Color(0xFFE0E0E0);
+  static const Color grey = Color(0xFF808080);
+  static const Color lightGrey = Color(0xFF666666);
   
-  // Additional colors for new components
-  static const Color backgroundSecondary = Color(0xFFF8F9FA);
-  static const Color border = Color(0xFFE0E0E0);
+  // Additional colors for new components (DARK THEME)
+  static const Color backgroundSecondary = Color(0xFF2A2A2A);
+  static const Color border = Color(0xFF404040); // Dark border
 }
 
 class AppTheme {

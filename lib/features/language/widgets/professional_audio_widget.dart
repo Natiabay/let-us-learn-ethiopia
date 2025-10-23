@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourist_assistive_app/features/language/services/professional_audio_service.dart';
+// import 'package:flutter/foundation.dart'; // Removed unnecessary import
 
 class ProfessionalAudioWidget extends StatefulWidget {
   final String amharicText;
@@ -102,7 +103,7 @@ class _ProfessionalAudioWidgetState extends State<ProfessionalAudioWidget>
         await _audioService.speakEnglish(widget.englishText);
       }
     } catch (e) {
-      print('Error playing audio: $e');
+      // debugPrint('Error playing audio: $e');
     } finally {
       // Stop animations
       _pulseController.stop();
@@ -127,12 +128,12 @@ class _ProfessionalAudioWidgetState extends State<ProfessionalAudioWidget>
             height: widget.size,
             decoration: BoxDecoration(
               color: _isPlaying 
-                  ? (widget.buttonColor ?? const Color(0xFF58CC02)).withValues(alpha: 0.8)
-                  : (widget.buttonColor ?? const Color(0xFF58CC02)),
+                  ? (widget.buttonColor ?? const Color(0xFF00D9B8)).withValues(alpha: 0.8)
+                  : (widget.buttonColor ?? const Color(0xFF00D9B8)),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: (widget.buttonColor ?? const Color(0xFF58CC02)).withValues(alpha: 0.3),
+                  color: (widget.buttonColor ?? const Color(0xFF00D9B8)).withValues(alpha: 0.3),
                   blurRadius: _isPlaying ? 15 : 8,
                   offset: const Offset(0, 4),
                 ),
@@ -150,7 +151,7 @@ class _ProfessionalAudioWidgetState extends State<ProfessionalAudioWidget>
                         width: widget.size! * (1 + _pulseController.value * 0.3),
                         height: widget.size! * (1 + _pulseController.value * 0.3),
                         decoration: BoxDecoration(
-                          color: (widget.buttonColor ?? const Color(0xFF58CC02))
+                          color: (widget.buttonColor ?? const Color(0xFF00D9B8))
                               .withValues(alpha: 0.3 * (1 - _pulseController.value)),
                           shape: BoxShape.circle,
                         ),
@@ -167,7 +168,7 @@ class _ProfessionalAudioWidgetState extends State<ProfessionalAudioWidget>
                         width: widget.size! * (1 + _waveController.value * 0.2),
                         height: widget.size! * (1 + _waveController.value * 0.2),
                         decoration: BoxDecoration(
-                          color: (widget.buttonColor ?? const Color(0xFF58CC02))
+                          color: (widget.buttonColor ?? const Color(0xFF00D9B8))
                               .withValues(alpha: 0.2 * (1 - _waveController.value)),
                           shape: BoxShape.circle,
                         ),
@@ -271,7 +272,7 @@ class ProfessionalPictureWidget extends StatelessWidget {
                 color: const Color(0xFFF5F5F5),
                 child: hasPicture
                     ? Image.asset(
-                        picturePath!,
+                        picturePath,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return _buildPlaceholder();

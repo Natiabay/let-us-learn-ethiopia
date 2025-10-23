@@ -288,3 +288,6 @@ function generateQuickReplies(userLocation?: string): string[] {
 
 
 
+
+
+

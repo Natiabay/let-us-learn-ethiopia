@@ -56,7 +56,7 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
         backgroundColor: Color(0xFF1A1A1A),
         body: Center(
           child: CircularProgressIndicator(
-            color: Color(0xFF58CC02),
+            color: Color(0xFF00D9B8),
           ),
         ),
       );
@@ -91,7 +91,7 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
             width: 40,
             height: 40,
             decoration: const BoxDecoration(
-              color: Color(0xFF58CC02),
+              color: Color(0xFF00D9B8),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -196,7 +196,7 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF58CC02), Color(0xFF4CAF50)],
+          colors: [Color(0xFF00D9B8), Color(0xFF4CAF50)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -237,7 +237,7 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
                   child: const Text(
                     'Start Learning',
                     style: TextStyle(
-                      color: Color(0xFF58CC02),
+                      color: Color(0xFF00D9B8),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -333,8 +333,8 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
     Color borderColor = const Color(0xFF2A2A2A);
     
     if (isCompleted) {
-      backgroundColor = const Color(0xFF58CC02);
-      borderColor = const Color(0xFF58CC02);
+      backgroundColor = const Color(0xFF00D9B8);
+      borderColor = const Color(0xFF00D9B8);
     } else if (isUnlocked) {
       backgroundColor = const Color(0xFF1CB0F6);
       borderColor = const Color(0xFF1CB0F6);
@@ -365,7 +365,7 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
               child: isCompleted
                   ? const Icon(
                       Icons.check,
-                      color: Color(0xFF58CC02),
+                      color: Color(0xFF00D9B8),
                       size: 24,
                     )
                   : isUnlocked
@@ -474,7 +474,7 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
             onPressed: () => Navigator.of(context).pop(),
             child: const Text(
               'OK',
-              style: TextStyle(color: Color(0xFF58CC02)),
+              style: TextStyle(color: Color(0xFF00D9B8)),
             ),
           ),
         ],
@@ -569,7 +569,7 @@ class _AmharicLearningDashboardState extends ConsumerState<AmharicLearningDashbo
     required VoidCallback onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: const Color(0xFF58CC02)),
+      leading: Icon(icon, color: const Color(0xFF00D9B8)),
       title: Text(
         title,
         style: const TextStyle(color: Colors.white),

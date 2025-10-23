@@ -107,7 +107,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.duolingoDark, // Deep navy background
       extendBody: true,
       resizeToAvoidBottomInset: false,
       appBar: _buildModernAppBar(currentIndex, isTrialActive),
@@ -128,22 +128,18 @@ class _MainScreenState extends ConsumerState<MainScreen>
     final item = _navigationItems[currentIndex];
     
     return AppBar(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.duolingoCard, // Navy card background
       elevation: 0,
-      surfaceTintColor: AppColors.primary,
+      surfaceTintColor: AppColors.duolingoGreen,
       leading: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: AppColors.primaryGradient,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: AppColors.duolingoGreen.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(
           item.activeIcon,
-          color: AppColors.textOnPrimary,
+          color: AppColors.duolingoGreen, // Turquoise icon
           size: 24,
         ),
       ),
@@ -203,9 +199,9 @@ class _MainScreenState extends ConsumerState<MainScreen>
           child: FloatingActionButton(
             heroTag: "main_fab_unique",
             onPressed: () => _toggleFabExpansion(),
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.textOnPrimary,
-            elevation: 0,
+            backgroundColor: AppColors.duolingoGreen, // Vibrant turquoise
+            foregroundColor: AppColors.duolingoDark, // Dark navy text
+            elevation: 8,
             child: AnimatedRotation(
               turns: _isFabExpanded ? 0.125 : 0,
               duration: const Duration(milliseconds: 300),
@@ -224,12 +220,12 @@ class _MainScreenState extends ConsumerState<MainScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.duolingoCard, // Navy card background
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.grey200, width: 1),
+        border: Border.all(color: AppColors.duolingoBorder, width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 4),
           ),
@@ -243,8 +239,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: AppColors.grey500,
+          selectedItemColor: AppColors.duolingoGreen, // Vibrant turquoise
+          unselectedItemColor: AppColors.duolingoTextTertiary, // Gray
           selectedLabelStyle: const TextStyle(
             fontFamily: null,
             fontSize: 12,
