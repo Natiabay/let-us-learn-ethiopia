@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tourist_assistive_app/features/duolingo_learn/providers/onboarding_provider.dart';
-import 'package:tourist_assistive_app/features/duolingo_learn/providers/progress_provider.dart';
 
-/// Preferences Screen - Final onboarding step with user preferences
-class PreferencesScreen extends ConsumerStatefulWidget {
+/// Preferences Screen for Language Learning Setup
+/// Final screen to set learning preferences and complete setup
+class PreferencesScreen extends StatefulWidget {
   const PreferencesScreen({super.key});
 
   @override
-  ConsumerState<PreferencesScreen> createState() => _PreferencesScreenState();
+  State<PreferencesScreen> createState() => _PreferencesScreenState();
 }
 
-class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
+class _PreferencesScreenState extends State<PreferencesScreen> {
+  int _dailyGoal = 10; // minutes
+  String _reminderTime = '09:00';
+  bool _notificationsEnabled = true;
+  bool _soundEnabled = true;
+
   @override
   Widget build(BuildContext context) {
-    final onboarding = ref.watch(onboardingProvider);
-
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => context.pop(),
+        ),
+        title: const Text(
+          'Preferences',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -36,206 +41,195 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             children: [
               // Header
               const Text(
-                'Customize your\nexperience',
+                'Almost there!',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 32,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  height: 1.2,
                 ),
-              ).animate().fadeIn().slideY(begin: -0.3, end: 0),
-              
+              ).animate()
+                .fadeIn(delay: 200.ms, duration: 600.ms)
+                .slideX(begin: -0.3, end: 0, delay: 200.ms),
+
               const SizedBox(height: 8),
-              
+
               Text(
-                'Set your learning preferences',
+                'Set your learning preferences to get started',
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 16,
                 ),
-              ).animate().fadeIn(delay: 100.ms),
+              ).animate()
+                .fadeIn(delay: 400.ms, duration: 600.ms)
+                .slideX(begin: -0.3, end: 0, delay: 400.ms),
 
               const SizedBox(height: 32),
 
-              // Preferences list
+              // Preferences
               Expanded(
-                child: ListView(
-                  children: [
-                    // Daily Goal
-                    _buildSection(
-                      title: 'Daily Goal',
-                      subtitle: 'How much XP per day?',
-                      delay: 200,
-                      child: Column(
-                        children: [
-                          _buildGoalOption(
-                            context: context,
-                            title: 'Casual',
-                            subtitle: '20 XP/day (5 minutes)',
-                            xp: 20,
-                            selected: onboarding.dailyGoalXP == 20,
-                          ),
-                          const SizedBox(height: 12),
-                          _buildGoalOption(
-                            context: context,
-                            title: 'Regular',
-                            subtitle: '50 XP/day (10 minutes)',
-                            xp: 50,
-                            selected: onboarding.dailyGoalXP == 50,
-                          ),
-                          const SizedBox(height: 12),
-                          _buildGoalOption(
-                            context: context,
-                            title: 'Serious',
-                            subtitle: '100 XP/day (15 minutes)',
-                            xp: 100,
-                            selected: onboarding.dailyGoalXP == 100,
-                          ),
-                          const SizedBox(height: 12),
-                          _buildGoalOption(
-                            context: context,
-                            title: 'Intense',
-                            subtitle: '200 XP/day (30 minutes)',
-                            xp: 200,
-                            selected: onboarding.dailyGoalXP == 200,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Transliteration
-                    _buildSection(
-                      title: 'Transliteration',
-                      subtitle: 'Show pronunciation guide',
-                      delay: 300,
-                      child: _buildToggle(
-                        title: 'Always show transliteration',
-                        subtitle: 'Display "selam/ሰላም" format',
-                        value: onboarding.showTransliteration,
-                        onChanged: (value) {
-                          ref.read(onboardingProvider.notifier)
-                              .toggleTransliteration(value);
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Subtitles
-                    _buildSection(
-                      title: 'Audio Subtitles',
-                      subtitle: 'Show text during audio playback',
-                      delay: 400,
-                      child: _buildToggle(
-                        title: 'Enable subtitles',
-                        subtitle: 'Display text when audio plays',
-                        value: onboarding.enableSubtitles,
-                        onChanged: (value) {
-                          ref.read(onboardingProvider.notifier)
-                              .toggleSubtitles(value);
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Notifications
-                    _buildSection(
-                      title: 'Reminders',
-                      subtitle: 'Stay motivated with practice reminders',
-                      delay: 500,
-                      child: _buildToggle(
-                        title: 'Enable notifications',
-                        subtitle: 'Get daily reminders to practice',
-                        value: onboarding.notificationsEnabled,
-                        onChanged: (value) {
-                          ref.read(onboardingProvider.notifier)
-                              .toggleNotifications(value);
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Voice preference
-                    _buildSection(
-                      title: 'Voice Preference',
-                      subtitle: 'Choose your preferred narrator',
-                      delay: 600,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _buildVoiceOption(
-                              context: context,
-                              title: 'Female',
-                              icon: Icons.woman_rounded,
-                              selected: onboarding.preferredVoice == 'female',
-                              onTap: () {
-                                ref.read(onboardingProvider.notifier)
-                                    .setPreferredVoice('female');
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Daily Goal
+                      _buildPreferenceCard(
+                        title: 'Daily Goal',
+                        subtitle: 'How many minutes per day?',
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '$_dailyGoal minutes',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: _dailyGoal > 5
+                                          ? () => setState(() => _dailyGoal -= 5)
+                                          : null,
+                                      icon: const Icon(Icons.remove_rounded),
+                                      style: IconButton.styleFrom(
+                                        backgroundColor: const Color(0xFF2A2A2A),
+                                        foregroundColor: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    IconButton(
+                                      onPressed: _dailyGoal < 60
+                                          ? () => setState(() => _dailyGoal += 5)
+                                          : null,
+                                      icon: const Icon(Icons.add_rounded),
+                                      style: IconButton.styleFrom(
+                                        backgroundColor: const Color(0xFF58CC02),
+                                        foregroundColor: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Slider(
+                              value: _dailyGoal.toDouble(),
+                              min: 5,
+                              max: 60,
+                              divisions: 11,
+                              activeColor: const Color(0xFF58CC02),
+                              inactiveColor: Colors.white.withValues(alpha: 0.2),
+                              onChanged: (value) {
+                                setState(() {
+                                  _dailyGoal = value.round();
+                                });
                               },
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildVoiceOption(
-                              context: context,
-                              title: 'Male',
-                              icon: Icons.man_rounded,
-                              selected: onboarding.preferredVoice == 'male',
-                              onTap: () {
-                                ref.read(onboardingProvider.notifier)
-                                    .setPreferredVoice('male');
-                              },
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        delay: 200,
                       ),
-                    ),
-                  ],
+
+                      const SizedBox(height: 16),
+
+                      // Reminder Time
+                      _buildPreferenceCard(
+                        title: 'Daily Reminder',
+                        subtitle: 'When should we remind you to practice?',
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _reminderTime,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: _selectTime,
+                              icon: const Icon(Icons.access_time_rounded),
+                              label: const Text('Change'),
+                              style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFF58CC02),
+                              ),
+                            ),
+                          ],
+                        ),
+                        delay: 400,
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Notifications
+                      _buildPreferenceCard(
+                        title: 'Notifications',
+                        subtitle: 'Get reminders and updates',
+                        child: Switch(
+                          value: _notificationsEnabled,
+                          onChanged: (value) {
+                            setState(() {
+                              _notificationsEnabled = value;
+                            });
+                          },
+                          activeColor: const Color(0xFF58CC02),
+                        ),
+                        delay: 600,
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Sound
+                      _buildPreferenceCard(
+                        title: 'Sound Effects',
+                        subtitle: 'Play sounds during lessons',
+                        child: Switch(
+                          value: _soundEnabled,
+                          onChanged: (value) {
+                            setState(() {
+                              _soundEnabled = value;
+                            });
+                          },
+                          activeColor: const Color(0xFF58CC02),
+                        ),
+                        delay: 800,
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
-              // Finish button
+              const SizedBox(height: 24),
+
+              // Complete Setup Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    // Complete onboarding
-                    await ref.read(onboardingProvider.notifier).completeOnboarding();
-                    
-                    // Set daily goal in progress
-                    await ref.read(progressProvider.notifier)
-                        .setDailyGoal(onboarding.dailyGoalXP);
-                    
-                    // Navigate to dashboard
-                    if (context.mounted) {
-                      context.go('/duolingo/dashboard');
-                    }
-                  },
+                  onPressed: _completeSetup,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF58CC02),
                     foregroundColor: Colors.white,
+                    elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 0,
                   ),
                   child: const Text(
-                    'START LEARNING',
+                    'Complete Setup',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
-              ).animate().fadeIn(delay: 700.ms),
-
-              const SizedBox(height: 16),
+              ).animate()
+                .fadeIn(delay: 1000.ms, duration: 600.ms)
+                .slideY(begin: 0.3, end: 0, delay: 1000.ms),
             ],
           ),
         ),
@@ -243,187 +237,88 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
     );
   }
 
-  Widget _buildSection({
+  Widget _buildPreferenceCard({
     required String title,
     required String subtitle,
-    required int delay,
     required Widget child,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          subtitle,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.6),
-            fontSize: 14,
-          ),
-        ),
-        const SizedBox(height: 12),
-        child,
-      ],
-    ).animate().fadeIn(delay: delay.ms).slideX(begin: -0.3, end: 0);
-  }
-
-  Widget _buildGoalOption({
-    required BuildContext context,
-    required String title,
-    required String subtitle,
-    required int xp,
-    required bool selected,
-  }) {
-    return InkWell(
-      onTap: () {
-        ref.read(onboardingProvider.notifier).setDailyGoalXP(xp);
-      },
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: selected
-              ? const Color(0xFF58CC02).withValues(alpha: 0.2)
-              : const Color(0xFF2A2A2A),
-          border: Border.all(
-            color: selected ? const Color(0xFF58CC02) : Colors.transparent,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: selected ? const Color(0xFF58CC02) : Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (selected)
-              const Icon(
-                Icons.check_circle_rounded,
-                color: Color(0xFF58CC02),
-                size: 24,
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildToggle({
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool> onChanged,
+    required int delay,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFF2A2A2A),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    fontSize: 13,
-                  ),
-                ),
-              ],
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeColor: const Color(0xFF58CC02),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.7),
+              fontSize: 14,
+            ),
           ),
+          const SizedBox(height: 16),
+          child,
         ],
       ),
-    );
+    ).animate()
+      .fadeIn(delay: delay.ms, duration: 600.ms)
+      .slideX(begin: -0.3, end: 0, delay: delay.ms);
   }
 
-  Widget _buildVoiceOption({
-    required BuildContext context,
-    required String title,
-    required IconData icon,
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: selected
-              ? const Color(0xFF58CC02).withValues(alpha: 0.2)
-              : const Color(0xFF2A2A2A),
-          border: Border.all(
-            color: selected ? const Color(0xFF58CC02) : Colors.transparent,
-            width: 2,
+  Future<void> _selectTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.parse(_reminderTime.split(':')[0]),
+        minute: int.parse(_reminderTime.split(':')[1]),
+      ),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color(0xFF58CC02),
+              onPrimary: Colors.white,
+              surface: Color(0xFF2A2A2A),
+              onSurface: Colors.white,
+            ),
           ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: selected ? const Color(0xFF58CC02) : Colors.white,
-              size: 32,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                color: selected ? const Color(0xFF58CC02) : Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      setState(() {
+        _reminderTime = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+      });
+    }
+  }
+
+  void _completeSetup() {
+    // Save preferences and navigate to dashboard
+    // TODO: Save preferences to storage/provider
+    
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Setup complete! Welcome to your learning journey!'),
+        backgroundColor: Color(0xFF58CC02),
       ),
     );
+
+    // Navigate to language dashboard
+    context.go('/language');
   }
 }
-

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/voice_service.dart';
 import '../../../core/services/audio_service.dart';
 
 /// Test widget for voice functionality
@@ -91,10 +90,10 @@ class _VoiceTestWidgetState extends State<VoiceTestWidget> {
     });
 
     try {
-      await _audioService.speakAmharic('ሰላም');
-      print('✅ Amharic TTS test completed');
+      await _audioService.playAmharicText('ሰላም');
+      // debugPrint('✅ Amharic TTS test completed');
     } catch (e) {
-      print('❌ Amharic TTS test failed: $e');
+      // debugPrint('❌ Amharic TTS test failed: $e');
     } finally {
       setState(() {
         _isSpeaking = false;
@@ -108,10 +107,10 @@ class _VoiceTestWidgetState extends State<VoiceTestWidget> {
     });
 
     try {
-      await _audioService.speakEnglish('Hello');
-      print('✅ English TTS test completed');
+      await _audioService.playEnglishText('Hello');
+      // debugPrint('✅ English TTS test completed');
     } catch (e) {
-      print('❌ English TTS test failed: $e');
+      // debugPrint('❌ English TTS test failed: $e');
     } finally {
       setState(() {
         _isSpeaking = false;

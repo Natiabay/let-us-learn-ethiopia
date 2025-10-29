@@ -75,7 +75,9 @@ class _ProfessionalAuthScreenState extends ConsumerState<ProfessionalAuthScreen>
     ref.listen<AuthState>(authProvider, (previous, next) {
       if (next.user != null) {
         // Check if user is admin and redirect accordingly
-        if (next.user!.isAdmin) {
+        // Check if user is admin by email (simplified check)
+        final isAdmin = next.user!.email?.toLowerCase() == 'kiru72fekadu@gmail.com';
+        if (isAdmin) {
           print('✅ Admin login detected: ${next.user!.email}');
           _showSnackBar('Welcome Admin! Redirecting to dashboard...', isError: false);
           Future.delayed(const Duration(milliseconds: 500), () {

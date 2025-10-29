@@ -25,6 +25,35 @@ class Exercise {
     this.points = 10,
   });
 
+  /// Create exercise with string options (for backward compatibility)
+  factory Exercise.withStringOptions({
+    required String id,
+    required ExerciseType type,
+    required String question,
+    String? questionAmharic,
+    String? audioUrl,
+    String? imageUrl,
+    required List<String> stringOptions,
+    required String correctAnswer,
+    String? explanation,
+    int points = 10,
+  }) {
+    return Exercise(
+      id: id,
+      type: type,
+      question: question,
+      questionAmharic: questionAmharic,
+      audioUrl: audioUrl,
+      imageUrl: imageUrl,
+      options: stringOptions.map((option) => 
+        ExerciseOption.fromString(option, isCorrect: option == correctAnswer)
+      ).toList(),
+      correctAnswer: correctAnswer,
+      explanation: explanation,
+      points: points,
+    );
+  }
+
   /// Check if answer is correct
   bool isCorrect(String answer) {
     return answer.trim().toLowerCase() == correctAnswer.trim().toLowerCase();
@@ -59,7 +88,9 @@ class Exercise {
       audioUrl: json['audioUrl'] as String?,
       imageUrl: json['imageUrl'] as String?,
       options: (json['options'] as List<dynamic>)
-          .map((e) => ExerciseOption.fromJson(e as Map<String, dynamic>))
+          .map((e) => e is String 
+              ? ExerciseOption.fromString(e, isCorrect: e == json['correctAnswer'])
+              : ExerciseOption.fromJson(e as Map<String, dynamic>))
           .toList(),
       correctAnswer: json['correctAnswer'] as String,
       explanation: json['explanation'] as String?,
@@ -118,6 +149,15 @@ class ExerciseOption {
     this.audioUrl,
     this.isCorrect = false,
   });
+
+  /// Create from string (for backward compatibility)
+  factory ExerciseOption.fromString(String text, {bool isCorrect = false}) {
+    return ExerciseOption(
+      id: text.hashCode.toString(),
+      text: text,
+      isCorrect: isCorrect,
+    );
+  }
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {

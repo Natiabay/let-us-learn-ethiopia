@@ -18,7 +18,6 @@ class HamburgerMenu extends ConsumerWidget {
     );
     
     final hasAccess = trialData['hasAccess'] ?? false;
-    final needsPayment = trialData['needsPayment'] ?? false;
     return Drawer(
       backgroundColor: AppColors.surface,
       child: Column(

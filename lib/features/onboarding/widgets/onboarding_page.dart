@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:tourist_assistive_app/core/theme/app_theme.dart';
 import 'package:tourist_assistive_app/features/onboarding/models/onboarding_data.dart';
-import 'package:tourist_assistive_app/features/onboarding/screens/onboarding_screen.dart';
 
 class OnboardingPage extends StatelessWidget {
   final OnboardingData data;
@@ -54,7 +52,7 @@ class OnboardingPage extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 // Background Circle (only if no logo)
-                if (data.logoPath == null)
+                if (data.logoPath.isEmpty)
                   Container(
                     width: 120,
                     height: 120,
@@ -64,7 +62,7 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ),
                 // Logo or Icon
-                if (data.logoPath != null)
+                if (data.logoPath.isNotEmpty)
                   Container(
                     width: 120,
                     height: 120,
@@ -74,7 +72,7 @@ class OnboardingPage extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(60),
                       child: Image.asset(
-                        data.logoPath!,
+                        data.logoPath,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(

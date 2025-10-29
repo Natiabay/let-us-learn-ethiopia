@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tourist_assistive_app/features/subscription/models/subscription_model.dart';
 import 'package:tourist_assistive_app/features/subscription/services/subscription_service.dart';
-import 'package:tourist_assistive_app/features/subscription/services/trial_service.dart';
 
 // Subscription service provider
 final subscriptionServiceProvider = Provider<SubscriptionService>((ref) {

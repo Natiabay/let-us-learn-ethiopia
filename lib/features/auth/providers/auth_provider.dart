@@ -1,101 +1,170 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tourist_assistive_app/features/auth/models/app_user.dart';
-import 'package:tourist_assistive_app/features/auth/services/auth_service.dart';
-import 'package:tourist_assistive_app/features/subscription/services/subscription_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tourist_assistive_app/core/services/firebase_service.dart';
 
-final authServiceProvider = Provider<AuthService>((ref) => AuthService());
-final subscriptionServiceProvider = Provider<SubscriptionService>((ref) => SubscriptionService());
-
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  final subscriptionService = ref.watch(subscriptionServiceProvider);
-  return AuthNotifier(authService, subscriptionService);
-});
+class AuthState {
+  final bool isAuthenticated;
+  final User? user;
+  final bool isLoading;
+  final String? error;
+  
+  AuthState({
+    required this.isAuthenticated,
+    this.user,
+    required this.isLoading,
+    this.error,
+  });
+  
+  factory AuthState.initial() => AuthState(
+    isAuthenticated: false,
+    isLoading: true,
+  );
+  
+  factory AuthState.authenticated(User user) => AuthState(
+    isAuthenticated: true,
+    user: user,
+    isLoading: false,
+  );
+  
+  factory AuthState.unauthenticated() => AuthState(
+    isAuthenticated: false,
+    isLoading: false,
+  );
+  
+  factory AuthState.error(String error) => AuthState(
+    isAuthenticated: false,
+    isLoading: false,
+    error: error,
+  );
+  
+  @override
+  String toString() {
+    return 'AuthState(isAuthenticated: $isAuthenticated, user: ${user?.uid}, isLoading: $isLoading, error: $error)';
+  }
+}
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  final AuthService _authService;
-  final SubscriptionService _subscriptionService;
-  
-  AuthNotifier(this._authService, this._subscriptionService) : super(const AuthState.initial()) {
-    _authService.authStateChanges.listen((user) {
-      if (user == null) {
-        state = const AuthState.unauthenticated();
-      } else {
-        state = AuthState.authenticated(AppUser.fromFirebaseUser(user));
-      }
-    });
+  AuthNotifier() : super(AuthState.initial()) {
+    _initialize();
   }
   
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
-    state = const AuthState.loading();
+  Future<void> _initialize() async {
+    print('🔐 Initializing Auth Provider...');
+    
     try {
-      await _authService.signInWithEmailAndPassword(email, password);
+      // Wait for Firebase to be ready
+      int attempts = 0;
+      while (!FirebaseService.isInitialized && attempts < 50) {
+        await Future.delayed(Duration(milliseconds: 100));
+        attempts++;
+        print('⏳ Waiting for Firebase initialization... attempt $attempts');
+      }
+      
+      if (!FirebaseService.isInitialized) {
+        print('❌ Firebase not initialized after 5 seconds');
+        state = AuthState.error('Firebase initialization timeout');
+        return;
+      }
+      
+      print('✅ Firebase is ready, setting up auth listener');
+      
+      // Listen to auth state changes
+      FirebaseAuth.instance.authStateChanges().listen(
+        (User? user) {
+          print('🔄 Auth state changed: ${user?.uid ?? 'null'}');
+          if (user != null) {
+            state = AuthState.authenticated(user);
+            FirebaseService.initializeUserDocument(user);
+          } else {
+            state = AuthState.unauthenticated();
+          }
+        },
+        onError: (error) {
+          print('❌ Auth state change error: $error');
+          state = AuthState.error(error.toString());
+        },
+      );
+      
+      // Set initial state based on current user
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        print('👤 Current user found: ${currentUser.uid}');
+        state = AuthState.authenticated(currentUser);
+        FirebaseService.initializeUserDocument(currentUser);
+      } else {
+        print('👤 No current user');
+        state = AuthState.unauthenticated();
+      }
+      
     } catch (e) {
+      print('❌ Auth initialization error: $e');
       state = AuthState.error(e.toString());
     }
   }
   
-  Future<void> signUpWithEmailAndPassword(String email, String password, String name) async {
-    state = const AuthState.loading();
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
     try {
-      final userCredential = await _authService.signUpWithEmailAndPassword(email, password, name);
+      state = AuthState(
+        isAuthenticated: false,
+        isLoading: true,
+      );
       
-      // Start free trial for new users
-      if (userCredential?.user != null) {
-        try {
-          await _subscriptionService.startFreeTrial(userCredential!.user!.uid);
-          print('🎉 Free trial started for new user: $email');
-        } catch (trialError) {
-          print('⚠️ Failed to start trial: $trialError');
-        }
-      }
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      
+      // State will be updated by the listener
     } catch (e) {
+      print('❌ Sign in error: $e');
+      state = AuthState.error(e.toString());
+    }
+  }
+  
+  Future<void> signUpWithEmailAndPassword(String email, String password, [String? fullName]) async {
+    try {
+      state = AuthState(
+        isAuthenticated: false,
+        isLoading: true,
+      );
+      
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      
+      // Update display name if provided
+      if (fullName != null && userCredential.user != null) {
+        await userCredential.user!.updateDisplayName(fullName);
+      }
+      
+      // State will be updated by the listener
+    } catch (e) {
+      print('❌ Sign up error: $e');
       state = AuthState.error(e.toString());
     }
   }
   
   Future<void> signOut() async {
-    await _authService.signOut();
-  }
-  
-  Future<void> resetPassword(String email) async {
     try {
-      await _authService.resetPassword(email);
+      await FirebaseAuth.instance.signOut();
+      // State will be updated by the listener
     } catch (e) {
+      print('❌ Sign out error: $e');
       state = AuthState.error(e.toString());
     }
   }
   
-  // Debug method to check admin status
-  void debugAdminStatus() {
-    final user = state.user;
-    if (user != null) {
-      print('🔍 DEBUG ADMIN STATUS:');
-      print('  - User email: ${user.email}');
-      print('  - Is admin flag: ${user.isAdmin}');
-      print('  - Admin email constant: ${AppUser.adminEmail}');
-      print('  - Email comparison: "${user.email?.toLowerCase()}" == "${AppUser.adminEmail.toLowerCase()}"');
-      print('  - Auth state: ${state.runtimeType}');
-    } else {
-      print('🔍 DEBUG: No user logged in');
+  Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print('❌ Password reset error: $e');
+      state = AuthState.error(e.toString());
     }
   }
 }
 
-class AuthState {
-  final AppUser? user;
-  final bool isLoading;
-  final String? error;
-  
-  const AuthState({
-    this.user,
-    this.isLoading = false,
-    this.error,
-  });
-  
-  const AuthState.initial() : this();
-  const AuthState.loading() : this(isLoading: true);
-  const AuthState.authenticated(AppUser user) : this(user: user);
-  const AuthState.unauthenticated() : this();
-  const AuthState.error(String error) : this(error: error);
-}
+final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+  return AuthNotifier();
+});

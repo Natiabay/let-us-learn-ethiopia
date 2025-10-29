@@ -1,9 +1,10 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 final advancedAudioServiceProvider = Provider<AdvancedAudioService>((ref) {
   return AdvancedAudioService();
@@ -28,20 +29,20 @@ class AdvancedAudioService {
       
       // Set up TTS callbacks
       _flutterTts.setStartHandler(() {
-        debugPrint('TTS Started');
+        // TTS Started
       });
       
       _flutterTts.setCompletionHandler(() {
-        debugPrint('TTS Completed');
+        // TTS Completed
       });
       
       _flutterTts.setErrorHandler((msg) {
-        debugPrint('TTS Error: $msg');
+        // TTS Error: $msg
       });
 
       _isInitialized = true;
     } catch (e) {
-      debugPrint('Audio service initialization error: $e');
+      // Audio service initialization error: $e
     }
   }
 
@@ -51,7 +52,7 @@ class AdvancedAudioService {
       await _flutterTts.setLanguage('am-ET');
       await _flutterTts.speak(text);
     } catch (e) {
-      debugPrint('Amharic TTS error: $e');
+      // Amharic TTS error: $e
     }
   }
 
@@ -61,7 +62,7 @@ class AdvancedAudioService {
       await _flutterTts.setLanguage('en-US');
       await _flutterTts.speak(text);
     } catch (e) {
-      debugPrint('English TTS error: $e');
+      // English TTS error: $e
     }
   }
 
@@ -71,7 +72,7 @@ class AdvancedAudioService {
       await _flutterTts.setLanguage(languageCode);
       await _flutterTts.speak(text);
     } catch (e) {
-      debugPrint('TTS error for $languageCode: $e');
+      // TTS error for $languageCode: $e
     }
   }
 
@@ -83,7 +84,7 @@ class AdvancedAudioService {
         await _audioPlayer.play(AssetSource(audioUrl));
       }
     } catch (e) {
-      debugPrint('Audio playback error: $e');
+      // Audio playback error: $e
     }
   }
 
@@ -106,49 +107,52 @@ class AdvancedAudioService {
         }
       }
     } catch (e) {
-      debugPrint('Cached audio playback error: $e');
+      // Cached audio playback error: $e
       // Fallback to TTS
       await speakWithLanguage(text, language);
     }
   }
 
   Future<String?> _generateAndCacheAudio(String text, String language) async {
-    if (kIsWeb) {
-      // On web, we can't save files to local storage
-      debugPrint('Audio caching not supported on web platform');
-      return null;
-    }
-    
     try {
-      final directory = await getApplicationDocumentsDirectory();
-      // Note: File operations are not available on web platform
+      final audioDir = Directory('${(await getApplicationDocumentsDirectory()).path}/audio_cache');
+      if (!await audioDir.exists()) {
+        await audioDir.create(recursive: true);
+      }
+
       final fileName = '${language}_${text.hashCode}.wav';
+      final filePath = '${audioDir.path}/$fileName';
       
       // For now, we'll use TTS to generate audio
       // In a real implementation, you might use Google Cloud Text-to-Speech API
       await _flutterTts.setLanguage(language);
       await _flutterTts.speak(text);
       
-      return fileName; // Return just the filename for web compatibility
+      return filePath;
     } catch (e) {
-      debugPrint('Audio generation error: $e');
+      // Audio generation error: $e
       return null;
     }
   }
 
   Future<void> downloadAndCacheAudio(String audioUrl, String fileName) async {
-    if (kIsWeb) {
-      // On web, we can't save files to local storage
-      debugPrint('Audio download and caching not supported on web platform');
-      return;
-    }
-    
     try {
-      final directory = await getApplicationDocumentsDirectory();
-      // Note: File operations are not available on web platform
-      debugPrint('Audio download and caching not supported on web platform');
+      final audioDir = Directory('${(await getApplicationDocumentsDirectory()).path}/audio_cache');
+      if (!await audioDir.exists()) {
+        await audioDir.create(recursive: true);
+      }
+
+      final filePath = '${audioDir.path}/$fileName';
+      final file = File(filePath);
+      
+      if (!await file.exists()) {
+        final response = await http.get(Uri.parse(audioUrl));
+        if (response.statusCode == 200) {
+          await file.writeAsBytes(response.bodyBytes);
+        }
+      }
     } catch (e) {
-      debugPrint('Audio download error: $e');
+      // Audio download error: $e
     }
   }
 
@@ -158,7 +162,7 @@ class AdvancedAudioService {
       final languages = await _flutterTts.getLanguages;
       return languages.cast<String>();
     } catch (e) {
-      debugPrint('Get languages error: $e');
+      // Get languages error: $e
       return ['en-US', 'am-ET']; // Default fallback
     }
   }
@@ -169,7 +173,7 @@ class AdvancedAudioService {
       final voices = await _flutterTts.getVoices;
       return voices.map((voice) => voice['name'] as String).toList();
     } catch (e) {
-      debugPrint('Get voices error: $e');
+      // Get voices error: $e
       return [];
     }
   }
@@ -179,7 +183,7 @@ class AdvancedAudioService {
     try {
       await _flutterTts.setVoice({'name': voiceName, 'locale': 'am-ET'});
     } catch (e) {
-      debugPrint('Set voice error: $e');
+      // Set voice error: $e
     }
   }
 
@@ -188,7 +192,7 @@ class AdvancedAudioService {
     try {
       await _flutterTts.setSpeechRate(rate);
     } catch (e) {
-      debugPrint('Set speech rate error: $e');
+      // Set speech rate error: $e
     }
   }
 
@@ -197,7 +201,7 @@ class AdvancedAudioService {
     try {
       await _flutterTts.setVolume(volume);
     } catch (e) {
-      debugPrint('Set volume error: $e');
+      // Set volume error: $e
     }
   }
 
@@ -206,7 +210,7 @@ class AdvancedAudioService {
     try {
       await _flutterTts.setPitch(pitch);
     } catch (e) {
-      debugPrint('Set pitch error: $e');
+      // Set pitch error: $e
     }
   }
 
@@ -215,7 +219,7 @@ class AdvancedAudioService {
       await _flutterTts.stop();
       await _audioPlayer.stop();
     } catch (e) {
-      debugPrint('Stop audio error: $e');
+      // Stop audio error: $e
     }
   }
 
@@ -223,7 +227,7 @@ class AdvancedAudioService {
     try {
       await _audioPlayer.pause();
     } catch (e) {
-      debugPrint('Pause audio error: $e');
+      // Pause audio error: $e
     }
   }
 
@@ -231,7 +235,7 @@ class AdvancedAudioService {
     try {
       await _audioPlayer.resume();
     } catch (e) {
-      debugPrint('Resume audio error: $e');
+      // Resume audio error: $e
     }
   }
 
@@ -239,7 +243,7 @@ class AdvancedAudioService {
     try {
       return await _audioPlayer.getDuration();
     } catch (e) {
-      debugPrint('Get duration error: $e');
+      // Get duration error: $e
       return null;
     }
   }
@@ -248,7 +252,7 @@ class AdvancedAudioService {
     try {
       return await _audioPlayer.getCurrentPosition();
     } catch (e) {
-      debugPrint('Get current position error: $e');
+      // Get current position error: $e
       return null;
     }
   }

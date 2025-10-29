@@ -15,13 +15,18 @@ class FirebaseService {
   static Future<bool> initialize() async {
     try {
       if (_initialized) {
+        print('✅ Firebase already initialized');
         return true;
       }
 
+      print('🚀 Initializing Firebase...');
+      
       // Initialize Firebase
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      
+      print('✅ Firebase core initialized');
 
       // Test Firebase services
       await _testFirebaseServices();
@@ -34,6 +39,7 @@ class FirebaseService {
     } catch (e) {
       _initializationError = 'Firebase initialization failed: $e';
       print('❌ Firebase initialization error: $e');
+      print('Stack trace: ${StackTrace.current}');
       return false;
     }
   }

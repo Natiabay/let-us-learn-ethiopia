@@ -111,7 +111,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF58CC02).withOpacity(0.3),
+            color: const Color(0xFF58CC02).withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -137,7 +137,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                 Text(
                   'Help us improve the Tourist Assistive App',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 16,
                   ),
                 ),
@@ -194,7 +194,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
           Text(
             _getRatingText(_selectedRating),
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 14,
             ),
           ),
@@ -278,7 +278,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               hintText: 'Brief description of your feedback',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               filled: true,
               fillColor: const Color(0xFF3A3A3A),
               border: OutlineInputBorder(
@@ -325,7 +325,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             maxLines: 6,
             decoration: InputDecoration(
               hintText: 'Please provide detailed feedback...',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               filled: true,
               fillColor: const Color(0xFF3A3A3A),
               border: OutlineInputBorder(
@@ -375,7 +375,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: 'your.email@example.com',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               filled: true,
               fillColor: const Color(0xFF3A3A3A),
               border: OutlineInputBorder(
@@ -477,14 +477,14 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
               if (snapshot.hasError) {
                 return Text(
                   'Error loading feedback history: ${snapshot.error}',
-                  style: TextStyle(color: Colors.red.withOpacity(0.8)),
+                  style: TextStyle(color: Colors.red.withValues(alpha: 0.8)),
                 );
               }
 
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return Text(
                   'No feedback submitted yet',
-                  style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                 );
               }
 
@@ -533,7 +533,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                         Text(
                           data['message'] ?? '',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 14,
                           ),
                           maxLines: 2,
@@ -543,7 +543,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                         Text(
                           _formatTimestamp(data['timestamp']),
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
+                            color: Colors.white.withValues(alpha: 0.6),
                             fontSize: 12,
                           ),
                         ),

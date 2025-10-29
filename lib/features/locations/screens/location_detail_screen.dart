@@ -302,7 +302,7 @@ class _LocationDetailScreenState extends ConsumerState<LocationDetailScreen> {
   }
 
   Widget _buildHeroAppBar(LocationModel location) {
-    final imagePath = _photoMapping[location.id] ?? 'assets/images/Logo.png';
+    final imagePath = _photoMapping[location.id] ?? 'Photos/New Logo.png';
     
     return SliverAppBar(
       expandedHeight: 400,

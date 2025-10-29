@@ -26,12 +26,14 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watchauthProvider;
+    final authState = ref.watch(authProvider);
     final user = authState.user;
     
     // Check if user is admin
-    if (user == null || !user.isAdmin) {
-      WidgetsBinding.instance.addPostFrameCallback(_ {
+    // Check if user is admin by email (simplified check)
+    final isAdmin = user?.email?.toLowerCase() == 'kiru72fekadu@gmail.com';
+    if (user == null || !isAdmin) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/home');
       });
       return const Scaffold(
@@ -130,7 +132,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: _filterOptions.map(filter {
+              children: _filterOptions.map((filter) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: FilterChip(
@@ -143,7 +145,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
                       ),
                     ),
                     selected: _selectedFilter == filter,
-                    onSelected: selected {
+                    onSelected: (selected) {
                       setState(() {
                         _selectedFilter = filter;
                       });
@@ -202,14 +204,14 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
         final lessons = snapshot.data!.docs;
         
         // Apply search filter
-        final filteredLessons = lessons.where(doc {
+        final filteredLessons = lessons.where((doc) {
           if (_searchQuery.isEmpty) return true;
           
           final data = doc.data() as Map<String, dynamic>;
           final title = (data['title'] ?? '').toString().toLowerCase();
           final description = (data['description'] ?? '').toString().toLowerCase();
           
-          return title.contains_searchQuery || description.contains_searchQuery;
+          return title.contains(_searchQuery) || description.contains(_searchQuery);
         }).toList();
 
         if (filteredLessons.isEmpty) {
@@ -270,7 +272,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: _getLevelColorlevel,
+                  color: _getLevelColor(level),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
@@ -354,7 +356,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
               const Spacer(),
               if (createdAt != null)
                 Text(
-                  'Created: $_formatDatecreatedAt',
+                  'Created: ${_formatDate(createdAt)}',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 12,
@@ -429,7 +431,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
   void _showLessonDetails(String lessonId, Map<String, dynamic> lessonData) {
     showDialog(
       context: context,
-      builder: context => AlertDialog(
+      builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF2A2A2A),
         title: const Text(
           'Lesson Details',
@@ -446,14 +448,14 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
               _buildDetailRow('Level', lessonData['level'] ?? 'N/A'),
               _buildDetailRow('Category', lessonData['category'] ?? 'N/A'),
               _buildDetailRow('Active', lessonData['isActive'] == true ? 'Yes' : 'No'),
-              _buildDetailRow('Exercise Count', '$(lessonData['exercises'] as List?)?.length ?? 0'),
+              _buildDetailRow('Exercise Count', '${(lessonData['exercises'] as List?)?.length ?? 0}'),
               _buildDetailRow('Created At', _formatDate(lessonData['createdAt'])),
             ],
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.popcontext,
+            onPressed: () => Navigator.pop(context),
             child: const Text('Close', style: TextStyle(color: Color(0xFF58CC02))),
           ),
         ],
@@ -492,7 +494,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF2A2A2A),
-      builder: context => Container(
+      builder: (context) => Container(
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -510,7 +512,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
               leading: const Icon(Icons.edit, color: Colors.blue),
               title: const Text('Edit Lesson', style: TextStyle(color: Colors.white)),
               onTap: () {
-                Navigator.popcontext;
+                Navigator.pop(context);
                 context.push('/admin/lessons/editor/$lessonId');
               },
             ),
@@ -524,7 +526,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
                 style: const TextStyle(color: Colors.white),
               ),
               onTap: () {
-                Navigator.popcontext;
+                Navigator.pop(context);
                 _toggleLessonStatus(lessonId, lessonData);
               },
             ),
@@ -532,8 +534,8 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
               leading: const Icon(Icons.delete, color: Colors.red),
               title: const Text('Delete Lesson', style: TextStyle(color: Colors.white)),
               onTap: () {
-                Navigator.popcontext;
-                _deleteLessonlessonId;
+                Navigator.pop(context);
+                _deleteLesson(lessonId);
               },
             ),
           ],
@@ -544,7 +546,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
 
   void _toggleLessonStatus(String lessonId, Map<String, dynamic> lessonData) {
     // Toggle lesson status will be implemented with backend integration
-    ScaffoldMessenger.ofcontext.showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Toggle lesson status functionality not implemented yet'),
         backgroundColor: Colors.orange,
@@ -554,7 +556,7 @@ class _AdminLessonManagementScreenState extends ConsumerState<AdminLessonManagem
 
   void _deleteLesson(String lessonId) {
     // Delete lesson will be implemented with backend integration
-    ScaffoldMessenger.ofcontext.showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Delete lesson functionality not implemented yet'),
         backgroundColor: Colors.orange,

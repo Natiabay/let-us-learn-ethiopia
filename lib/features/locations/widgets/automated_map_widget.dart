@@ -73,7 +73,7 @@ class _AutomatedMapWidgetState extends State<AutomatedMapWidget> {
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('⚠️ Map initialization failed: $e');
+      // debugPrint('⚠️ Map initialization failed: $e');
       setState(() {
         _isLoading = false;
       });
@@ -113,7 +113,6 @@ class _AutomatedMapWidgetState extends State<AutomatedMapWidget> {
     
     // Create markers with different colors based on priority and type
     for (final location in locationsToShow) {
-      final markerColor = _getMarkerColor(location);
       final markerIcon = _getMarkerIcon(location);
       
       markers.add(
@@ -267,13 +266,17 @@ class _AutomatedMapWidgetState extends State<AutomatedMapWidget> {
   }
 
   void _navigateToLocation(GlobalLocation location) {
-    if (_mapController != null) {
-      _mapController!.animateCamera(
-        CameraUpdate.newLatLngZoom(
-          LatLng(location.latitude, location.longitude),
-          15.0,
-        ),
-      );
+    try {
+      if (_mapController != null) {
+        _mapController!.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            LatLng(location.latitude, location.longitude),
+            15.0,
+          ),
+        );
+      }
+    } catch (e) {
+      // debugPrint('Error navigating to location: $e');
     }
   }
 
@@ -357,7 +360,11 @@ class _AutomatedMapWidgetState extends State<AutomatedMapWidget> {
               zoomControlsEnabled: true,
               mapType: MapType.normal,
               onTap: (LatLng position) {
-                debugPrint('Map tapped at: $position');
+                try {
+                  // debugPrint('Map tapped at: $position');
+                } catch (e) {
+                  // debugPrint('Error handling map tap: $e');
+                }
               },
             ),
             // Legend for marker colors
@@ -438,5 +445,11 @@ class _AutomatedMapWidgetState extends State<AutomatedMapWidget> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
   }
 }

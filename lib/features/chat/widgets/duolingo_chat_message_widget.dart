@@ -58,7 +58,7 @@ class DuolingoChatMessageWidget extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00D9B8).withOpacity(0.3),
+            color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -81,7 +81,7 @@ class DuolingoChatMessageWidget extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1CB0F6).withOpacity(0.3),
+            color: const Color(0xFF1CB0F6).withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -109,13 +109,13 @@ class DuolingoChatMessageWidget extends StatelessWidget {
         border: Border.all(
           color: message.isUser 
               ? const Color(0xFF1CB0F6)
-              : const Color(0xFF00D9B8).withOpacity(0.3),
+              : const Color(0xFF00D9B8).withValues(alpha: 0.3),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
             color: (message.isUser ? const Color(0xFF1CB0F6) : const Color(0xFF00D9B8))
-                .withOpacity(0.2),
+                .withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -142,7 +142,7 @@ class DuolingoChatMessageWidget extends StatelessWidget {
           Text(
             _formatTime(message.timestamp),
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               fontSize: 12,
             ),
           ),
@@ -176,7 +176,7 @@ class DuolingoChatMessageWidget extends StatelessWidget {
           Text(
             'Selam is typing...',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 12,
             ),
           ),

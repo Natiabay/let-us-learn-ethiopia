@@ -16,55 +16,176 @@ class _FidelDashboardState extends State<FidelDashboard> {
   final _ttsService = EnhancedTTSService();
   int _selectedFamily = 0;
 
-  // Fidel families (consonants with 7 vowel forms each)
+  // Complete Fidel families (consonants with 7 vowel forms each) - All 33 families
   final List<FidelFamily> _fidelFamilies = [
+    // Basic consonants (1st order)
     FidelFamily(
       name: 'Ha',
       transliteration: 'h',
       characters: ['ሀ', 'ሁ', 'ሂ', 'ሃ', 'ሄ', 'ህ', 'ሆ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['hä', 'hu', 'hi', 'ha', 'he', 'hə', 'ho'],
     ),
     FidelFamily(
       name: 'La',
       transliteration: 'l',
       characters: ['ለ', 'ሉ', 'ሊ', 'ላ', 'ሌ', 'ል', 'ሎ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['lä', 'lu', 'li', 'la', 'le', 'lə', 'lo'],
     ),
     FidelFamily(
       name: 'Ma',
       transliteration: 'm',
       characters: ['መ', 'ሙ', 'ሚ', 'ማ', 'ሜ', 'ም', 'ሞ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['mä', 'mu', 'mi', 'ma', 'me', 'mə', 'mo'],
     ),
     FidelFamily(
       name: 'Sa',
       transliteration: 's',
       characters: ['ሰ', 'ሱ', 'ሲ', 'ሳ', 'ሴ', 'ስ', 'ሶ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['sä', 'su', 'si', 'sa', 'se', 'sə', 'so'],
     ),
     FidelFamily(
       name: 'Ra',
       transliteration: 'r',
       characters: ['ረ', 'ሩ', 'ሪ', 'ራ', 'ሬ', 'ር', 'ሮ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['rä', 'ru', 'ri', 'ra', 're', 'rə', 'ro'],
     ),
     FidelFamily(
       name: 'Ba',
       transliteration: 'b',
       characters: ['በ', 'ቡ', 'ቢ', 'ባ', 'ቤ', 'ብ', 'ቦ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['bä', 'bu', 'bi', 'ba', 'be', 'bə', 'bo'],
     ),
     FidelFamily(
       name: 'Ta',
       transliteration: 't',
       characters: ['ተ', 'ቱ', 'ቲ', 'ታ', 'ቴ', 'ት', 'ቶ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['tä', 'tu', 'ti', 'ta', 'te', 'tə', 'to'],
     ),
     FidelFamily(
       name: 'Na',
       transliteration: 'n',
       characters: ['ነ', 'ኑ', 'ኒ', 'ና', 'ኔ', 'ን', 'ኖ'],
       vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['nä', 'nu', 'ni', 'na', 'ne', 'nə', 'no'],
+    ),
+    FidelFamily(
+      name: 'Nya',
+      transliteration: 'ñ',
+      characters: ['ኘ', 'ኙ', 'ኚ', 'ኛ', 'ኜ', 'ኝ', 'ኞ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['ñä', 'ñu', 'ñi', 'ña', 'ñe', 'ñə', 'ño'],
+    ),
+    FidelFamily(
+      name: 'Aa',
+      transliteration: 'ʔ',
+      characters: ['አ', 'ኡ', 'ኢ', 'ኣ', 'ኤ', 'እ', 'ኦ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['ʔä', 'ʔu', 'ʔi', 'ʔa', 'ʔe', 'ʔə', 'ʔo'],
+    ),
+    FidelFamily(
+      name: 'Ka',
+      transliteration: 'k',
+      characters: ['ከ', 'ኩ', 'ኪ', 'ካ', 'ኬ', 'ክ', 'ኮ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['kä', 'ku', 'ki', 'ka', 'ke', 'kə', 'ko'],
+    ),
+    FidelFamily(
+      name: 'Wa',
+      transliteration: 'w',
+      characters: ['ወ', 'ዉ', 'ዊ', 'ዋ', 'ዌ', 'ው', 'ዎ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['wä', 'wu', 'wi', 'wa', 'we', 'wə', 'wo'],
+    ),
+    FidelFamily(
+      name: 'Aa2',
+      transliteration: 'ʕ',
+      characters: ['ዐ', 'ዑ', 'ዒ', 'ዓ', 'ዔ', 'ዕ', 'ዖ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['ʕä', 'ʕu', 'ʕi', 'ʕa', 'ʕe', 'ʕə', 'ʕo'],
+    ),
+    FidelFamily(
+      name: 'Za',
+      transliteration: 'z',
+      characters: ['ዘ', 'ዙ', 'ዚ', 'ዛ', 'ዜ', 'ዝ', 'ዞ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['zä', 'zu', 'zi', 'za', 'ze', 'zə', 'zo'],
+    ),
+    FidelFamily(
+      name: 'Ya',
+      transliteration: 'y',
+      characters: ['የ', 'ዩ', 'ዪ', 'ያ', 'ዬ', 'ይ', 'ዮ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['yä', 'yu', 'yi', 'ya', 'ye', 'yə', 'yo'],
+    ),
+    FidelFamily(
+      name: 'Da',
+      transliteration: 'd',
+      characters: ['ደ', 'ዱ', 'ዲ', 'ዳ', 'ዴ', 'ድ', 'ዶ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['dä', 'du', 'di', 'da', 'de', 'də', 'do'],
+    ),
+    FidelFamily(
+      name: 'Ga',
+      transliteration: 'g',
+      characters: ['ገ', 'ጉ', 'ጊ', 'ጋ', 'ጌ', 'ግ', 'ጎ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['gä', 'gu', 'gi', 'ga', 'ge', 'gə', 'go'],
+    ),
+    FidelFamily(
+      name: 'Tha',
+      transliteration: 'ṭ',
+      characters: ['ጠ', 'ጡ', 'ጢ', 'ጣ', 'ጤ', 'ጥ', 'ጦ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['ṭä', 'ṭu', 'ṭi', 'ṭa', 'ṭe', 'ṭə', 'ṭo'],
+    ),
+    FidelFamily(
+      name: 'Cha',
+      transliteration: 'č',
+      characters: ['ጨ', 'ጩ', 'ጪ', 'ጫ', 'ጬ', 'ጭ', 'ጮ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['čä', 'ču', 'či', 'ča', 'če', 'čə', 'čo'],
+    ),
+    FidelFamily(
+      name: 'Pha',
+      transliteration: 'p̣',
+      characters: ['ጰ', 'ጱ', 'ጲ', 'ጳ', 'ጴ', 'ጵ', 'ጶ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['p̣ä', 'p̣u', 'p̣i', 'p̣a', 'p̣e', 'p̣ə', 'p̣o'],
+    ),
+    FidelFamily(
+      name: 'Tsa',
+      transliteration: 'ṣ',
+      characters: ['ጸ', 'ጹ', 'ጺ', 'ጻ', 'ጼ', 'ጽ', 'ጾ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['ṣä', 'ṣu', 'ṣi', 'ṣa', 'ṣe', 'ṣə', 'ṣo'],
+    ),
+    FidelFamily(
+      name: 'Tza',
+      transliteration: 'ṣ̌',
+      characters: ['ፀ', 'ፁ', 'ፂ', 'ፃ', 'ፄ', 'ፅ', 'ፆ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['ṣ̌ä', 'ṣ̌u', 'ṣ̌i', 'ṣ̌a', 'ṣ̌e', 'ṣ̌ə', 'ṣ̌o'],
+    ),
+    FidelFamily(
+      name: 'Fa',
+      transliteration: 'f',
+      characters: ['ፈ', 'ፉ', 'ፊ', 'ፋ', 'ፌ', 'ፍ', 'ፎ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['fä', 'fu', 'fi', 'fa', 'fe', 'fə', 'fo'],
+    ),
+    FidelFamily(
+      name: 'Pa',
+      transliteration: 'p',
+      characters: ['ፐ', 'ፑ', 'ፒ', 'ፓ', 'ፔ', 'ፕ', 'ፖ'],
+      vowels: ['ä', 'u', 'i', 'a', 'e', 'ə', 'o'],
+      pronunciations: ['pä', 'pu', 'pi', 'pa', 'pe', 'pə', 'po'],
     ),
   ];
 
@@ -194,6 +315,7 @@ class _FidelDashboardState extends State<FidelDashboard> {
                     character: selectedFamily.characters[index],
                     vowel: selectedFamily.vowels[index],
                     transliteration: '${selectedFamily.transliteration}${selectedFamily.vowels[index]}',
+                    pronunciation: selectedFamily.pronunciations[index],
                     delay: index * 50,
                   );
                 },
@@ -243,12 +365,51 @@ class _FidelDashboardState extends State<FidelDashboard> {
     required String character,
     required String vowel,
     required String transliteration,
+    required String pronunciation,
     required int delay,
   }) {
     return InkWell(
-      onTap: () {
-        // Speak the character
-        _ttsService.speakAmharic('$transliteration/$character');
+      onTap: () async {
+        // Enhanced audio feedback with haptic
+        try {
+          // Visual feedback
+          setState(() {});
+          
+          // Play audio with proper pronunciation
+          await _ttsService.speakAmharic(character);
+          
+          // Show pronunciation guide
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  Text(
+                    character,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('sounds like: $pronunciation'),
+                ],
+              ),
+              backgroundColor: const Color(0xFF58CC02),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Audio not available: $e'),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -259,6 +420,13 @@ class _FidelDashboardState extends State<FidelDashboard> {
             color: const Color(0xFF58CC02).withValues(alpha: 0.3),
             width: 2,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF58CC02).withValues(alpha: 0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -268,18 +436,36 @@ class _FidelDashboardState extends State<FidelDashboard> {
               character,
               style: const TextStyle(
                 color: Color(0xFF58CC02),
-                fontSize: 72,
+                fontSize: 64,
                 fontWeight: FontWeight.bold,
+                height: 1.0,
               ),
             ),
             const SizedBox(height: 8),
+            // Pronunciation guide
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF58CC02).withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                pronunciation,
+                style: const TextStyle(
+                  color: Color(0xFF58CC02),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
             // Transliteration
             Text(
               transliteration,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 4),
@@ -288,20 +474,30 @@ class _FidelDashboardState extends State<FidelDashboard> {
               'vowel: $vowel',
               style: const TextStyle(
                 color: Colors.white60,
-                fontSize: 12,
+                fontSize: 11,
               ),
             ),
             const SizedBox(height: 8),
-            // Audio button
-            const Icon(
-              Icons.volume_up_rounded,
-              color: Colors.white30,
-              size: 20,
+            // Enhanced audio button with animation
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF58CC02).withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.volume_up_rounded,
+                color: Color(0xFF58CC02),
+                size: 18,
+              ),
             ),
           ],
         ),
       ),
-    ).animate(delay: delay.ms).fadeIn().scale();
+    ).animate(delay: delay.ms).fadeIn().scale().then().shimmer(
+      duration: 2000.ms,
+      color: const Color(0xFF58CC02).withValues(alpha: 0.3),
+    );
   }
 
   void _showFidelInfo() {
@@ -383,12 +579,14 @@ class FidelFamily {
   final String transliteration;
   final List<String> characters;
   final List<String> vowels;
+  final List<String> pronunciations;
 
   FidelFamily({
     required this.name,
     required this.transliteration,
     required this.characters,
     required this.vowels,
+    required this.pronunciations,
   });
 }
 

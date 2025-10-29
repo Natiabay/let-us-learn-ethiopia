@@ -1,5 +1,6 @@
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 
 class ProfessionalAudioService {
   static final ProfessionalAudioService _instance = ProfessionalAudioService._internal();
@@ -49,14 +50,14 @@ class ProfessionalAudioService {
 
       // Set up error handler
       _flutterTts.setErrorHandler((msg) {
-        print('TTS Error: $msg');
+        debugPrint('TTS Error: $msg');
         _isPlaying = false;
       });
 
       _isInitialized = true;
-      print('Professional Audio Service initialized successfully');
+      debugPrint('Professional Audio Service initialized successfully');
     } catch (e) {
-      print('Error initializing audio service: $e');
+      debugPrint('Error initializing audio service: $e');
     }
   }
 
@@ -74,9 +75,9 @@ class ProfessionalAudioService {
       // Speak the text
       await _flutterTts.speak(text);
       
-      print('Speaking Amharic: $text');
+      debugPrint('Speaking Amharic: $text');
     } catch (e) {
-      print('Error speaking Amharic: $e');
+      debugPrint('Error speaking Amharic: $e');
       _isPlaying = false;
     }
   }
@@ -95,9 +96,9 @@ class ProfessionalAudioService {
       // Speak the text
       await _flutterTts.speak(text);
       
-      print('Speaking English: $text');
+      debugPrint('Speaking English: $text');
     } catch (e) {
-      print('Error speaking English: $e');
+      debugPrint('Error speaking English: $e');
       _isPlaying = false;
     }
   }
@@ -119,9 +120,9 @@ class ProfessionalAudioService {
         _isPlaying = false;
       });
       
-      print('Playing Amharic audio: $audioPath');
+      debugPrint('Playing Amharic audio: $audioPath');
     } catch (e) {
-      print('Error playing Amharic audio: $e');
+      debugPrint('Error playing Amharic audio: $e');
       _isPlaying = false;
     }
   }
@@ -133,7 +134,7 @@ class ProfessionalAudioService {
       await _audioPlayer.stop();
       _isPlaying = false;
     } catch (e) {
-      print('Error stopping audio: $e');
+      debugPrint('Error stopping audio: $e');
     }
   }
 
@@ -366,3 +367,4 @@ class AmharicPictureDatabase {
     }
   }
 }
+

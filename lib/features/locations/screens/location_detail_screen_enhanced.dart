@@ -276,14 +276,14 @@ class _LocationDetailScreenEnhancedState extends ConsumerState<LocationDetailScr
                         ),
                       ),
 
-                      if (location.openingHours != null && location.openingHours!.isNotEmpty) ...[
+                      if (location.openingHours.isNotEmpty) ...[
                         const SizedBox(height: 16),
                         Row(
                           children: [
                             const Icon(Icons.access_time, color: AppColors.primary, size: 20),
                             const SizedBox(width: 8),
                             Text(
-                              location.openingHours!,
+                              location.openingHours,
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.textSecondary,
@@ -293,14 +293,14 @@ class _LocationDetailScreenEnhancedState extends ConsumerState<LocationDetailScr
                         ),
                       ],
 
-                      if (location.entryFee != null && location.entryFee!.isNotEmpty) ...[
+                      if (location.entryFee.isNotEmpty) ...[
                         const SizedBox(height: 12),
                         Row(
                           children: [
                             const Icon(Icons.attach_money, color: AppColors.primary, size: 20),
                             const SizedBox(width: 8),
                             Text(
-                              location.entryFee!,
+                              location.entryFee,
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.textSecondary,
@@ -416,7 +416,7 @@ class _LocationDetailScreenEnhancedState extends ConsumerState<LocationDetailScr
                                   _showMap = value;
                                 });
                               },
-                              activeColor: AppColors.primary,
+                              activeThumbColor: AppColors.primary,
                             ),
                           ],
                         ),
@@ -433,7 +433,7 @@ class _LocationDetailScreenEnhancedState extends ConsumerState<LocationDetailScr
                                 ? _buildWebMapPlaceholder(location)
                                 : GoogleMap(
                                     initialCameraPosition: CameraPosition(
-                                      target: LatLng(location.latitude ?? 9.145, location.longitude ?? 40.4897),
+                                      target: LatLng(location.latitude, location.longitude),
                                       zoom: 14,
                                     ),
                                     markers: _markers,
@@ -556,7 +556,7 @@ class _LocationDetailScreenEnhancedState extends ConsumerState<LocationDetailScr
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  location.name ?? 'Location',
+                  location.name,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -565,9 +565,9 @@ class _LocationDetailScreenEnhancedState extends ConsumerState<LocationDetailScr
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                if (location.city != null)
+                if (location.city.isNotEmpty)
                   Text(
-                    location.city!,
+                    location.city,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[700],

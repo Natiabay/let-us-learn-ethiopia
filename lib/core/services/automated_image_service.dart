@@ -3,51 +3,75 @@ import 'package:flutter/material.dart';
 /// Automated Image Service using local assets from Photos folder
 class AutomatedImageService {
   
-  /// Local images for Ethiopian locations from Photos folder
+  /// Local images for Ethiopian locations from Photos folder - EXACT file names
   static const Map<String, String> _locationImages = {
-    // Historical Sites
-    'lalibela': 'assets/images/Lalibela.png',
-    'axum': 'assets/images/Axum.png',
-    'gondar': 'assets/images/Fassil Gimb.png',
-    'harar': 'assets/images/Jugol.png',
-    'harar_jugol': 'assets/images/Jugol.png',
-    'debre_damo': 'assets/images/debre damo.png',
+    // Historical Sites - using exact file names from Photos folder
+    'lalibela': 'Photos/Lalibela.png',
+    'lalibela-churches': 'Photos/Lalibela.png',
+    'axum': 'Photos/Axum.png',
+    'axum-obelisks': 'Photos/Axum.png',
+    'gondar': 'Photos/Fassil Gimb.png',
+    'gondar-castles': 'Photos/Fassil Gimb.png',
+    'fassil-ghebbi': 'Photos/Fassil Gimb.png',
+    'harar': 'Photos/Harer.jpg',
+    'harar-jugol': 'Photos/Harer.jpg',
+    'harar_jugol': 'Photos/Harer.jpg',
+    'debre-damo': 'Photos/debre damo.png',
+    'debre_damo': 'Photos/debre damo.png',
     
-    // Natural Sites
-    'simien': 'assets/images/Bale.png',
-    'simien_mountains': 'assets/images/Bale.png',
-    'danakil': 'assets/images/Danakil.png',
-    'danakil_depression': 'assets/images/Danakil.png',
-    'lake_tana': 'assets/images/lake tana.png',
-    'blue_nile': 'assets/images/blue nile.png',
-    'bale': 'assets/images/Bale.png',
-    'bale_mountains': 'assets/images/Bale.png',
-    'konso': 'assets/images/konso.png',
+    // Natural Sites - using exact file names
+    'simien': 'Photos/Semen mountain.jpg',
+    'simien-mountains': 'Photos/Semen mountain.jpg',
+    'simien_mountains': 'Photos/Semen mountain.jpg',
+    'danakil': 'Photos/Danakil.png',
+    'danakil-depression': 'Photos/Danakil.png',
+    'danakil_depression': 'Photos/Danakil.png',
+    'lake-tana': 'Photos/lake tana.png',
+    'lake_tana': 'Photos/lake tana.png',
+    'blue-nile': 'Photos/blue nile.png',
+    'blue-nile-falls': 'Photos/blue nile.png',
+    'blue_nile': 'Photos/blue nile.png',
+    'bale': 'Photos/Bale.png',
+    'bale-mountains': 'Photos/Bale.png',
+    'bale_mountains': 'Photos/Bale.png',
+    'konso': 'Photos/konso.png',
+    'konso-cultural': 'Photos/konso.png',
     
-    // Cities
-    'addis_ababa': 'assets/images/Logo.png',
-    'national_museum': 'assets/images/National museium.jpg',
+    // Cities and Museums - using exact file names
+    'addis-ababa': 'Photos/Addis Ababa.avif',
+    'addis_ababa': 'Photos/Addis Ababa.avif',
+    'national-museum': 'Photos/National museium.jpg',
+    'national_museum': 'Photos/National museium.jpg',
+    
+    // Additional locations
+    'coffee-ceremony': 'Photos/coffee.png',
+    'coffee': 'Photos/coffee.png',
+    'ethiopian-food': 'Photos/food.png',
+    'food': 'Photos/food.png',
+    'greetings': 'Photos/greetings.png',
+    'thank-you': 'Photos/thank you.png',
+    'thank_you': 'Photos/thank you.png',
     
     // Default fallback
-    'default': 'assets/images/Logo.png',
+    'default': 'Photos/New Logo.png',
   };
   
-  /// Local images for language learning from Photos folder
+  /// Local images for language learning from Photos folder - EXACT file names
   static const Map<String, String> _languageImages = {
-    'greetings': 'assets/images/greetings.png',
-    'food': 'assets/images/food.png',
-    'hospital': 'assets/images/hospital.png',
-    'hotel': 'assets/images/hotel.png',
-    'restaurant': 'assets/images/Restaurant.png',
-    'police': 'assets/images/polices.png',
-    'water': 'assets/images/water.png',
-    'coffee': 'assets/images/coffee.png',
-    'injera': 'assets/images/injera.png',
-    'milk': 'assets/images/milk.png',
-    'thank_you': 'assets/images/thank you.png',
-    'numbers_1': 'assets/images/one.png',
-    'numbers_2': 'assets/images/two.png',
-    'numbers_3': 'assets/images/three.png',
+    'greetings': 'Photos/greetings.png',
+    'food': 'Photos/food.png',
+    'hospital': 'Photos/hospital.png',
+    'hotel': 'Photos/hotel.png',
+    'restaurant': 'Photos/Restaurant.png',
+    'police': 'Photos/polices.png',
+    'water': 'Photos/water.png',
+    'coffee': 'Photos/coffee.png',
+    'injera': 'Photos/injera.png',
+    'milk': 'Photos/milk.png',
+    'thank_you': 'Photos/thank you.png',
+    'numbers_1': 'Photos/one.png',
+    'numbers_2': 'Photos/two.png',
+    'numbers_3': 'Photos/three.png',
   };
   
   /// Get local image path for location

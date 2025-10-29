@@ -16,7 +16,9 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
     final user = authState.user;
     
     // Check if user is admin
-    if (user == null || !user.isAdmin) {
+    // Check if user is admin by email (simplified check)
+    final isAdmin = user?.email?.toLowerCase() == 'kiru72fekadu@gmail.com';
+    if (user == null || !isAdmin) {
       // Not admin, redirect to home
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/home');
@@ -88,7 +90,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF00D9B8).withOpacity(0.3),
+                      color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -282,7 +284,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF2A2A2A),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3), width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,7 +292,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.2),
+              color: color.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 24),
@@ -312,7 +314,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
                 Text(
                   description,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontSize: 14,
                     height: 1.5,
                   ),
@@ -338,9 +340,9 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.3), width: 2),
+          border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -372,7 +374,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 fontSize: 14,
               ),
             ),
@@ -380,7 +382,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
           Text(
             path,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               fontSize: 12,
               fontFamily: 'monospace',
             ),
@@ -426,7 +428,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF00D9B8).withOpacity(0.3),
+                color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -484,7 +486,7 @@ class AdminDashboardScreenWrapper extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(

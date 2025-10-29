@@ -5,10 +5,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:tourist_assistive_app/core/theme/app_theme.dart';
 import 'package:tourist_assistive_app/features/subscription/providers/subscription_provider.dart';
 import 'package:tourist_assistive_app/features/home/screens/home_dashboard.dart';
-import 'package:tourist_assistive_app/features/language/screens/language_learning_screen.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/dashboard/duolingo_dashboard.dart';
 import 'package:tourist_assistive_app/features/locations/screens/locations_screen.dart';
 import 'package:tourist_assistive_app/features/chat/screens/modern_chat_screen.dart';
-import 'package:tourist_assistive_app/features/profile/screens/profile_screen.dart';
+import 'package:tourist_assistive_app/features/language/screens/english_amharic_dictionary_screen.dart';
 import 'package:tourist_assistive_app/features/navigation/widgets/hamburger_menu.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -59,7 +59,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       color: AppColors.info,
     ),
     NavigationItem(
-      icon: Icons.person_outline_rounded,
+      icon: Icons.person_outlined,
       activeIcon: Icons.person_rounded,
       label: 'Profile',
       route: '/profile',
@@ -100,10 +100,10 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
     final screens = [
       const HomeDashboard(),
-      const LanguageLearningScreen(),
+      const DuolingoDashboard(),
       const LocationsScreen(),
       const ModernChatScreen(), // ✅ NEW RAG-powered chat with 10,000+ line knowledge base
-      const ProfileScreen(),
+      const EnglishAmharicDictionaryScreen(),
     ];
 
     return Scaffold(
@@ -287,7 +287,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       case 3:
         return 'AI Assistant';
       case 4:
-        return 'My Profile';
+        return 'Dictionary';
       default:
         return 'Tourist Assistant';
     }

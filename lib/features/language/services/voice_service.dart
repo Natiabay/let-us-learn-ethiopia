@@ -37,7 +37,7 @@ class VoiceService {
     
     try {
       _isSpeaking = true;
-      await _audioService.speakAmharic(text);
+      await _audioService.playAmharicText(text);
       if (kDebugMode) {
         print('Speaking Amharic: $text');
       }

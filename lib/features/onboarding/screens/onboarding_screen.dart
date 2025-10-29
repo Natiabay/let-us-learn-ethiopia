@@ -18,13 +18,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   late AnimationController _floatingController;
 
   final List<OnboardingData> _pages = [
-    OnboardingData(
+    const OnboardingData(
       title: 'Let us learn Ethiopia',
       subtitle: 'ኢትዮጵያን እንማር',
       description: 'Your comprehensive guide to exploring the beautiful country of Ethiopia. Discover amazing places, learn the language, and get instant help.',
       image: Icons.public_rounded,
       color: const Color(0xFF58CC02),
-      logoPath: 'assets/images/Logo.png',
+      logoPath: 'Photos/New Logo.png',
       gradient: const LinearGradient(
         colors: [Color(0xFF58CC02), Color(0xFF1CB0F6)],
         begin: Alignment.topLeft,
@@ -32,13 +32,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       ),
       features: ['🏛️ Historical Sites', '🗺️ Interactive Maps', '📱 Offline Access'],
     ),
-    OnboardingData(
+    const OnboardingData(
       title: 'Learn Amharic',
       subtitle: 'አማርኛ ይማሩ',
       description: 'Master the local language with our interactive lessons. Practice speaking, listening, and writing Amharic like a native.',
       image: Icons.school_rounded,
       color: const Color(0xFF1CB0F6),
-      logoPath: 'assets/images/ethio_assist_logo.png',
+      logoPath: 'Photos/New Logo.png',
       gradient: const LinearGradient(
         colors: [Color(0xFF1CB0F6), Color(0xFFCE82FF)],
         begin: Alignment.topLeft,
@@ -46,13 +46,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       ),
       features: ['🎯 Interactive Lessons', '🎤 Voice Practice', '📚 Cultural Context'],
     ),
-    OnboardingData(
+    const OnboardingData(
       title: 'Explore Amazing Places',
       subtitle: 'አስደናቂ ቦታዎችን ያስሱ',
       description: 'Discover hidden gems, historical sites, and popular tourist destinations. Get detailed information and directions.',
       image: Icons.location_on_rounded,
       color: const Color(0xFFCE82FF),
-      logoPath: 'assets/images/ethio_assist_logo.png',
+      logoPath: 'Photos/New Logo.png',
       gradient: const LinearGradient(
         colors: [Color(0xFFCE82FF), Color(0xFFFF6B6B)],
         begin: Alignment.topLeft,
@@ -60,13 +60,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       ),
       features: ['🏔️ National Parks', '🏰 Ancient Castles', '🌋 Natural Wonders'],
     ),
-    OnboardingData(
+    const OnboardingData(
       title: 'Get Instant Help',
       subtitle: 'ወዲያውኑ እርዳታ ያግኙ',
       description: 'Chat with our AI assistant anytime. Get answers about culture, directions, emergency contacts, and local tips.',
       image: Icons.chat_bubble_rounded,
       color: const Color(0xFFFF6B6B),
-      logoPath: 'assets/images/ethio_assist_logo.png',
+      logoPath: 'Photos/New Logo.png',
       gradient: const LinearGradient(
         colors: [Color(0xFFFF6B6B), Color(0xFF58CC02)],
         begin: Alignment.topLeft,
@@ -100,7 +100,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final currentData = _pages[_currentPage];
     
     return Scaffold(
@@ -309,11 +308,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 width: 2,
               ),
             ),
-            child: data.logoPath != null
+            child: data.logoPath.isNotEmpty
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(60),
                     child: Image.asset(
-                      data.logoPath!,
+                      data.logoPath,
                       width: 120,
                       height: 120,
                       fit: BoxFit.cover,

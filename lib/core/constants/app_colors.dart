@@ -14,6 +14,9 @@ class AppColors {
   static const Color duolingoOrange = Color(0xFFFF6B35);
   static const Color duolingoYellow = Color(0xFFFFD93D);
   static const Color duolingoPink = Color(0xFFFF6B9D);
+  
+  // Primary App Color (Duolingo Blue for consistency)
+  static const Color primary = duolingoBlue;
 
   // Duolingo Dark Theme Colors
   static const Color duolingoDark = Color(0xFF1A1A1A);

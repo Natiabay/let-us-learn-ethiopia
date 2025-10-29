@@ -1,41 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tourist_assistive_app/features/duolingo_learn/models/onboarding_model.dart';
-import 'package:tourist_assistive_app/features/duolingo_learn/providers/onboarding_provider.dart';
+import 'dart:ui';
 
-/// Learning Goals Screen - Choose why you want to learn Amharic
-class LearningGoalsScreen extends ConsumerWidget {
+/// Learning Goals Screen for Language Learning Setup
+/// Allows users to select their learning goals and motivation
+class LearningGoalsScreen extends StatefulWidget {
   const LearningGoalsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedGoals = ref.watch(onboardingProvider).learningGoals;
+  State<LearningGoalsScreen> createState() => _LearningGoalsScreenState();
+}
 
+class _LearningGoalsScreenState extends State<LearningGoalsScreen> {
+  final List<String> _selectedGoals = [];
+
+  final List<Map<String, dynamic>> _goals = [
+    {
+      'id': 'travel',
+      'title': 'Travel',
+      'description': 'I want to travel and communicate with locals',
+      'icon': Icons.flight_rounded,
+      'color': const Color(0xFF1CB0F6),
+    },
+    {
+      'id': 'work',
+      'title': 'Work',
+      'description': 'I need it for my job or career',
+      'icon': Icons.work_rounded,
+      'color': const Color(0xFF58CC02),
+    },
+    {
+      'id': 'education',
+      'title': 'Education',
+      'description': 'I\'m studying or want to study',
+      'icon': Icons.school_rounded,
+      'color': const Color(0xFFFF9600),
+    },
+    {
+      'id': 'family',
+      'title': 'Family',
+      'description': 'I want to connect with family members',
+      'icon': Icons.family_restroom_rounded,
+      'color': const Color(0xFF9C27B0),
+    },
+    {
+      'id': 'culture',
+      'title': 'Culture',
+      'description': 'I\'m interested in the culture',
+      'icon': Icons.public_rounded,
+      'color': const Color(0xFFE91E63),
+    },
+    {
+      'id': 'challenge',
+      'title': 'Challenge',
+      'description': 'I love learning new languages',
+      'icon': Icons.psychology_rounded,
+      'color': const Color(0xFF607D8B),
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => context.pop(),
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.push('/duolingo/onboarding/preferences');
-            },
-            child: const Text(
-              'SKIP',
-              style: TextStyle(
-                color: Color(0xFF58CC02),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+        title: const Text(
+          'Your Goals',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -45,83 +84,98 @@ class LearningGoalsScreen extends ConsumerWidget {
             children: [
               // Header
               const Text(
-                'Why are you\nlearning Amharic?',
+                'Why are you learning?',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 32,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  height: 1.2,
                 ),
-              ).animate().fadeIn().slideY(begin: -0.3, end: 0),
-              
+              ).animate()
+                .fadeIn(delay: 200.ms, duration: 600.ms)
+                .slideX(begin: -0.3, end: 0, delay: 200.ms),
+
               const SizedBox(height: 8),
-              
+
               Text(
-                'Select all that apply',
+                'Select all that apply (you can change this later)',
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 16,
                 ),
-              ).animate().fadeIn(delay: 100.ms),
+              ).animate()
+                .fadeIn(delay: 400.ms, duration: 600.ms)
+                .slideX(begin: -0.3, end: 0, delay: 400.ms),
 
               const SizedBox(height: 32),
 
-              // Goals grid
+              // Goals Grid
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1.1,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
                   ),
-                  itemCount: LearningGoal.all.length,
+                  itemCount: _goals.length,
                   itemBuilder: (context, index) {
-                    final goal = LearningGoal.all[index];
-                    final isSelected = selectedGoals.contains(goal.id);
+                    final goal = _goals[index];
+                    final isSelected = _selectedGoals.contains(goal['id']);
 
                     return _buildGoalCard(
-                      context: context,
-                      ref: ref,
                       goal: goal,
                       isSelected: isSelected,
-                      delay: index * 50,
+                      onTap: () {
+                        setState(() {
+                          if (isSelected) {
+                            _selectedGoals.remove(goal['id']);
+                          } else {
+                            _selectedGoals.add(goal['id']);
+                          }
+                        });
+                      },
+                      delay: (index + 1) * 100,
                     );
                   },
                 ),
               ),
 
-              // Continue button
+              const SizedBox(height: 24),
+
+              // Continue Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: selectedGoals.isNotEmpty
+                  onPressed: _selectedGoals.isNotEmpty
                       ? () {
-                          context.push('/duolingo/onboarding/preferences');
+                          // Navigate to preferences screen
+                          context.push('/language/setup/preferences');
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF58CC02),
+                    backgroundColor: _selectedGoals.isNotEmpty
+                        ? const Color(0xFF58CC02)
+                        : Colors.grey.withValues(alpha: 0.3),
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey,
+                    elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 0,
                   ),
-                  child: const Text(
-                    'CONTINUE',
-                    style: TextStyle(
-                      fontSize: 16,
+                  child: Text(
+                    _selectedGoals.isEmpty
+                        ? 'Select at least one goal'
+                        : 'Continue',
+                    style: const TextStyle(
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
-              ).animate().fadeIn(delay: 400.ms),
-
-              const SizedBox(height: 16),
+              ).animate()
+                .fadeIn(delay: 1000.ms, duration: 600.ms)
+                .slideY(begin: 0.3, end: 0, delay: 1000.ms),
             ],
           ),
         ),
@@ -130,68 +184,91 @@ class LearningGoalsScreen extends ConsumerWidget {
   }
 
   Widget _buildGoalCard({
-    required BuildContext context,
-    required WidgetRef ref,
-    required LearningGoal goal,
+    required Map<String, dynamic> goal,
     required bool isSelected,
+    required VoidCallback onTap,
     required int delay,
   }) {
+    final color = goal['color'] as Color;
+
     return InkWell(
-      onTap: () {
-        if (isSelected) {
-          ref.read(onboardingProvider.notifier).removeLearningGoal(goal.id);
-        } else {
-          ref.read(onboardingProvider.notifier).addLearningGoal(goal.id);
-        }
-      },
+      onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF58CC02).withValues(alpha: 0.2)
+              ? color.withValues(alpha: 0.1)
               : const Color(0xFF2A2A2A),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xFF58CC02)
-                : Colors.transparent,
+            color: isSelected ? color : Colors.transparent,
             width: 2,
           ),
-          borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Emoji/Icon
-            Text(
-              goal.icon,
-              style: const TextStyle(fontSize: 48),
+            // Icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? color.withValues(alpha: 0.2)
+                    : color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                goal['icon'],
+                color: isSelected ? color : color.withValues(alpha: 0.6),
+                size: 20,
+              ),
             ),
             const SizedBox(height: 12),
-            // Goal name
+
+            // Title
             Text(
-              goal.name,
+              goal['title'],
               style: TextStyle(
-                color: isSelected ? const Color(0xFF58CC02) : Colors.white,
+                color: isSelected ? color : Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+
+            // Description
+            Text(
+              goal['description'],
+              style: TextStyle(
+                color: isSelected
+                    ? color.withValues(alpha: 0.8)
+                    : Colors.white70,
+                fontSize: 11,
               ),
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
-            // Check icon
+
+            // Selection Indicator
             if (isSelected)
-              const Icon(
-                Icons.check_circle_rounded,
-                color: Color(0xFF58CC02),
-                size: 20,
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Icon(
+                  Icons.check_circle_rounded,
+                  color: color,
+                  size: 16,
+                ),
               ),
           ],
         ),
       ),
-    ).animate().fadeIn(delay: delay.ms).scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1));
+    ).animate()
+      .fadeIn(delay: delay.ms, duration: 600.ms)
+      .scale(begin: const Offset(0.8, 0.8), end: const Offset(1.0, 1.0), delay: delay.ms);
   }
 }
-

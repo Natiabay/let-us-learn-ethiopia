@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Utility class for color operations with platform compatibility
 class ColorUtils {
   /// Create a color with opacity, using the new withValues method when available
-  static Color withOpacity(Color color, double opacity) {
+  static Color withValues(Color color, double opacity) {
     // Use the new withValues method to avoid precision loss
     return color.withValues(alpha: opacity);
   }

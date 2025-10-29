@@ -15,23 +15,23 @@ import 'package:tourist_assistive_app/features/payment/screens/payment_status_sc
 import 'package:tourist_assistive_app/features/payment/screens/payment_dashboard_screen.dart';
 import 'package:tourist_assistive_app/features/home/screens/main_screen.dart';
 import 'package:tourist_assistive_app/features/home/screens/home_dashboard.dart';
-import 'package:tourist_assistive_app/features/language/screens/language_learning_screen.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/dashboard/duolingo_dashboard.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/lessons/lesson_screen.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/fidel/fidel_dashboard.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/progress/progress_dashboard.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/onboarding/welcome_screen.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/onboarding/language_selection_screen.dart' as duolingo;
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/onboarding/proficiency_screen.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/onboarding/learning_goals_screen.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/onboarding/preferences_screen.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/providers/lesson_provider.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/providers/onboarding_provider.dart';
 import 'package:tourist_assistive_app/features/language/screens/enhanced_amharic_lesson_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/english_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/multilingual_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/language_selection_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/mandarin_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/french_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/german_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/spanish_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/arabic_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/portuguese_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/russian_amharic_lessons_screen.dart';
-import 'package:tourist_assistive_app/features/language/screens/japanese_amharic_lessons_screen.dart';
+import 'package:tourist_assistive_app/features/language/screens/universal_amharic_lessons_screen.dart';
+import 'package:tourist_assistive_app/features/language/widgets/multi_language_selector.dart';
 import 'package:tourist_assistive_app/features/language/screens/english_amharic_dictionary_screen.dart';
 import 'package:tourist_assistive_app/features/locations/screens/location_detail_screen_enhanced.dart';
 import 'package:tourist_assistive_app/features/locations/screens/locations_screen.dart';
-import 'package:tourist_assistive_app/features/home/screens/main_screen.dart';
 import 'package:tourist_assistive_app/features/chat/screens/modern_chat_screen.dart';
 import 'package:tourist_assistive_app/features/profile/screens/profile_screen.dart';
 import 'package:tourist_assistive_app/features/profile/screens/edit_profile_screen.dart';
@@ -49,106 +49,55 @@ import 'package:tourist_assistive_app/features/feedback/screens/feedback_screen.
 final limitedAccessProvider = StateProvider<bool>((ref) => false);
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
-  final trialStatus = ref.watch(trialStatusProvider);
-  // final hasLimitedAccess = ref.watch(limitedAccessProvider);
-  
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/',
     redirect: (context, state) {
-      final isLoggedIn = authState.user != null;
-      
-      // Handle AsyncValue for trial status
-      final trialData = trialStatus.when(
-        data: (data) => data,
-        loading: () => {'hasAccess': false, 'needsPayment': false, 'loading': true},
-        error: (_, __) => {'hasAccess': false, 'needsPayment': false, 'loading': false},
-      );
-      
-      final hasAccess = trialData['hasAccess'] ?? false;
-      final needsPayment = trialData['needsPayment'] ?? false;
-      final isLoading = trialData['loading'] ?? false;
-      
-      // Debug: Router redirect logic
-      print('🔄 Router redirect check:');
-      print('   Location: ${state.matchedLocation}');
-      print('   isLoggedIn: $isLoggedIn');
-      print('   hasAccess: $hasAccess');
-      print('   needsPayment: $needsPayment');
-      print('   isLoading: $isLoading');
-      
-      final isOnboarding = state.matchedLocation == '/onboarding';
-      final isAuth = state.matchedLocation == '/auth';
-      final isAdmin = state.matchedLocation.startsWith('/admin');
-      // final isPayment = state.matchedLocation == '/payment';
-      final isHome = state.matchedLocation.startsWith('/home');
-      final isLanguage = state.matchedLocation.startsWith('/language');
-      
-      // Enhanced admin route access control
-      if (isAdmin) {
-        if (isLoggedIn && authState.user != null) {
-          // Enhanced admin verification
-          final userEmail = authState.user!.email?.toLowerCase().trim() ?? '';
-          final adminEmail = 'kiru72fekadu@gmail.com'.toLowerCase().trim();
-          final isAdminByEmail = userEmail == adminEmail;
-          final isAdminByFlag = authState.user!.isAdmin;
-          
-          print('🔍 Enhanced admin access check:');
-          print('  - User email: "$userEmail"');
-          print('  - Admin email: "$adminEmail"');
-          print('  - Email match: $isAdminByEmail');
-          print('  - Flag match: $isAdminByFlag');
-          print('  - Is logged in: $isLoggedIn');
-          
-          if (isAdminByEmail || isAdminByFlag) {
-            print('✅ Admin access granted for: ${authState.user?.email}');
-            print('✅ Admin verification successful');
-            return null;
-          } else {
-            print('⛔ Admin access denied - email/flag mismatch');
-            print('🔍 Redirecting to home');
+      final authState = ref.watch(authProvider);
+      final isAuthenticated = authState.isAuthenticated;
+      final isAuthenticating = authState.isLoading;
+
+      print('🔄 Router redirect called for: ${state.matchedLocation}');
+      print('   Is Authenticated: $isAuthenticated, Is Loading: $isAuthenticating');
+
+      // If still loading auth state, don't redirect yet
+      if (isAuthenticating) {
+        return null; // Keep current location or show a loading screen
+      }
+
+      // If authenticated, redirect to home dashboard
+      if (isAuthenticated) {
+        if (state.matchedLocation == '/' || 
+            state.matchedLocation == '/onboarding' || 
+            state.matchedLocation == '/auth') {
+          print('✅ Authenticated, redirecting to /home');
+          return '/home';
+        }
+        // Allow language setup routes only if user hasn't completed onboarding
+        if (state.matchedLocation.startsWith('/language/setup')) {
+          final isOnboardingComplete = ref.read(isOnboardingCompleteProvider);
+          if (isOnboardingComplete) {
+            print('✅ Onboarding complete, redirecting to /home');
             return '/home';
           }
-        } else {
-          print('⛔ Admin access denied - not logged in');
-          print('🔍 Redirecting to home');
-          return '/home';
         }
-      }
-      
-      // If loading subscription data, don't redirect yet
-      if (isLoading && isLoggedIn) {
-        return null;
-      }
-      
-      // If not logged in and not on auth/onboarding, redirect to onboarding
-      if (!isLoggedIn && !isAuth && !isOnboarding) {
-        return '/onboarding';
-      }
-      
-      // ✅✅✅ COMPLETE UNRESTRICTED ACCESS - ALL FEATURES UNLOCKED ✅✅✅
-      // No payment checks, no access restrictions, no trial limitations
-      // EVERYTHING is FREE and ACCESSIBLE
-      if (isLoggedIn) {
-        print('✅ FULL ACCESS MODE: All features unlocked - lessons, chat, places, profile');
-        
-        // For root path, redirect to home
-        if (state.matchedLocation == '/') {
-          return '/home';
+        return null; // Allow navigation to other routes if authenticated
+      } else {
+        // If not authenticated, redirect to main onboarding
+        if (state.matchedLocation != '/onboarding' && 
+            state.matchedLocation != '/auth') {
+          print('❌ Not authenticated, redirecting to /onboarding');
+          return '/onboarding';
         }
-        
-        // ✅ GRANT COMPLETE ACCESS TO ALL ROUTES - NO RESTRICTIONS
-        return null;
+        return null; // Allow navigation to onboarding and auth
       }
-      
-      // If logged in but on auth/onboarding, redirect to home
-      if (isLoggedIn && (isAuth || isOnboarding)) {
-        return '/home';
-      }
-      
-      return null;
     },
     routes: [
+      // Root route - will be handled by redirect logic
+      GoRoute(
+        path: '/',
+        redirect: (context, state) => '/onboarding', // Default redirect, actual logic in main redirect
+      ),
+      // 🔐 AUTHENTICATION ONBOARDING - For user registration/login
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
@@ -217,10 +166,104 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/feedback',
         builder: (context, state) => const FeedbackScreen(),
       ),
+      // Duolingo routes
+      GoRoute(
+        path: '/duolingo',
+        builder: (context, state) => const DuolingoDashboard(),
+        routes: [
+          GoRoute(
+            path: 'lessons/:lessonId',
+            builder: (context, state) {
+              final lessonId = state.pathParameters['lessonId']!;
+              final lesson = ref.read(lessonByIdProvider(lessonId));
+              if (lesson != null) {
+                return LessonScreen(lesson: lesson);
+              } else {
+                return Scaffold(
+                  body: Center(
+                    child: Text('Lesson not found: $lessonId'),
+                  ),
+                );
+              }
+            },
+          ),
+          GoRoute(
+            path: 'fidel',
+            builder: (context, state) => const FidelDashboard(),
+          ),
+        ],
+      ),
       GoRoute(
         path: '/language',
-        builder: (context, state) => const LanguageLearningScreen(),
+        builder: (context, state) => const DuolingoDashboard(),
         routes: [
+          // Duolingo lesson routes
+          GoRoute(
+            path: 'lessons/:lessonId',
+            builder: (context, state) {
+              final lessonId = state.pathParameters['lessonId']!;
+              final lesson = ref.read(lessonByIdProvider(lessonId));
+              if (lesson != null) {
+                return LessonScreen(lesson: lesson);
+              } else {
+                return Scaffold(
+                  body: Center(
+                    child: Text('Lesson not found: $lessonId'),
+                  ),
+                );
+              }
+            },
+          ),
+          GoRoute(
+            path: 'fidel',
+            builder: (context, state) => const FidelDashboard(),
+          ),
+          GoRoute(
+            path: 'progress',
+            builder: (context, state) => const ProgressDashboard(),
+          ),
+          // 📚 LEARNING SETUP - For lesson preferences and setup
+          GoRoute(
+            path: 'setup/welcome',
+            builder: (context, state) => const WelcomeScreen(),
+          ),
+          GoRoute(
+            path: 'setup/language',
+            builder: (context, state) => const duolingo.LanguageSelectionScreen(),
+          ),
+          GoRoute(
+            path: 'setup/proficiency',
+            builder: (context, state) => const ProficiencyScreen(),
+          ),
+          GoRoute(
+            path: 'setup/goals',
+            builder: (context, state) => const LearningGoalsScreen(),
+          ),
+          GoRoute(
+            path: 'setup/preferences',
+            builder: (context, state) => const PreferencesScreen(),
+          ),
+          // Duolingo lesson routes
+          GoRoute(
+            path: 'lessons/:lessonId',
+            builder: (context, state) {
+              final lessonId = state.pathParameters['lessonId']!;
+              final lesson = ref.read(lessonByIdProvider(lessonId));
+              if (lesson != null) {
+                return LessonScreen(lesson: lesson);
+              } else {
+                return const Scaffold(
+                  body: Center(
+                    child: Text('Lesson not found'),
+                  ),
+                );
+              }
+            },
+          ),
+          GoRoute(
+            path: 'fidel',
+            builder: (context, state) => const FidelDashboard(),
+          ),
           GoRoute(
             path: 'amharic/lesson/:lessonId',
             builder: (context, state) {
@@ -229,56 +272,67 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               );
             },
           ),
+          // Language selector - shows 10 languages with flags
           GoRoute(
             path: 'selection',
-            builder: (context, state) => const LanguageSelectionScreen(),
+            builder: (context, state) => const MultiLanguageSelector(),
           ),
+          // Universal Amharic lessons route - works for all 10 languages
+          GoRoute(
+            path: 'amharic/lessons',
+            builder: (context, state) {
+              final languageCode = state.uri.queryParameters['lang'] ?? 'en';
+              return UniversalAmharicLessonsScreen(languageCode: languageCode);
+            },
+          ),
+          // Legacy routes - redirect to universal route
           GoRoute(
             path: 'amharic',
-            builder: (context, state) => const EnglishAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=en',
           ),
           GoRoute(
             path: 'english-amharic',
-            builder: (context, state) => const EnglishAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=en',
           ),
           GoRoute(
-            path: 'multilingual-amharic/:languageCode',
-            builder: (context, state) {
-              final languageCode = state.pathParameters['languageCode']!;
-              return MultilingualAmharicLessonsScreen(sourceLanguage: languageCode);
-            },
+            path: 'english',
+            redirect: (context, state) => '/language/amharic/lessons?lang=en',
           ),
           GoRoute(
             path: 'mandarin',
-            builder: (context, state) => const MandarinAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=zh',
           ),
           GoRoute(
             path: 'french',
-            builder: (context, state) => const FrenchAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=fr',
           ),
           GoRoute(
             path: 'german',
-            builder: (context, state) => const GermanAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=de',
           ),
           GoRoute(
             path: 'spanish',
-            builder: (context, state) => const SpanishAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=es',
           ),
           GoRoute(
             path: 'arabic',
-            builder: (context, state) => const ArabicAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=ar',
           ),
           GoRoute(
             path: 'portuguese',
-            builder: (context, state) => const PortugueseAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=pt',
           ),
           GoRoute(
             path: 'russian',
-            builder: (context, state) => const RussianAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=ru',
           ),
           GoRoute(
             path: 'japanese',
-            builder: (context, state) => const JapaneseAmharicLessonsScreen(),
+            redirect: (context, state) => '/language/amharic/lessons?lang=ja',
+          ),
+          GoRoute(
+            path: 'hindi',
+            redirect: (context, state) => '/language/amharic/lessons?lang=hi',
           ),
           GoRoute(
             path: 'dictionary',
@@ -350,67 +404,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-
-// Helper methods for language data
-String _getLanguageName(String languageCode) {
-  switch (languageCode) {
-    case 'en': return 'English';
-    case 'zh': return 'Mandarin';
-    case 'fr': return 'French';
-    case 'de': return 'German';
-    case 'es': return 'Spanish';
-    case 'ar': return 'Arabic';
-    case 'pt': return 'Portuguese';
-    case 'ru': return 'Russian';
-    case 'ja': return 'Japanese';
-    default: return 'English';
-  }
-}
-
-String _getNativeName(String languageCode) {
-  switch (languageCode) {
-    case 'en': return 'English';
-    case 'zh': return '中文';
-    case 'fr': return 'Français';
-    case 'de': return 'Deutsch';
-    case 'es': return 'Español';
-    case 'ar': return 'العربية';
-    case 'pt': return 'Português';
-    case 'ru': return 'Русский';
-    case 'ja': return '日本語';
-    default: return 'English';
-  }
-}
-
-String _getFlag(String languageCode) {
-  switch (languageCode) {
-    case 'en': return '🇺🇸';
-    case 'zh': return '🇨🇳';
-    case 'fr': return '🇫🇷';
-    case 'de': return '🇩🇪';
-    case 'es': return '🇪🇸';
-    case 'ar': return '🇸🇦';
-    case 'pt': return '🇵🇹';
-    case 'ru': return '🇷🇺';
-    case 'ja': return '🇯🇵';
-    default: return '🇺🇸';
-  }
-}
-
-Color _getColor(String languageCode) {
-  switch (languageCode) {
-    case 'en': return const Color(0xFF1CB0F6);
-    case 'zh': return const Color(0xFFCE82FF);
-    case 'fr': return const Color(0xFF1CB0F6);
-    case 'de': return const Color(0xFFCE82FF);
-    case 'es': return const Color(0xFF1CB0F6);
-    case 'ar': return const Color(0xFFCE82FF);
-    case 'pt': return const Color(0xFF1CB0F6);
-    case 'ru': return const Color(0xFFCE82FF);
-    case 'ja': return const Color(0xFF1CB0F6);
-    default: return const Color(0xFF1CB0F6);
-  }
-}
 
 
 

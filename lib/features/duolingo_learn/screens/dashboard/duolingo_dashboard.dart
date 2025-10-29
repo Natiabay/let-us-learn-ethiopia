@@ -4,6 +4,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourist_assistive_app/features/duolingo_learn/providers/progress_provider.dart';
 import 'package:tourist_assistive_app/features/duolingo_learn/providers/onboarding_provider.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/providers/lesson_provider.dart';
+import 'package:tourist_assistive_app/features/duolingo_learn/screens/lessons/interactive_lesson_screen.dart';
 
 /// Duolingo Dashboard - Main learning hub
 /// Shows progress, skill tree, and gamification elements
@@ -23,12 +25,8 @@ class _DuolingoDashboardState extends ConsumerState<DuolingoDashboard> {
   }
 
   Future<void> _checkOnboarding() async {
-    // Check if onboarding is complete
-    final isComplete = ref.read(isOnboardingCompleteProvider);
-    if (!isComplete && mounted) {
-      // Navigate to onboarding
-      context.go('/duolingo/onboarding/welcome');
-    }
+    // Onboarding check is now handled by the router
+    // No need to force redirect here
   }
 
   Future<void> _checkHeartRegeneration() async {
@@ -121,18 +119,31 @@ class _DuolingoDashboardState extends ConsumerState<DuolingoDashboard> {
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    // TODO: Replace with actual lesson data
+                    final categories = ref.watch(availableCategoriesProvider);
+                    if (index >= categories.length) return null;
+                    
+                    final categoryId = categories[index];
+                    final lessons = ref.watch(categoryLessonsProvider(categoryId));
+                    
+                    if (lessons.isEmpty) return null;
+                    
+                    final firstLesson = lessons.first;
+                    final isLocked = index > 2; // First 3 categories unlocked
+                    final isCompleted = index < 1; // First category completed
+                    final progress = index == 1 ? 0.6 : (isCompleted ? 1.0 : 0.0);
+                    
                     return _buildLessonCard(
                       context: context,
-                      title: 'Lesson ${index + 1}',
-                      description: 'Learn basic Amharic greetings',
-                      isLocked: index > 2,
-                      isCompleted: index == 0,
-                      progress: index == 1 ? 0.6 : 0.0,
+                      title: _getCategoryDisplayName(categoryId),
+                      description: '${lessons.length} lessons • ${firstLesson.description}',
+                      isLocked: isLocked,
+                      isCompleted: isCompleted,
+                      progress: progress,
                       delay: (index + 3) * 100,
+                      onTap: () => _navigateToCategory(context, categoryId),
                     );
                   },
-                  childCount: 10, // TODO: Replace with actual lesson count
+                  childCount: ref.watch(availableCategoriesProvider).length,
                 ),
               ),
             ),
@@ -433,18 +444,16 @@ class _DuolingoDashboardState extends ConsumerState<DuolingoDashboard> {
     required bool isCompleted,
     required double progress,
     required int delay,
+    VoidCallback? onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: InkWell(
-        onTap: isLocked
-            ? null
-            : () {
-                // TODO: Navigate to lesson
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Lesson coming in Phase 2!')),
-                );
-              },
+        onTap: isLocked ? null : (onTap ?? () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Lesson coming in Phase 2!')),
+          );
+        }),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(20),
@@ -570,7 +579,7 @@ class _DuolingoDashboardState extends ConsumerState<DuolingoDashboard> {
                 label: 'Fidel',
                 isActive: false,
                 onTap: () {
-                  // TODO: Navigate to Fidel learning
+                  context.go('/language/fidel');
                 },
               ),
               _buildNavItem(
@@ -578,15 +587,15 @@ class _DuolingoDashboardState extends ConsumerState<DuolingoDashboard> {
                 label: 'Progress',
                 isActive: false,
                 onTap: () {
-                  // TODO: Navigate to progress/leaderboard
+                  context.go('/language/progress');
                 },
               ),
               _buildNavItem(
-                icon: Icons.person_rounded,
-                label: 'Profile',
+                icon: Icons.book_rounded,
+                label: 'Dictionary',
                 isActive: false,
                 onTap: () {
-                  // TODO: Navigate to profile
+                  context.go('/language/dictionary');
                 },
               ),
             ],
@@ -628,6 +637,107 @@ class _DuolingoDashboardState extends ConsumerState<DuolingoDashboard> {
         ),
       ),
     );
+  }
+
+  String _getCategoryDisplayName(String categoryId) {
+    switch (categoryId) {
+      case 'fidel_alphabet':
+        return 'Fidel Alphabet';
+      case 'basic_greetings':
+        return 'Basic Greetings';
+      case 'simple_introductions':
+        return 'Simple Introductions';
+      case 'polite_expressions':
+        return 'Polite Expressions';
+      case 'numbers_1_10':
+        return 'Numbers 1-10';
+      case 'numbers_11_100':
+        return 'Numbers 11-100';
+      case 'colors':
+        return 'Colors';
+      case 'family_members':
+        return 'Family Members';
+      case 'basic_food':
+        return 'Basic Food';
+      case 'drinks_beverages':
+        return 'Drinks & Beverages';
+      case 'restaurant_basics':
+        return 'Restaurant Basics';
+      case 'shopping_basics':
+        return 'Shopping Basics';
+      case 'asking_directions':
+        return 'Asking for Directions';
+      case 'basic_transportation':
+        return 'Basic Transportation';
+      case 'hotel_check_in':
+        return 'Hotel Check-in';
+      case 'telling_time':
+        return 'Telling Time';
+      case 'days_of_week':
+        return 'Days of the Week';
+      case 'months_seasons':
+        return 'Months & Seasons';
+      case 'weather_terms':
+        return 'Weather Terms';
+      case 'body_parts':
+        return 'Body Parts';
+      case 'basic_health':
+        return 'Basic Health';
+      case 'emergency_phrases':
+        return 'Emergency Phrases';
+      case 'personal_pronouns':
+        return 'Personal Pronouns';
+      case 'to_be_have':
+        return 'To Be and Have';
+      case 'common_verbs_1':
+        return 'Common Verbs 1';
+      case 'simple_adjectives':
+        return 'Simple Adjectives';
+      case 'asking_questions':
+        return 'Asking Questions';
+      case 'negative_sentences':
+        return 'Negative Sentences';
+      case 'simple_sentences':
+        return 'Simple Sentences';
+      case 'animals':
+        return 'Animals';
+      case 'clothing':
+        return 'Clothing';
+      case 'home_furniture':
+        return 'Home & Furniture';
+      case 'cultural_facts_1':
+        return 'Cultural Facts 1';
+      case 'tourist_essentials_1':
+        return 'Tourist Essentials 1';
+      default:
+        return categoryId.replaceAll('_', ' ').split(' ').map((word) => 
+          word[0].toUpperCase() + word.substring(1)).join(' ');
+    }
+  }
+
+  void _navigateToCategory(BuildContext context, String categoryId) {
+    if (categoryId == 'fidel_alphabet') {
+      // Navigate to Fidel dashboard
+      context.go('/language/fidel');
+    } else {
+      // Get the first lesson in the category
+      final lessons = ref.read(categoryLessonsProvider(categoryId));
+      if (lessons.isNotEmpty) {
+        final firstLesson = lessons.first;
+        // Navigate to interactive lesson screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InteractiveLessonScreen(lesson: firstLesson),
+          ),
+        );
+      } else {
+        // Fallback to category view if no lessons found
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No lessons available in this category')),
+        );
+      }
+    }
   }
 }
 

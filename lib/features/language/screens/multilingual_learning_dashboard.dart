@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:tourist_assistive_app/core/constants/app_colors.dart';
-import 'package:tourist_assistive_app/features/language/data/amharic_lessons_data.dart';
 import 'package:tourist_assistive_app/features/language/models/comprehensive_lesson_model.dart';
 import 'package:tourist_assistive_app/features/language/services/amharic_voice_service.dart';
 import 'package:tourist_assistive_app/features/subscription/providers/subscription_provider.dart';
-import 'package:tourist_assistive_app/features/language/providers/duolingo_progress_provider.dart';
 // import 'package:tourist_assistive_app/features/language/widgets/duolingo_dashboard_widget.dart';
 
 class MultilingualLearningDashboard extends ConsumerStatefulWidget {
@@ -158,7 +156,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
               color: const Color(0xFFFFE135),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(
@@ -370,7 +368,7 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
   }
   
   Widget _buildLanguageSelectionButton() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Material(
         color: Colors.transparent,
@@ -448,32 +446,6 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
     );
   }
 
-  Widget _buildLanguageOptions() {
-    final languages = [
-      LanguageOption(
-        name: 'Amharic',
-        nativeName: 'አማርኛ',
-        flag: '🇪🇹',
-        color: Colors.green,
-        description: 'Official language of Ethiopia',
-        isAvailable: true,
-        languageCode: 'am',
-      ),
-      LanguageOption(
-        name: 'English',
-        nativeName: 'English',
-        flag: '🇺🇸',
-        color: Colors.blue,
-        description: 'International language',
-        isAvailable: true,
-        languageCode: 'en',
-      ),
-    ];
-
-    return Column(
-      children: languages.map((language) => _buildLanguageCard(language)).toList(),
-    );
-  }
 
   Widget _buildLanguageCard(LanguageOption language) {
     return Container(
@@ -980,27 +952,6 @@ class _MultilingualLearningDashboardState extends ConsumerState<MultilingualLear
     ).animate().fadeIn(duration: 1200.ms).slideY(begin: 0.3, end: 0);
   }
 
-  Future<void> _startFreeTrial(WidgetRef ref) async {
-    try {
-      final subscriptionActions = ref.read(subscriptionActionsProvider);
-      await subscriptionActions.startFreeTrial();
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('🎉 Free trial started! You now have 24 hours of full access.'),
-          backgroundColor: Color(0xFF00D9B8),
-        ),
-      );
-    } catch (e) {
-      // Error starting free trial: $e
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error starting trial: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 
   void _showSettings() {
     showModalBottomSheet(

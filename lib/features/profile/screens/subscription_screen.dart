@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 
 class SubscriptionScreen extends ConsumerStatefulWidget {
   const SubscriptionScreen({super.key});
@@ -14,9 +13,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   static const Color _navyBlue = Color(0xFF0A1929);
   static const Color _navyCard = Color(0xFF1A2F44);
   static const Color _turquoise = Color(0xFF00D9B8);
-  static const Color _yellow = Color(0xFFFFD43B);
   static const Color _blue = Color(0xFF1CB0F6);
-  static const Color _red = Color(0xFFFF4B4B);
   static const Color _textPrimary = Color(0xFFFFFFFF);
   static const Color _textSecondary = Color(0xFFB3B3B3);
   static const Color _textTertiary = Color(0xFF8B949E);

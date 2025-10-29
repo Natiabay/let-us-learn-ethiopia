@@ -5,8 +5,8 @@ import 'package:geocoding/geocoding.dart';
 
 /// Automated Google Maps Service with fallback functionality
 class AutomatedGoogleMapsService {
-  static const String _ethiopiaCenterLat = '9.1450';
-  static const String _ethiopiaCenterLng = '40.4897';
+  // static const String _ethiopiaCenterLat = '9.1450';
+  // static const String _ethiopiaCenterLng = '40.4897';
   
   // Development API keys (these are public and safe to use)
   static const String _devWebKey = 'AIzaSyBvOkBw3cFyZ8Q2vK9mN1pL4sR7tU3wX6Y';
@@ -27,10 +27,10 @@ class AutomatedGoogleMapsService {
         await _initializeMobileMaps();
       }
       _isInitialized = true;
-      debugPrint('✅ Automated Google Maps initialized successfully');
+      // debugPrint('✅ Automated Google Maps initialized successfully');
     } catch (e) {
-      debugPrint('⚠️ Google Maps initialization failed: $e');
-      debugPrint('🔄 Continuing with fallback functionality');
+      // debugPrint('⚠️ Google Maps initialization failed: $e');
+      // debugPrint('🔄 Continuing with fallback functionality');
     }
   }
   
@@ -39,10 +39,10 @@ class AutomatedGoogleMapsService {
     try {
       // Try to use development key first
       _currentApiKey = _devWebKey;
-      debugPrint('🌐 Google Maps Web initialized with development key');
-      debugPrint('💡 For production, replace with your own API key');
+      // debugPrint('🌐 Google Maps Web initialized with development key');
+      // debugPrint('💡 For production, replace with your own API key');
     } catch (e) {
-      debugPrint('⚠️ Web Maps initialization failed: $e');
+      // debugPrint('⚠️ Web Maps initialization failed: $e');
     }
   }
   
@@ -51,14 +51,14 @@ class AutomatedGoogleMapsService {
     try {
       if (defaultTargetPlatform == TargetPlatform.android) {
         _currentApiKey = _devAndroidKey;
-        debugPrint('🤖 Google Maps Android initialized with development key');
+        // debugPrint('🤖 Google Maps Android initialized with development key');
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         _currentApiKey = _devIOSKey;
-        debugPrint('🍎 Google Maps iOS initialized with development key');
+        // debugPrint('🍎 Google Maps iOS initialized with development key');
       }
-      debugPrint('💡 For production, replace with your own API key');
+      // debugPrint('💡 For production, replace with your own API key');
     } catch (e) {
-      debugPrint('⚠️ Mobile Maps initialization failed: $e');
+      // debugPrint('⚠️ Mobile Maps initialization failed: $e');
     }
   }
   
@@ -79,7 +79,7 @@ class AutomatedGoogleMapsService {
       if (permission == LocationPermission.denied) {
         final request = await Geolocator.requestPermission();
         if (request == LocationPermission.denied) {
-          debugPrint('⚠️ Location permission denied');
+          // debugPrint('⚠️ Location permission denied');
           return null;
         }
       }
@@ -90,7 +90,7 @@ class AutomatedGoogleMapsService {
       
       return LatLng(position.latitude, position.longitude);
     } catch (e) {
-      debugPrint('⚠️ Error getting current location: $e');
+      // debugPrint('⚠️ Error getting current location: $e');
       return null;
     }
   }
@@ -109,7 +109,7 @@ class AutomatedGoogleMapsService {
       }
       return null;
     } catch (e) {
-      debugPrint('⚠️ Error getting address: $e');
+      // debugPrint('⚠️ Error getting address: $e');
       return null;
     }
   }

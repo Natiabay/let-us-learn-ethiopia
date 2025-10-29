@@ -6,8 +6,8 @@ import 'package:tourist_assistive_app/core/config/environment_config.dart';
 
 /// Google Maps Service for cross-platform map functionality
 class GoogleMapsService {
-  static const String _ethiopiaCenterLat = '9.1450';
-  static const String _ethiopiaCenterLng = '40.4897';
+  // static const String _ethiopiaCenterLat = '9.1450';
+  // static const String _ethiopiaCenterLng = '40.4897';
   
   /// Initialize Google Maps for the current platform
   static Future<void> initialize() async {
@@ -134,19 +134,19 @@ class GoogleMapsService {
     return [
       {
         'name': 'Lalibela Rock-Hewn Churches',
-        'coordinates': LatLng(12.0317, 39.0417),
+        'coordinates': const LatLng(12.0317, 39.0417),
         'description': '11 monolithic churches carved from solid rock',
         'type': 'UNESCO World Heritage Site',
       },
       {
         'name': 'Simien Mountains National Park',
-        'coordinates': LatLng(13.2500, 38.2500),
+        'coordinates': const LatLng(13.2500, 38.2500),
         'description': 'Dramatic mountain landscapes and wildlife',
         'type': 'National Park',
       },
       {
         'name': 'Aksum (Axum)',
-        'coordinates': LatLng(14.1211, 38.7234),
+        'coordinates': const LatLng(14.1211, 38.7234),
         'description': 'Ancient capital with obelisks and archaeological sites',
         'type': 'Historical Site',
       },

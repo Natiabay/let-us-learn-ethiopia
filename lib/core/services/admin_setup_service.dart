@@ -1,35 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 /// Service to set up admin user and ensure proper Firebase configuration
 class AdminSetupService {
   static const String adminEmail = 'kiru72fekadu@gmail.com';
   static const String adminPassword = '12332122';
   
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  // static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   /// Initialize admin user in Firebase
   static Future<void> initializeAdminUser() async {
     try {
-      print('🔧 Setting up admin user in Firebase...');
+      // debugPrint('🔧 Setting up admin user in Firebase...');
       
       // Check if admin user already exists
       final adminUser = await _checkAdminUserExists();
       
       if (adminUser != null) {
-        print('✅ Admin user already exists: ${adminUser.email}');
+        // debugPrint('✅ Admin user already exists: ${adminUser.email}');
         await _updateAdminUserDocument(adminUser);
       } else {
-        print('⚠️ Admin user not found in Firebase Auth');
-        print('📝 Please create admin user manually in Firebase Console:');
-        print('   Email: $adminEmail');
-        print('   Password: $adminPassword');
-        print('   Or run: flutter run --dart-define=CREATE_ADMIN=true');
+        // debugPrint('⚠️ Admin user not found in Firebase Auth');
+        // debugPrint('📝 Please create admin user manually in Firebase Console:');
+        // debugPrint('   Email: $adminEmail');
+        // debugPrint('   Password: $adminPassword');
+        // debugPrint('   Or run: flutter run --dart-define=CREATE_ADMIN=true');
       }
       
     } catch (e) {
-      print('❌ Admin setup error: $e');
+      // debugPrint('❌ Admin setup error: $e');
     }
   }
 
@@ -44,7 +45,7 @@ class AdminSetupService {
       }
       return null;
     } catch (e) {
-      print('⚠️ Could not check admin user: $e');
+      // debugPrint('⚠️ Could not check admin user: $e');
       return null;
     }
   }
@@ -73,9 +74,9 @@ class AdminSetupService {
         'profileCompleted': true,
       }, SetOptions(merge: true));
       
-      print('✅ Admin user document updated in Firestore');
+      // debugPrint('✅ Admin user document updated in Firestore');
     } catch (e) {
-      print('❌ Failed to update admin user document: $e');
+      // debugPrint('❌ Failed to update admin user document: $e');
     }
   }
 
@@ -94,9 +95,9 @@ class AdminSetupService {
         'lastUpdated': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       
-      print('✅ Admin settings created');
+      // debugPrint('✅ Admin settings created');
     } catch (e) {
-      print('❌ Failed to create admin settings: $e');
+      // debugPrint('❌ Failed to create admin settings: $e');
     }
   }
 
@@ -117,7 +118,7 @@ class AdminSetupService {
 
       return false;
     } catch (e) {
-      print('❌ Admin verification error: $e');
+      // debugPrint('❌ Admin verification error: $e');
       return false;
     }
   }
@@ -152,7 +153,7 @@ class AdminSetupService {
         'lastUpdated': DateTime.now().toIso8601String(),
       };
     } catch (e) {
-      print('❌ Failed to get admin dashboard data: $e');
+      // debugPrint('❌ Failed to get admin dashboard data: $e');
       return {
         'totalUsers': 0,
         'activeSubscriptions': 0,

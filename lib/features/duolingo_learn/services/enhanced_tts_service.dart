@@ -18,10 +18,11 @@ class EnhancedTTSService {
   // TTS Configuration for Learning
   static const String _amharicLanguage = 'am-ET'; // Amharic (Ethiopia)
   static const String _englishLanguage = 'en-US'; // English (US)
-  static const double _learningSpeed = 0.5; // Slower for learning (adjustable)
+  static const double _learningSpeed = 0.7; // Optimal for learning (more natural)
   static const double _normalSpeed = 1.0; // Normal speed
-  static const double _volume = 0.9;
-  static const double _pitch = 1.0;
+  static const double _emphasisSpeed = 0.5; // Very slow for emphasis
+  static const double _volume = 1.0;
+  static const double _pitch = 1.05; // Slightly higher for clarity
 
   String _preferredVoice = 'female'; // male/female
   double _currentSpeed = _learningSpeed;
@@ -298,10 +299,12 @@ class EnhancedTTSService {
 
   /// Speak word with emphasis (for vocabulary learning)
   Future<void> speakWordWithEmphasis(String word) async {
-    // Speak slowly, then at normal speed
-    await speakAmharic(word, speed: 0.3); // Very slow
-    await Future.delayed(const Duration(milliseconds: 500));
-    await speakAmharic(word, speed: 0.8); // Normal pace
+    // Speak slowly for learning, then at normal speed for practice
+    await speakAmharic(word, speed: _emphasisSpeed); // Very slow - 0.5
+    await Future.delayed(const Duration(milliseconds: 800));
+    await speakAmharic(word, speed: _learningSpeed); // Learning speed - 0.7
+    await Future.delayed(const Duration(milliseconds: 600));
+    await speakAmharic(word, speed: _normalSpeed); // Normal speed - 1.0
   }
 
   /// Speak sentence word by word (for learning)

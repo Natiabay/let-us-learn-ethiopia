@@ -34,7 +34,7 @@ class EthiopianTourGuides {
     const TourGuide(
       id: 'guide-1',
       name: 'Abebe Tadesse',
-      photoUrl: 'assets/images/Logo.png',
+      photoUrl: 'Photos/New Logo.png',
       rating: 4.9,
       reviewCount: 234,
       languages: ['Amharic', 'English', 'French'],
@@ -48,7 +48,7 @@ class EthiopianTourGuides {
     const TourGuide(
       id: 'guide-2',
       name: 'Tigist Bekele',
-      photoUrl: 'assets/images/Logo.png',
+      photoUrl: 'Photos/New Logo.png',
       rating: 4.8,
       reviewCount: 189,
       languages: ['Amharic', 'English', 'German', 'Spanish'],
@@ -62,7 +62,7 @@ class EthiopianTourGuides {
     const TourGuide(
       id: 'guide-3',
       name: 'Solomon Gebre',
-      photoUrl: 'assets/images/Logo.png',
+      photoUrl: 'Photos/New Logo.png',
       rating: 4.7,
       reviewCount: 156,
       languages: ['Amharic', 'English', 'Italian', 'Arabic'],
@@ -76,7 +76,7 @@ class EthiopianTourGuides {
     const TourGuide(
       id: 'guide-4',
       name: 'Hanna Alemayehu',
-      photoUrl: 'assets/images/Logo.png',
+      photoUrl: 'Photos/New Logo.png',
       rating: 4.9,
       reviewCount: 278,
       languages: ['Amharic', 'English', 'Mandarin'],

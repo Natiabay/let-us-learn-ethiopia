@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:tourist_assistive_app/features/locations/data/ethiopian_locations.dart';
 
 class LocationsColors {
@@ -197,7 +196,7 @@ class _ImaginativeTourScreenState extends State<ImaginativeTourScreen>
   }
 
   Widget _buildLocationImage(dynamic location) {
-    final imagePath = _photoMapping[location.id] ?? 'assets/images/Logo.png';
+    final imagePath = _photoMapping[location.id] ?? 'Photos/New Logo.png';
     
     return Container(
       width: double.infinity,

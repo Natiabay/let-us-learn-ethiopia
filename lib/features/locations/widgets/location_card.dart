@@ -45,17 +45,16 @@ class LocationCard extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      _getCategoryColor(location.category ?? 'Cultural'),
-                      _getCategoryColor(location.category ?? 'Cultural').withValues(alpha: 0.7),
+                      _getCategoryColor(location.category),
+                      _getCategoryColor(location.category).withValues(alpha: 0.7),
                     ],
                   ),
                 ),
                 child: Stack(
                   children: [
                     // Real image using automated service
-                    if (location.id != null)
-                      AutomatedImageService.createLocationImage(
-                        locationId: location.id!,
+                    AutomatedImageService.createLocationImage(
+                      locationId: location.id,
                         width: double.infinity,
                         height: 180,
                         fit: BoxFit.cover,
@@ -101,7 +100,7 @@ class LocationCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
-                          location.category ?? 'Cultural',
+                          location.category,
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -112,7 +111,7 @@ class LocationCard extends StatelessWidget {
                     ),
                     
                     // Rating
-                    if (location.rating != null)
+                    if (location.rating > 0)
                       Positioned(
                         bottom: 12,
                         right: 12,
@@ -132,7 +131,7 @@ class LocationCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                location.rating!.toStringAsFixed(1),
+                                location.rating.toStringAsFixed(1),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
@@ -159,7 +158,7 @@ class LocationCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          location.name ?? 'Unknown Location',
+                          location.name,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -169,7 +168,7 @@ class LocationCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      if (location.city != null) ...[
+                      if (location.city.isNotEmpty) ...[
                         const SizedBox(width: 8),
                         Row(
                           children: [
@@ -180,7 +179,7 @@ class LocationCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              location.city!,
+                              location.city,
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: AppColors.textSecondary,
@@ -195,9 +194,9 @@ class LocationCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   
                   // Description
-                  if (location.description != null)
+                  if (location.description.isNotEmpty)
                     Text(
-                      location.description!,
+                      location.description,
                       style: const TextStyle(
                         fontSize: 14,
                         color: AppColors.textSecondary,
@@ -217,14 +216,14 @@ class LocationCard extends StatelessWidget {
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: _getCategoryColor(location.category ?? 'Cultural').withValues(alpha: 0.1),
+                          color: _getCategoryColor(location.category).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           feature,
                           style: TextStyle(
                             fontSize: 11,
-                            color: _getCategoryColor(location.category ?? 'Cultural'),
+                            color: _getCategoryColor(location.category),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -239,7 +238,7 @@ class LocationCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Rating
-                      if (location.rating != null)
+                      if (location.rating > 0)
                         Row(
                           children: [
                             const Icon(
@@ -249,7 +248,7 @@ class LocationCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              location.rating!.toStringAsFixed(1),
+                              location.rating.toStringAsFixed(1),
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -260,19 +259,19 @@ class LocationCard extends StatelessWidget {
                         ),
                       
                       // Price
-                      if (location.entryFee != null && location.entryFee!.isNotEmpty)
+                      if (location.entryFee.isNotEmpty)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: _getCategoryColor(location.category ?? 'Cultural').withValues(alpha: 0.1),
+                            color: _getCategoryColor(location.category).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            location.entryFee!,
+                            location.entryFee,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: _getCategoryColor(location.category ?? 'Cultural'),
+                              color: _getCategoryColor(location.category),
                             ),
                           ),
                         ),

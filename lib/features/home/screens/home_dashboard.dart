@@ -111,12 +111,12 @@ class HomeDashboard extends ConsumerWidget {
         color: _navyCard, // Navy card background
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: _turquoise.withOpacity(0.3),
+          color: _turquoise.withValues(alpha: 0.3),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: _turquoise.withOpacity(0.1),
+            color: _turquoise.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -134,7 +134,7 @@ class HomeDashboard extends ConsumerWidget {
                   border: Border.all(color: _turquoise, width: 3),
                   boxShadow: [
                     BoxShadow(
-                      color: _turquoise.withOpacity(0.3),
+                      color: _turquoise.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -206,14 +206,14 @@ class HomeDashboard extends ConsumerWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: duolingoProgress.isStreakActive
-                          ? [_yellow, _yellow.withOpacity(0.8)]
-                          : [_navyBlue, _navyBlue.withOpacity(0.8)],
+                          ? [_yellow, _yellow.withValues(alpha: 0.8)]
+                          : [_navyBlue, _navyBlue.withValues(alpha: 0.8)],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: duolingoProgress.isStreakActive
                           ? _yellow
-                          : _textTertiary.withOpacity(0.3),
+                          : _textTertiary.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -245,7 +245,7 @@ class HomeDashboard extends ConsumerWidget {
                             'Day Streak',
                             style: TextStyle(
                               color: duolingoProgress.isStreakActive
-                                  ? _navyBlue.withOpacity(0.8)
+                                  ? _navyBlue.withValues(alpha: 0.8)
                                   : _textSecondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -266,7 +266,7 @@ class HomeDashboard extends ConsumerWidget {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [_blue, _blue.withOpacity(0.8)],
+                      colors: [_blue, _blue.withValues(alpha: 0.8)],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
@@ -325,7 +325,7 @@ class HomeDashboard extends ConsumerWidget {
         color: _navyCard,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: _blue.withOpacity(0.3),
+          color: _blue.withValues(alpha: 0.3),
           width: 2,
         ),
       ),
@@ -355,10 +355,10 @@ class HomeDashboard extends ConsumerWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: _turquoise.withOpacity(0.15),
+                color: _turquoise.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: _turquoise.withOpacity(0.3),
+                  color: _turquoise.withValues(alpha: 0.3),
                   width: 1,
                 ),
               ),
@@ -386,10 +386,10 @@ class HomeDashboard extends ConsumerWidget {
               _buildActionCard(
                 icon: Icons.translate_rounded,
                 title: 'Learn Amharic',
-                subtitle: 'Continue lesson',
+                subtitle: 'Choose your language',
                 color: _turquoise,
                 onTap: () {
-                  ref.read(bottomNavIndexProvider.notifier).state = 1;
+                  context.push('/language/selection');
                 },
               ),
               _buildActionCard(
@@ -462,12 +462,12 @@ class HomeDashboard extends ConsumerWidget {
               color: _navyCard,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: color.withOpacity(0.4),
+                color: color.withValues(alpha: 0.4),
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -481,10 +481,10 @@ class HomeDashboard extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.15),
+                    color: color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: color.withOpacity(0.3),
+                      color: color.withValues(alpha: 0.3),
                       width: 1,
                     ),
                   ),
@@ -576,7 +576,7 @@ class HomeDashboard extends ConsumerWidget {
               },
               style: TextButton.styleFrom(
                 foregroundColor: _turquoise,
-                backgroundColor: _turquoise.withOpacity(0.1),
+                backgroundColor: _turquoise.withValues(alpha: 0.1),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -632,17 +632,17 @@ class HomeDashboard extends ConsumerWidget {
           end: Alignment.bottomRight,
           colors: [
             _navyCard,
-            _navyCard.withOpacity(0.8),
+            _navyCard.withValues(alpha: 0.8),
           ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: _yellow.withOpacity(0.4),
+          color: _yellow.withValues(alpha: 0.4),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: _yellow.withOpacity(0.15),
+            color: _yellow.withValues(alpha: 0.15),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -661,7 +661,7 @@ class HomeDashboard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: _yellow.withOpacity(0.4),
+                      color: _yellow.withValues(alpha: 0.4),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -725,7 +725,7 @@ class HomeDashboard extends ConsumerWidget {
               height: 5,
               margin: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
-                color: _textTertiary.withOpacity(0.5),
+                color: _textTertiary.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(3),
               ),
             ),
@@ -818,7 +818,7 @@ class HomeDashboard extends ConsumerWidget {
             color: _navyBlue,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: color.withOpacity(0.4),
+              color: color.withValues(alpha: 0.4),
               width: 2,
             ),
           ),
@@ -828,7 +828,7 @@ class HomeDashboard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(icon, color: color, size: 32),
@@ -918,7 +918,7 @@ class HomeDashboard extends ConsumerWidget {
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
               foregroundColor: _turquoise,
-              backgroundColor: _turquoise.withOpacity(0.1),
+              backgroundColor: _turquoise.withValues(alpha: 0.1),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -948,14 +948,14 @@ class HomeDashboard extends ConsumerWidget {
           decoration: BoxDecoration(
             color: _navyBlue,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withOpacity(0.3), width: 1),
+            border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 24),
@@ -1008,7 +1008,7 @@ class HomeDashboard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: _turquoise.withOpacity(0.4),
+              color: _turquoise.withValues(alpha: 0.4),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),

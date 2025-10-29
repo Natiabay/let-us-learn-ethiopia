@@ -13,6 +13,20 @@ class LocationModel {
   final String entryFee;
   final List<String> features;
   
+  // Enhanced Ethiopian fields
+  final String? nameAmharic;
+  final String? descriptionAmharic;
+  final int? reviewCount;
+  final double? entrance;
+  final String? visitDuration;
+  final String? bestTimeToVisit;
+  final String? accessibility;
+  final List<String>? facilities;
+  final List<String>? nearbyAttractions;
+  final String? historicalSignificance;
+  final String? culturalImportance;
+  final List<String>? tips;
+  
   // Global location fields
   final String? country;
   final String? region;
@@ -34,6 +48,18 @@ class LocationModel {
     required this.openingHours,
     required this.entryFee,
     required this.features,
+    this.nameAmharic,
+    this.descriptionAmharic,
+    this.reviewCount,
+    this.entrance,
+    this.visitDuration,
+    this.bestTimeToVisit,
+    this.accessibility,
+    this.facilities,
+    this.nearbyAttractions,
+    this.historicalSignificance,
+    this.culturalImportance,
+    this.tips,
     this.country,
     this.region,
     this.isEthiopian,
@@ -55,6 +81,18 @@ class LocationModel {
     String? openingHours,
     String? entryFee,
     List<String>? features,
+    String? nameAmharic,
+    String? descriptionAmharic,
+    int? reviewCount,
+    double? entrance,
+    String? visitDuration,
+    String? bestTimeToVisit,
+    String? accessibility,
+    List<String>? facilities,
+    List<String>? nearbyAttractions,
+    String? historicalSignificance,
+    String? culturalImportance,
+    List<String>? tips,
     String? country,
     String? region,
     bool? isEthiopian,
@@ -75,6 +113,18 @@ class LocationModel {
       openingHours: openingHours ?? this.openingHours,
       entryFee: entryFee ?? this.entryFee,
       features: features ?? this.features,
+      nameAmharic: nameAmharic ?? this.nameAmharic,
+      descriptionAmharic: descriptionAmharic ?? this.descriptionAmharic,
+      reviewCount: reviewCount ?? this.reviewCount,
+      entrance: entrance ?? this.entrance,
+      visitDuration: visitDuration ?? this.visitDuration,
+      bestTimeToVisit: bestTimeToVisit ?? this.bestTimeToVisit,
+      accessibility: accessibility ?? this.accessibility,
+      facilities: facilities ?? this.facilities,
+      nearbyAttractions: nearbyAttractions ?? this.nearbyAttractions,
+      historicalSignificance: historicalSignificance ?? this.historicalSignificance,
+      culturalImportance: culturalImportance ?? this.culturalImportance,
+      tips: tips ?? this.tips,
       country: country ?? this.country,
       region: region ?? this.region,
       isEthiopian: isEthiopian ?? this.isEthiopian,

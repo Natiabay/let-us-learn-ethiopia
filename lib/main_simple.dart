@@ -9,7 +9,7 @@ void main() async {
   // Ensure Flutter is properly initialized
   WidgetsFlutterBinding.ensureInitialized();
   
-  print('🚀 Initializing Tourist Assistive App (Simple Version)...');
+  debugPrint('🚀 Initializing Tourist Assistive App (Simple Version)...');
   
   // Start the app
   runApp(const ProviderScope(child: TouristAssistiveApp()));

@@ -189,47 +189,6 @@ class GoogleVoiceService {
     }
   }
 
-  // Google Cloud Speech-to-Text API call
-  Future<String?> _recognizeSpeech(String audioBase64, String language) async {
-    try {
-      // Check if API key is configured
-      if (!EnvironmentConfig.isGoogleCloudConfigured) {
-        debugPrint('Google Cloud API key not configured');
-        return null;
-      }
-
-      final response = await http.post(
-        Uri.parse('$_sttUrl?key=${EnvironmentConfig.getGoogleCloudKey()}'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'config': {
-            'encoding': 'MP3',
-            'sampleRateHertz': 16000,
-            'languageCode': language,
-            'enableAutomaticPunctuation': true,
-          },
-          'audio': {
-            'content': audioBase64,
-          },
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['results'] != null && data['results'].isNotEmpty) {
-          return data['results'][0]['alternatives'][0]['transcript'];
-        }
-      }
-      
-      debugPrint('Google Cloud STT API error: ${response.statusCode} - ${response.body}');
-      return null;
-    } catch (e) {
-      debugPrint('Google Cloud STT API exception: $e');
-      return null;
-    }
-  }
 
   // Utility Methods using Google Cloud STT
   Future<String?> recognizeAudioFromFile(String filePath) async {

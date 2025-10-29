@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tourist_assistive_app/core/constants/app_colors.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
@@ -233,7 +232,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: _turquoise,
+            activeThumbColor: _turquoise,
             activeTrackColor: _turquoise.withValues(alpha: 0.3),
             inactiveThumbColor: _textTertiary,
             inactiveTrackColor: _textTertiary.withValues(alpha: 0.3),
@@ -562,7 +561,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: _turquoise,
+            activeThumbColor: _turquoise,
             activeTrackColor: _turquoise.withValues(alpha: 0.3),
             inactiveThumbColor: _textTertiary,
             inactiveTrackColor: _textTertiary.withValues(alpha: 0.3),

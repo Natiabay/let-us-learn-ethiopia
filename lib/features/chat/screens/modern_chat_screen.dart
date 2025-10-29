@@ -64,8 +64,26 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Use Duolingo-style chat screen
-    return const DuolingoChatScreen();
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F9FC),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildModernHeader(),
+            Expanded(
+              child: Stack(
+                children: [
+                  _buildMessagesList([]),
+                  _buildTypingIndicator(),
+                ],
+              ),
+            ),
+            _buildQuickSuggestions(),
+            _buildModernInputArea(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildModernHeader() {
@@ -76,13 +94,13 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF00D9B8), // Duolingo green
-            const Color(0xFF1CB0F6), // Duolingo blue
+            AppColors.primary,
+            AppColors.primary.withValues(alpha: 0.8),
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -113,7 +131,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
             ),
             child: Icon(
               Icons.support_agent_rounded,
-              color: const Color(0xFF00D9B8),
+              color: AppColors.primary,
               size: 32,
             ),
           ).animate().scale(delay: 200.ms),
@@ -215,7 +233,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: const Color(0xFF00D9B8).withValues(alpha: 0.3),
+                      color: AppColors.primary.withValues(alpha: 0.3),
                       width: 2,
                     ),
                     boxShadow: [
@@ -306,7 +324,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
             'Selam is typing...',
             style: TextStyle(
               fontSize: 13,
-              color: const Color(0xFF00D9B8),
+              color: AppColors.primary,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.italic,
             ),
@@ -321,7 +339,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
       width: 8,
       height: 8,
       decoration: BoxDecoration(
-        color: const Color(0xFF00D9B8),
+        color: AppColors.primary,
         shape: BoxShape.circle,
       ),
     ).animate(onPlay: (controller) => controller.repeat())
@@ -393,7 +411,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
           ),
           const SizedBox(width: 8),
           Material(
-            color: const Color(0xFF00D9B8),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(24),
             child: InkWell(
               onTap: _sendMessage,
@@ -421,13 +439,13 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF00D9B8).withValues(alpha: 0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.chat_bubble_outline_rounded,
               size: 64,
-              color: const Color(0xFF00D9B8),
+              color: AppColors.primary,
             ),
           ).animate().scale(delay: 200.ms),
           const SizedBox(height: 24),
@@ -463,7 +481,7 @@ class _ModernChatScreenState extends ConsumerState<ModernChatScreen>
         ),
         title: Row(
           children: [
-            Icon(Icons.info_outline, color: const Color(0xFF00D9B8)),
+            Icon(Icons.info_outline, color: AppColors.primary),
             const SizedBox(width: 8),
             const Text('About Selam'),
           ],

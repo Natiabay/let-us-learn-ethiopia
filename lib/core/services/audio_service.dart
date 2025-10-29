@@ -1,183 +1,297 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:audioplayers/audioplayers.dart';
 
+/// Audio Service for handling text-to-speech functionality
+/// Uses flutter_tts for TTS and audioplayers for audio playback
 class AudioService {
   static final AudioService _instance = AudioService._internal();
   factory AudioService() => _instance;
-  AudioService._internal();
+  AudioService._internal() {
+    _initialize();
+  }
 
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  
-  /// Play Amharic text using Google Translate TTS
+  FlutterTts? _flutterTts;
+  AudioPlayer? _audioPlayer;
+  bool _isInitialized = false;
+  bool _isPlaying = false;
+
+  /// Initialize TTS and audio player
+  Future<void> _initialize() async {
+    if (_isInitialized) return;
+
+    try {
+      _flutterTts = FlutterTts();
+      _audioPlayer = AudioPlayer();
+
+      // Configure TTS
+      await _flutterTts?.setVolume(1.0);
+      await _flutterTts?.setSpeechRate(0.7); // Optimal for learning
+      await _flutterTts?.setPitch(1.05); // Slightly higher for clarity
+
+      // Set up handlers
+      _flutterTts?.setStartHandler(() {
+        _isPlaying = true;
+        if (kDebugMode) {
+          debugPrint('▶️ Audio started');
+        }
+      });
+
+      _flutterTts?.setCompletionHandler(() {
+        _isPlaying = false;
+        if (kDebugMode) {
+          debugPrint('✅ Audio completed');
+        }
+      });
+
+      _flutterTts?.setErrorHandler((msg) {
+        _isPlaying = false;
+        if (kDebugMode) {
+          debugPrint('❌ Audio error: $msg');
+        }
+      });
+
+      _isInitialized = true;
+      if (kDebugMode) {
+        debugPrint('✅ AudioService initialized successfully');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('❌ Failed to initialize AudioService: $e');
+      }
+      _isInitialized = false;
+    }
+  }
+
+  /// Play Amharic text using TTS
   Future<void> playAmharicText(String text) async {
+    if (!_isInitialized) {
+      await _initialize();
+    }
+
     try {
-      if (kIsWeb) {
-        // Use Web Speech API for web platform
-        await _useWebSpeechAPI(text, 'am');
-      } else {
-        // Use Google Translate TTS URL for Amharic
-        final ttsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=am&client=tw-ob&q=${Uri.encodeComponent(text)}';
+      if (_isPlaying) {
+        await stop();
+      }
+
+      // Extract Amharic text from "transliteration/አማርኛ" format
+      final amharicText = _extractAmharicText(text);
+
+      if (kDebugMode) {
+        debugPrint('🔊 Playing Amharic text: $amharicText');
+      }
+
+      // Try Amharic TTS with multiple fallbacks
+      await _flutterTts?.setLanguage('am-ET');
+      final result = await _flutterTts?.speak(amharicText);
+
+      if (result == 0) {
+        // Try alternative Amharic language codes
+        await _flutterTts?.setLanguage('am');
+        final result2 = await _flutterTts?.speak(amharicText);
         
-        // Play directly from URL
-        await _audioPlayer.play(UrlSource(ttsUrl));
+        if (result2 == 0) {
+          // Fallback to Google TTS if device doesn't support Amharic
+          await _fallbackGoogleTTS(amharicText, 'am');
+        }
       }
     } catch (e) {
-      print('Error playing Amharic audio: $e');
-      // Fallback: try to play a local audio file if available
-      await _playFallbackAudio(text);
+      if (kDebugMode) {
+        debugPrint('❌ Error playing Amharic text: $e');
+      }
+      // Try fallback methods
+      try {
+        await _fallbackGoogleTTS(_extractAmharicText(text), 'am');
+      } catch (fallbackError) {
+        if (kDebugMode) {
+          debugPrint('❌ Fallback TTS also failed: $fallbackError');
+        }
+      }
     }
   }
 
-  /// Play English text using Google Translate TTS
+  /// Play English text using TTS
   Future<void> playEnglishText(String text) async {
+    if (!_isInitialized) {
+      await _initialize();
+    }
+
     try {
-      if (kIsWeb) {
-        // Use Web Speech API for web platform
-        await _useWebSpeechAPI(text, 'en');
-      } else {
-        final ttsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${Uri.encodeComponent(text)}';
-        await _audioPlayer.play(UrlSource(ttsUrl));
+      if (_isPlaying) {
+        await stop();
       }
+
+      if (kDebugMode) {
+        debugPrint('🔊 Playing English text: $text');
+      }
+
+      await _flutterTts?.setLanguage('en-US');
+      await _flutterTts?.speak(text);
     } catch (e) {
-      print('Error playing English audio: $e');
+      if (kDebugMode) {
+        debugPrint('❌ Error playing English text: $e');
+      }
+      rethrow;
     }
   }
 
-  /// Play audio from a specific language
+  /// Play text in specific language
   Future<void> playTextInLanguage(String text, String languageCode) async {
+    if (!_isInitialized) {
+      await _initialize();
+    }
+
     try {
-      if (kIsWeb) {
-        // Use Web Speech API for web platform
-        await _useWebSpeechAPI(text, languageCode);
-      } else {
-        final ttsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=$languageCode&client=tw-ob&q=${Uri.encodeComponent(text)}';
-        await _audioPlayer.play(UrlSource(ttsUrl));
+      if (_isPlaying) {
+        await stop();
+      }
+
+      if (kDebugMode) {
+        debugPrint('🔊 Playing text in $languageCode: $text');
+      }
+
+      await _flutterTts?.setLanguage(languageCode);
+      final result = await _flutterTts?.speak(text);
+
+      if (result == 0) {
+        // Fallback to Google TTS
+        await _fallbackGoogleTTS(text, languageCode.split('-').first);
       }
     } catch (e) {
-      print('Error playing audio in $languageCode: $e');
+      if (kDebugMode) {
+        debugPrint('❌ Error playing text in $languageCode: $e');
+      }
+      rethrow;
     }
   }
 
-
-  /// Use Web Speech API for TTS
-  Future<void> _useWebSpeechAPI(String text, String languageCode) async {
+  /// Fallback to Google Translate TTS
+  Future<void> _fallbackGoogleTTS(String text, String lang) async {
     try {
-      if (kIsWeb) {
-        // Use JavaScript interop to call web TTS
-        await _callWebTTS(text, languageCode);
-      } else {
-        print('🔊 Web TTS: Speaking $languageCode - $text');
-        await Future.delayed(const Duration(milliseconds: 500));
-        print('✅ TTS completed for: $text');
+      final url = 'https://translate.google.com/translate_tts?'
+          'ie=UTF-8&tl=$lang&client=tw-ob&q=${Uri.encodeComponent(text)}';
+
+      await _audioPlayer?.play(UrlSource(url));
+      if (kDebugMode) {
+        debugPrint('🔊 Using Google TTS fallback for: $text');
       }
     } catch (e) {
-      print('Web Speech API error: $e');
-    }
-  }
-
-  /// Call JavaScript TTS function
-  Future<void> _callWebTTS(String text, String languageCode) async {
-    try {
-      // This would use js interop in a real implementation
-      // For now, we'll simulate the TTS
-      print('🔊 Web TTS: Speaking $languageCode - $text');
-      await Future.delayed(const Duration(milliseconds: 1000));
-      print('✅ TTS completed for: $text');
-    } catch (e) {
-      print('JavaScript TTS error: $e');
-    }
-  }
-
-  /// Fallback method to play local audio files
-  Future<void> _playFallbackAudio(String text) async {
-    try {
-      // Map common Amharic words to local audio files
-      final audioMap = {
-        'ሰላም': 'assets/audio/amharic/hello.mp3',
-        'አመሰግናለሁ': 'assets/audio/amharic/thank_you.mp3',
-        'ባይ': 'assets/audio/amharic/water.mp3',
-        'ምግብ': 'assets/audio/amharic/food.mp3',
-        'ቤት': 'assets/audio/amharic/house.mp3',
-        'መኪና': 'assets/audio/amharic/car.mp3',
-      };
-
-      final audioPath = audioMap[text];
-      if (audioPath != null) {
-        await _audioPlayer.play(AssetSource(audioPath));
+      if (kDebugMode) {
+        debugPrint('❌ Fallback TTS failed: $e');
       }
-    } catch (e) {
-      print('Error playing fallback audio: $e');
     }
   }
 
-  /// Stop current audio playback
-  Future<void> stopAudio() async {
-    await _audioPlayer.stop();
+  /// Extract Amharic text from "transliteration/አማርኛ" format
+  String _extractAmharicText(String text) {
+    if (text.contains('/')) {
+      return text.split('/').last.trim();
+    }
+    return text;
   }
 
-  /// Play Amharic text (alias for playAmharicText)
+  /// Speak Amharic text
   Future<void> speakAmharic(String text) async {
-    await playAmharicText(text);
+    return playAmharicText(text);
   }
 
-  /// Play English text (alias for playEnglishText)
+  /// Speak English text
   Future<void> speakEnglish(String text) async {
-    await playEnglishText(text);
+    return playEnglishText(text);
   }
 
-  /// Play tap sound effect
-  Future<void> playTapSound() async {
-    // Simple tone for tap feedback
-    // TODO: Add actual sound effect asset
-    print('🔊 Tap sound');
+  /// Stop any currently playing audio
+  Future<void> stop() async {
+    try {
+      await _flutterTts?.stop();
+      if (_audioPlayer != null) {
+        try {
+          await _audioPlayer!.stop();
+        } catch (e) {
+          // Ignore errors if player is already disposed
+          if (kDebugMode) {
+            debugPrint('⚠️ Audio player stop error (likely disposed): $e');
+          }
+        }
+      }
+      _isPlaying = false;
+      if (kDebugMode) {
+        debugPrint('⏹️ Audio stopped');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('❌ Error stopping audio: $e');
+      }
+    }
   }
 
-  /// Play success sound effect
-  Future<void> playSuccessSound() async {
-    // Play a success chime
-    // TODO: Add actual sound effect asset
-    print('✅ Success sound');
+  /// Stop audio (alias for stop)
+  Future<void> stopAudio() async {
+    return stop();
   }
 
-  /// Play error sound effect
-  Future<void> playErrorSound() async {
-    // Play an error buzz
-    // TODO: Add actual sound effect asset
-    print('❌ Error sound');
+  /// Set speech rate (0.1 to 2.0)
+  Future<void> setSpeechRate(double rate) async {
+    try {
+      await _flutterTts?.setSpeechRate(rate.clamp(0.1, 2.0));
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('❌ Error setting speech rate: $e');
+      }
+    }
   }
 
-  /// Dispose audio player
-  void dispose() {
-    _audioPlayer.dispose();
+  /// Set volume (0.0 to 1.0)
+  Future<void> setVolume(double volume) async {
+    try {
+      await _flutterTts?.setVolume(volume.clamp(0.0, 1.0));
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('❌ Error setting volume: $e');
+      }
+    }
   }
 
-  /// Get language code for different languages
-  static String getLanguageCode(String languageName) {
-    switch (languageName.toLowerCase()) {
-      case 'english':
-        return 'en';
-      case 'mandarin':
-      case 'chinese':
-        return 'zh';
-      case 'french':
-        return 'fr';
-      case 'german':
-        return 'de';
-      case 'spanish':
-        return 'es';
-      case 'arabic':
-        return 'ar';
-      case 'portuguese':
-        return 'pt';
-      case 'russian':
-        return 'ru';
-      case 'japanese':
-        return 'ja';
-      case 'amharic':
-        return 'am';
-      default:
-        return 'en';
+  /// Set pitch (0.5 to 2.0)
+  Future<void> setPitch(double pitch) async {
+    try {
+      await _flutterTts?.setPitch(pitch.clamp(0.5, 2.0));
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('❌ Error setting pitch: $e');
+      }
+    }
+  }
+
+  /// Check if currently playing
+  bool get isPlaying => _isPlaying;
+
+  /// Check if initialized
+  bool get isInitialized => _isInitialized;
+
+  /// Dispose of resources
+  Future<void> dispose() async {
+    try {
+      await stop();
+      if (_audioPlayer != null) {
+        try {
+          await _audioPlayer!.dispose();
+        } catch (e) {
+          // Ignore errors if player is already disposed
+          if (kDebugMode) {
+            debugPrint('⚠️ Audio player dispose error (likely already disposed): $e');
+          }
+        }
+      }
+      _audioPlayer = null;
+      _isInitialized = false;
+      if (kDebugMode) {
+        debugPrint('🗑️ AudioService disposed');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('❌ Error disposing AudioService: $e');
+      }
     }
   }
 }
-

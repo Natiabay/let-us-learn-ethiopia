@@ -1,705 +1,794 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:tourist_assistive_app/features/locations/providers/locations_provider.dart';
-import 'package:tourist_assistive_app/features/locations/data/ethiopian_locations.dart';
-import 'package:tourist_assistive_app/features/locations/screens/location_detail_screen.dart';
-import 'package:tourist_assistive_app/features/locations/screens/tour_guides_screen.dart';
+import 'package:tourist_assistive_app/core/constants/app_colors.dart';
+import 'package:tourist_assistive_app/features/locations/models/location_model.dart';
+import 'package:tourist_assistive_app/features/locations/screens/location_detail_screen_enhanced.dart';
 
-// Professional Color Palette with Better Contrast
-class LocationsColors {
-  static const deepNavy = Color(0xFF0A1929);
-  static const navyCard = Color(0xFF1A2F44);
-  static const turquoise = Color(0xFF00D9B8);
-  static const brightYellow = Color(0xFFFFD43B);
-  static const brightBlue = Color(0xFF1CB0F6);
-  static const brightGreen = Color(0xFF4CAF50);
-  static const brightRed = Color(0xFFFF4B4B);
-  static const pureWhite = Color(0xFFFFFFFF);
-  static const lightGray = Color(0xFFE2E8F0);
-  static const mediumGray = Color(0xFF94A3B8);
-  static const darkGray = Color(0xFF475569);
-  
-  // Enhanced contrast colors for better visibility
-  static const highContrastWhite = Color(0xFFFFFFFF);
-  static const highContrastBlack = Color(0xFF000000);
-  static const cardBackground = Color(0xFF1E293B);
-  static const accentBlue = Color(0xFF0EA5E9);
-  static const accentGreen = Color(0xFF10B981);
-  static const accentOrange = Color(0xFFF59E0B);
-}
-
-class LocationsScreen extends ConsumerStatefulWidget {
+/// Professional Locations Screen with Ethiopian Historical Sites
+/// Features:
+/// - Full-screen image viewing with InteractiveViewer
+/// - Exact photo mapping for each Ethiopian location
+/// - Google Maps integration in detail screen
+/// - Professional UI/UX with smooth animations
+/// - Search and filter functionality
+/// - Interactive cards with ratings and distance
+class LocationsScreen extends StatefulWidget {
   const LocationsScreen({super.key});
 
   @override
-  ConsumerState<LocationsScreen> createState() => _LocationsScreenState();
+  State<LocationsScreen> createState() => _LocationsScreenState();
 }
 
-class _LocationsScreenState extends ConsumerState<LocationsScreen>
-    with TickerProviderStateMixin {
-  final TextEditingController _searchController = TextEditingController();
-  String _selectedView = 'grid'; // 'grid', 'list'
-  late AnimationController _fabController;
+class _LocationsScreenState extends State<LocationsScreen> with SingleTickerProviderStateMixin {
+  String _searchQuery = '';
+  String _selectedCategory = 'All';
+  bool _isGridView = true;
+  late AnimationController _animationController;
 
-  // Correct Ethiopian historical site photos mapping with proper names
+  final List<String> _categories = [
+    'All',
+    'UNESCO Sites',
+    'Historical',
+    'Natural',
+    'Religious',
+    'Cultural',
+  ];
+
+  /// Ethiopian Historical Sites with Exact Photo Mapping
   final Map<String, String> _photoMapping = {
-    // Lalibela Rock-Hewn Churches
-    'lalibela-churches': 'assets/images/Lalibela.png',
-    'lalibela': 'assets/images/Lalibela.png',
-    
-    // Axum Obelisks
-    'axum-obelisks': 'assets/images/Axum.png',
-    'axum': 'assets/images/Axum.png',
-    
-    // Gondar Castles
-    'gondar-castles': 'assets/images/Fassil Gimb.png',
-    'fassil-ghebbi': 'assets/images/Fassil Gimb.png',
-    
-    // Simien Mountains
-    'simien-mountains': 'assets/images/Semen mountain.jpg',
-    'simien': 'assets/images/Semen mountain.jpg',
-    
-    // Danakil Depression
-    'danakil-depression': 'assets/images/Danakil.png',
-    'danakil': 'assets/images/Danakil.png',
-    
-    // Bale Mountains
-    'bale-mountains': 'assets/images/Bale.png',
-    'bale': 'assets/images/Bale.png',
-    
-    // Harar Jugol
-    'harar-jugol': 'Photos/Harer.jpg',
-    'harar': 'Photos/Harer.jpg',
-    
-    // Lake Tana
-    'lake-tana': 'assets/images/lake tana.png',
-    'lake_tana': 'assets/images/lake tana.png',
-    
-    // Blue Nile Falls
-    'blue-nile-falls': 'assets/images/blue nile.png',
-    'blue_nile': 'assets/images/blue nile.png',
-    
-    // Konso Cultural Landscape
-    'konso-cultural': 'assets/images/konso.png',
-    'konso': 'assets/images/konso.png',
-    
-    // Debre Damo
-    'debre-damo': 'assets/images/debre damo.png',
-    'debre_damo': 'assets/images/debre damo.png',
-    
-    // National Museum
-    'national-museum': 'assets/images/National museium.jpg',
-    'national_museum': 'assets/images/National museium.jpg',
-    
-    // Additional Ethiopian sites with proper fallbacks
-    'tiya-archaeological': 'assets/images/Lalibela.png',
-    'yeha-temple': 'assets/images/Axum.png',
-    'abuna-yemata': 'assets/images/Lalibela.png',
-    'bete-amanuel': 'assets/images/Lalibela.png',
-    'omo-valley': 'assets/images/Bale.png',
-    'awash-national-park': 'assets/images/Bale.png',
-    'sof-omar-caves': 'assets/images/Danakil.png',
-    'entoto-mountains': 'assets/images/Semen mountain.jpg',
-    'adadi-mariam': 'assets/images/Lalibela.png',
+    'lalibela-churches': 'Photos/Lalibela.png',
+    'simien-mountains': 'Photos/Semen mountain.jpg',
+    'axum-obelisks': 'Photos/Axum.png',
+    'fasil-ghebbi': 'Photos/Fassil Gimb.png',
+    'lower-valley-omo': 'Photos/konso.png',
+    'blue-nile-falls': 'Photos/blue nile.png',
+    'lake-tana': 'Photos/lake tana.png',
+    'bale-mountains': 'Photos/Bale.png',
+    'danakil-depression': 'Photos/Danakil.png',
+    'harar-jugol': 'Photos/Jugol.png',
+    'national-museum': 'Photos/National museium.jpg',
+    'addis-ababa': 'Photos/Addis Ababa.avif',
+    'debre-damo': 'Photos/debre damo.png',
   };
+
+  /// Complete List of Ethiopian Locations with All Required Fields
+  final List<LocationModel> _allLocations = [
+    // 1. Lalibela
+    LocationModel(
+      id: 'lalibela-churches',
+      name: 'Rock-Hewn Churches of Lalibela',
+      description: 'Eleven medieval monolithic churches carved from rock in the 12th century.',
+      city: 'Lalibela',
+      latitude: 12.0311,
+      longitude: 39.0473,
+      category: 'UNESCO Sites',
+      rating: 4.9,
+      imageUrl: 'Photos/Lalibela.png',
+      isFavorite: false,
+      openingHours: '6:00 AM - 6:00 PM daily',
+      entryFee: '\$50 USD',
+      features: ['Rock-hewn churches', 'Religious site', 'UNESCO Heritage'],
+      nameAmharic: 'የላሊበላ ቤተ ክርስቲያናት',
+      reviewCount: 15234,
+      entrance: 50.0,
+      visitDuration: '4-6 hours',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 2. Simien Mountains
+    LocationModel(
+      id: 'simien-mountains',
+      name: 'Simien Mountains National Park',
+      description: 'Africa\'s most spectacular mountain scenery with endemic wildlife.',
+      city: 'Debark',
+      latitude: 13.2167,
+      longitude: 38.0500,
+      category: 'UNESCO Sites',
+      rating: 4.8,
+      imageUrl: 'Photos/Semen mountain.jpg',
+      isFavorite: false,
+      openingHours: 'Open 24/7',
+      entryFee: '\$90 USD',
+      features: ['Mountain trekking', 'Wildlife viewing', 'UNESCO Heritage'],
+      nameAmharic: 'የስሜን ተራሮች ብሔራዊ ፓርክ',
+      reviewCount: 8956,
+      entrance: 90.0,
+      visitDuration: '3-7 days',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 3. Axum Obelisks
+    LocationModel(
+      id: 'axum-obelisks',
+      name: 'Axum Obelisks',
+      description: 'Ancient stelae marking royal tombs of the Aksumite Empire.',
+      city: 'Axum',
+      latitude: 14.1306,
+      longitude: 38.7169,
+      category: 'UNESCO Sites',
+      rating: 4.7,
+      imageUrl: 'Photos/Axum.png',
+      isFavorite: false,
+      openingHours: '8:00 AM - 5:00 PM',
+      entryFee: '\$30 USD',
+      features: ['Ancient obelisks', 'Historical site', 'UNESCO Heritage'],
+      nameAmharic: 'የአክሱም ሐውልቶች',
+      reviewCount: 6543,
+      entrance: 30.0,
+      visitDuration: '2-3 hours',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 4. Fasil Ghebbi
+    LocationModel(
+      id: 'fasil-ghebbi',
+      name: 'Fasil Ghebbi (Royal Enclosure)',
+      description: 'Fortress-city of Gondar with castles built by Ethiopian emperors.',
+      city: 'Gondar',
+      latitude: 12.6089,
+      longitude: 37.4656,
+      category: 'UNESCO Sites',
+      rating: 4.6,
+      imageUrl: 'Photos/Fassil Gimb.png',
+      isFavorite: false,
+      openingHours: '8:30 AM - 5:30 PM',
+      entryFee: '\$20 USD',
+      features: ['Medieval castles', 'Historical site', 'UNESCO Heritage'],
+      nameAmharic: 'ፋሲል ግቢ',
+      reviewCount: 5432,
+      entrance: 20.0,
+      visitDuration: '3-4 hours',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 5. Lower Valley of the Omo
+    LocationModel(
+      id: 'lower-valley-omo',
+      name: 'Lower Valley of the Omo',
+      description: 'Archaeological site with evidence of human evolution spanning 4 million years.',
+      city: 'Jinka',
+      latitude: 5.1167,
+      longitude: 36.2500,
+      category: 'UNESCO Sites',
+      rating: 4.5,
+      imageUrl: 'Photos/konso.png',
+      isFavorite: false,
+      openingHours: 'Open with guide',
+      entryFee: '\$75 USD',
+      features: ['Archaeological site', 'Tribal villages', 'UNESCO Heritage'],
+      nameAmharic: 'የታችኛው የኦሞ ሸለቆ',
+      reviewCount: 3210,
+      entrance: 75.0,
+      visitDuration: '3-7 days',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 6. Blue Nile Falls
+    LocationModel(
+      id: 'blue-nile-falls',
+      name: 'Blue Nile Falls (Tis Issat)',
+      description: 'Spectacular waterfall on the Blue Nile River, known as "Smoking Water".',
+      city: 'Bahir Dar',
+      latitude: 11.5152,
+      longitude: 37.5860,
+      category: 'Natural',
+      rating: 4.4,
+      imageUrl: 'Photos/blue nile.png',
+      isFavorite: false,
+      openingHours: 'Dawn to dusk',
+      entryFee: '\$15 USD',
+      features: ['Waterfall', 'Hiking trails', 'Natural wonder'],
+      nameAmharic: 'ጥስ እሳት',
+      reviewCount: 4567,
+      entrance: 15.0,
+      visitDuration: '2-3 hours',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 7. Lake Tana
+    LocationModel(
+      id: 'lake-tana',
+      name: 'Lake Tana Monasteries',
+      description: 'Ethiopia\'s largest lake with island monasteries dating back to 14th century.',
+      city: 'Bahir Dar',
+      latitude: 12.0000,
+      longitude: 37.3167,
+      category: 'Religious',
+      rating: 4.5,
+      imageUrl: 'Photos/lake tana.png',
+      isFavorite: false,
+      openingHours: '7:00 AM - 5:00 PM',
+      entryFee: '\$25 USD',
+      features: ['Island monasteries', 'Boat tours', 'Bird watching'],
+      nameAmharic: 'የጣና ሀይቅ ገዳማት',
+      reviewCount: 3890,
+      entrance: 25.0,
+      visitDuration: 'Full day',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 8. Bale Mountains
+    LocationModel(
+      id: 'bale-mountains',
+      name: 'Bale Mountains National Park',
+      description: 'Pristine afro-alpine habitat home to the endangered Ethiopian wolf.',
+      city: 'Goba',
+      latitude: 7.0667,
+      longitude: 39.7833,
+      category: 'Natural',
+      rating: 4.7,
+      imageUrl: 'Photos/Bale.png',
+      isFavorite: false,
+      openingHours: 'Open 24/7',
+      entryFee: '\$90 USD',
+      features: ['Wildlife viewing', 'Trekking', 'Ethiopian wolf habitat'],
+      nameAmharic: 'የባሌ ተራሮች ብሔራዊ ፓርክ',
+      reviewCount: 2345,
+      entrance: 90.0,
+      visitDuration: '2-5 days',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 9. Danakil Depression
+    LocationModel(
+      id: 'danakil-depression',
+      name: 'Danakil Depression',
+      description: 'One of Earth\'s hottest places with active volcano and colorful sulfur springs.',
+      city: 'Mekele',
+      latitude: 14.2417,
+      longitude: 40.3000,
+      category: 'Natural',
+      rating: 4.9,
+      imageUrl: 'Photos/Danakil.png',
+      isFavorite: false,
+      openingHours: 'Guided tours only',
+      entryFee: '\$150 USD',
+      features: ['Active volcano', 'Salt flats', 'Extreme environment'],
+      nameAmharic: 'የዳናክል ቁልቁል',
+      reviewCount: 1876,
+      entrance: 150.0,
+      visitDuration: '3-4 days',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 10. Harar Jugol
+    LocationModel(
+      id: 'harar-jugol',
+      name: 'Harar Jugol (Fortified Historic Town)',
+      description: 'Ancient walled city, fourth holiest city in Islam with unique architecture.',
+      city: 'Harar',
+      latitude: 9.3142,
+      longitude: 42.1284,
+      category: 'UNESCO Sites',
+      rating: 4.6,
+      imageUrl: 'Photos/Jugol.png',
+      isFavorite: false,
+      openingHours: 'Open access',
+      entryFee: '\$20 USD',
+      features: ['Walled city', 'Islamic heritage', 'Hyena feeding'],
+      nameAmharic: 'ሐረር ጁጎል',
+      reviewCount: 4123,
+      entrance: 20.0,
+      visitDuration: '2-3 days',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 11. National Museum
+    LocationModel(
+      id: 'national-museum',
+      name: 'National Museum of Ethiopia',
+      description: 'Home to "Lucy", the 3.2 million-year-old hominid fossil.',
+      city: 'Addis Ababa',
+      latitude: 9.0192,
+      longitude: 38.7525,
+      category: 'Cultural',
+      rating: 4.5,
+      imageUrl: 'Photos/National museium.jpg',
+      isFavorite: false,
+      openingHours: '8:30 AM - 5:00 PM (Closed Mondays)',
+      entryFee: '\$10 USD',
+      features: ['Lucy fossil', 'Ethiopian history', 'Archaeological exhibits'],
+      nameAmharic: 'የኢትዮጵያ ብሔራዊ ሙዚየም',
+      reviewCount: 5678,
+      entrance: 10.0,
+      visitDuration: '2-3 hours',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 12. Addis Ababa
+    LocationModel(
+      id: 'addis-ababa',
+      name: 'Addis Ababa',
+      description: 'Ethiopia\'s vibrant capital city, hub of African Union and rich coffee culture.',
+      city: 'Addis Ababa',
+      latitude: 9.0320,
+      longitude: 38.7469,
+      category: 'Cultural',
+      rating: 4.3,
+      imageUrl: 'Photos/Addis Ababa.avif',
+      isFavorite: false,
+      openingHours: 'Open 24/7',
+      entryFee: 'Free',
+      features: ['Capital city', 'African Union HQ', 'Coffee culture', 'Markets'],
+      nameAmharic: 'አዲስ አበባ',
+      reviewCount: 12345,
+      entrance: 0.0,
+      visitDuration: '2-4 days',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+
+    // 13. Debre Damo
+    LocationModel(
+      id: 'debre-damo',
+      name: 'Debre Damo Monastery',
+      description: 'Ancient monastery atop a mountain, accessible only by rope (men only).',
+      city: 'Adigrat',
+      latitude: 14.3833,
+      longitude: 39.2667,
+      category: 'Religious',
+      rating: 4.4,
+      imageUrl: 'Photos/debre damo.png',
+      isFavorite: false,
+      openingHours: 'Dawn to dusk (Men only)',
+      entryFee: '\$30 USD',
+      features: ['Ancient monastery', 'Rope climb', 'Mountain views'],
+      nameAmharic: 'ደብረ ዳሞ ገዳም',
+      reviewCount: 876,
+      entrance: 30.0,
+      visitDuration: '3-4 hours',
+      isEthiopian: true,
+      country: 'Ethiopia',
+    ),
+  ];
 
   @override
   void initState() {
     super.initState();
-    _fabController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
+    _animationController.forward();
   }
 
   @override
   void dispose() {
-    _searchController.dispose();
-    _fabController.dispose();
+    _animationController.dispose();
     super.dispose();
+  }
+
+  List<LocationModel> get _filteredLocations {
+    return _allLocations.where((location) {
+      final matchesSearch = location.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          (location.nameAmharic?.contains(_searchQuery) ?? false) ||
+          location.description.toLowerCase().contains(_searchQuery.toLowerCase());
+      
+      final matchesCategory = _selectedCategory == 'All' || location.category == _selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final locationsState = ref.watch(locationsProvider);
-    final filteredLocations = locationsState.filteredLocations;
-
     return Scaffold(
-      backgroundColor: LocationsColors.deepNavy,
-      body: SafeArea(
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            // Header
-            SliverToBoxAdapter(
-              child: _buildHeader(),
-            ),
-            // Search and Filters
-            SliverToBoxAdapter(
-              child: _buildSearchAndFilters(),
-            ),
-            // View Toggle
-            SliverToBoxAdapter(
-              child: _buildViewToggle(),
-            ),
-            // Content
-            _selectedView == 'list'
-                ? _buildListView(filteredLocations)
-                : _buildGridView(filteredLocations),
-          ],
-        ),
-      ),
-      floatingActionButton: _buildFloatingActions(),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            LocationsColors.deepNavy,
-            LocationsColors.navyCard,
-          ],
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: LocationsColors.turquoise.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.explore_rounded,
-                  color: LocationsColors.turquoise,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ethiopian Historical Sites',
-                      style: TextStyle(
-                        color: LocationsColors.pureWhite,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Welcome to Ethiopia 🇪🇹',
-                      style: TextStyle(
-                        color: LocationsColors.lightGray,
-                        fontSize: 14,
-                      ),
+      body: CustomScrollView(
+        slivers: [
+          // App Bar with Search
+          SliverAppBar(
+            expandedHeight: 200.0,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text(
+                'Explore Ethiopia',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(0, 1),
+                      blurRadius: 3.0,
+                      color: Colors.black54,
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildStatsRow(),
-        ],
-      ),
-    ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.3, end: 0);
-  }
-
-  Widget _buildStatsRow() {
-    return Row(
-      children: [
-        _buildStatBadge(
-          icon: Icons.location_city_rounded,
-          label: '9 UNESCO Sites',
-          color: LocationsColors.turquoise,
-        ),
-        const SizedBox(width: 8),
-        _buildStatBadge(
-          icon: Icons.park_rounded,
-          label: '15+ Parks',
-          color: LocationsColors.brightGreen,
-        ),
-        const SizedBox(width: 8),
-        _buildStatBadge(
-          icon: Icons.temple_buddhist_rounded,
-          label: '20+ Historic',
-          color: LocationsColors.brightYellow,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatBadge({
-    required IconData icon,
-    required String label,
-    required Color color,
-  }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: color, size: 18),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchAndFilters() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      child: Column(
-        children: [
-          // Search Bar
-          Container(
-            decoration: BoxDecoration(
-              color: LocationsColors.navyCard,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: TextField(
-              controller: _searchController,
-              style: const TextStyle(color: LocationsColors.pureWhite),
-              decoration: const InputDecoration(
-                hintText: 'Search Ethiopian historical sites...',
-                hintStyle: TextStyle(color: LocationsColors.mediumGray),
-                prefixIcon: Icon(
-                  Icons.search_rounded,
-                  color: LocationsColors.turquoise,
-                ),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-              ),
-              onChanged: (value) {
-                ref.read(locationsProvider.notifier).searchLocations(value);
-                setState(() {});
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          // Category Filters
-          _buildCategoryFilters(),
-        ],
-      ),
-    ).animate().fadeIn(delay: 200.ms, duration: 400.ms);
-  }
-
-  Widget _buildCategoryFilters() {
-    final selectedCategory = ref.watch(locationsProvider).selectedCategory;
-    final categories = EthiopianLocations.categories;
-
-    return SizedBox(
-      height: 40,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          final isSelected = category == selectedCategory;
-
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: FilterChip(
-              selected: isSelected,
-              label: Text(category),
-              labelStyle: TextStyle(
-                color: isSelected
-                    ? LocationsColors.deepNavy
-                    : LocationsColors.lightGray,
-                fontWeight: FontWeight.w600,
-              ),
-              backgroundColor: LocationsColors.navyCard,
-              selectedColor: _getCategoryColor(category),
-              checkmarkColor: LocationsColors.deepNavy,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(
-                  color: isSelected
-                      ? _getCategoryColor(category)
-                      : LocationsColors.darkGray,
-                ),
-              ),
-              onSelected: (selected) {
-                ref.read(locationsProvider.notifier).filterByCategory(category);
-              },
-            ).animate(target: isSelected ? 1 : 0).scale(
-                  begin: const Offset(1, 1),
-                  end: const Offset(1.05, 1.05),
-                ),
-          );
-        },
-      ),
-    );
-  }
-
-  Color _getCategoryColor(String category) {
-    switch (category.toLowerCase()) {
-      case 'historical':
-        return LocationsColors.brightYellow;
-      case 'nature':
-        return LocationsColors.brightGreen;
-      case 'cultural':
-        return LocationsColors.turquoise;
-      case 'religious':
-        return LocationsColors.brightBlue;
-      case 'adventure':
-        return LocationsColors.brightRed;
-      default:
-        return LocationsColors.turquoise;
-    }
-  }
-
-  Widget _buildViewToggle() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Row(
-        children: [
-          Text(
-            '${ref.watch(locationsProvider).filteredLocations.length} Ethiopian Sites',
-            style: const TextStyle(
-              color: LocationsColors.lightGray,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const Spacer(),
-          Container(
-            decoration: BoxDecoration(
-              color: LocationsColors.navyCard,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                _buildViewButton(Icons.grid_view_rounded, 'grid'),
-                _buildViewButton(Icons.list_rounded, 'list'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildViewButton(IconData icon, String view) {
-    final isSelected = _selectedView == view;
-    return IconButton(
-      icon: Icon(icon),
-      color: isSelected ? LocationsColors.turquoise : LocationsColors.mediumGray,
-      onPressed: () {
-        setState(() {
-          _selectedView = view;
-        });
-      },
-    );
-  }
-
-  Widget _buildGridView(List<dynamic> locations) {
-    if (locations.isEmpty) {
-      return SliverToBoxAdapter(child: _buildEmptyState());
-    }
-
-    return SliverPadding(
-      padding: const EdgeInsets.all(20),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final location = locations[index];
-            return _buildLocationCard(location, index);
-          },
-          childCount: locations.length,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildListView(List<dynamic> locations) {
-    if (locations.isEmpty) {
-      return SliverToBoxAdapter(child: _buildEmptyState());
-    }
-
-    return SliverPadding(
-      padding: const EdgeInsets.all(20),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final location = locations[index];
-            return _buildLocationListTile(location, index);
-          },
-          childCount: locations.length,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLocationCard(dynamic location, int index) {
-    final imagePath = _photoMapping[location.id] ?? 'assets/images/Logo.png';
-    
-    return GestureDetector(
-      onTap: () => _showFullScreenImage(context, location, imagePath),
-      child: Container(
-        decoration: BoxDecoration(
-          color: LocationsColors.navyCard,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: LocationsColors.turquoise.withValues(alpha: 0.2),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Real Ethiopian Historical Site Image
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
-                  child: Image.asset(
-                    imagePath,
-                    height: 140,
-                    width: double.infinity,
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    'Photos/Addis Ababa.avif',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 140,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              _getCategoryColor(location.category),
-                              _getCategoryColor(location.category).withValues(alpha: 0.6),
-                            ],
-                          ),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            _getCategoryIcon(location.category),
-                            color: LocationsColors.pureWhite,
-                            size: 48,
-                          ),
-                        ),
-                      );
+                      return Container(color: Colors.grey[300]);
                     },
                   ),
-                ),
-                // Rating Badge
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
+                  Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.6),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.star_rounded,
-                          color: LocationsColors.brightYellow,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          location.rating.toString(),
-                          style: const TextStyle(
-                            color: LocationsColors.pureWhite,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Category Badge
-                Positioned(
-                  bottom: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: _getCategoryColor(location.category),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      location.category,
-                      style: const TextStyle(
-                        color: LocationsColors.deepNavy,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.7),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            // Content
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(60.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search Ethiopian destinations...',
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Category Filter
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 60,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _categories.length,
+                itemBuilder: (context, index) {
+                  final category = _categories[index];
+                  final isSelected = category == _selectedCategory;
+                  
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: index == 0 ? 16.0 : 8.0,
+                      right: index == _categories.length - 1 ? 16.0 : 0,
+                      top: 8.0,
+                      bottom: 8.0,
+                    ),
+                    child: FilterChip(
+                      label: Text(category),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        setState(() {
+                          _selectedCategory = category;
+                        });
+                      },
+                      backgroundColor: Colors.grey[200],
+                      selectedColor: AppColors.primary,
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black87,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          // View Toggle and Count
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    location.name,
+                    '${_filteredLocations.length} destinations found',
                     style: const TextStyle(
-                      color: LocationsColors.pureWhite,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_on_rounded,
-                        color: LocationsColors.turquoise,
-                        size: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          _getLocationCity(location),
-                          style: const TextStyle(
-                            color: LocationsColors.mediumGray,
-                            fontSize: 12,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                      IconButton(
+                        icon: Icon(
+                          Icons.grid_view,
+                          color: _isGridView ? AppColors.primary : Colors.grey,
                         ),
+                        onPressed: () {
+                          setState(() {
+                            _isGridView = true;
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.list,
+                          color: !_isGridView ? AppColors.primary : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isGridView = false;
+                          });
+                        },
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ).animate().fadeIn(delay: (100 * index).ms).slideY(begin: 0.3, end: 0),
+          ),
+
+          // Locations Grid/List
+          _isGridView ? _buildGridView() : _buildListView(),
+        ],
+      ),
     );
   }
 
-  Widget _buildLocationListTile(dynamic location, int index) {
-    final imagePath = _photoMapping[location.id] ?? 'assets/images/Logo.png';
+  Widget _buildGridView() {
+    return SliverPadding(
+      padding: const EdgeInsets.all(16.0),
+      sliver: SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.75,
+          crossAxisSpacing: 16.0,
+          mainAxisSpacing: 16.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final location = _filteredLocations[index];
+            return _buildLocationCard(location);
+          },
+          childCount: _filteredLocations.length,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListView() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final location = _filteredLocations[index];
+          return _buildLocationListItem(location);
+        },
+        childCount: _filteredLocations.length,
+      ),
+    );
+  }
+
+  Widget _buildLocationCard(LocationModel location) {
+    final imagePath = _photoMapping[location.id] ?? 'Photos/New Logo.png';
     
     return GestureDetector(
-      onTap: () => _showFullScreenImage(context, location, imagePath),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: LocationsColors.navyCard,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: LocationsColors.turquoise.withValues(alpha: 0.2),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LocationDetailScreenEnhanced(
+              locationId: location.id,
+            ),
           ),
+        );
+      },
+      onLongPress: () {
+        _showFullScreenImage(context, location, imagePath);
+      },
+      child: Hero(
+        tag: 'location_${location.id}',
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image
+              Expanded(
+                flex: 3,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.image_not_supported, size: 50),
+                          );
+                        },
+                      ),
+                      // Gradient Overlay
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          height: 60,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withValues(alpha: 0.7),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Category Badge
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            location.category,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Details
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Text(
+                        location.name,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      // Amharic Name
+                      if (location.nameAmharic != null)
+                        Text(
+                          location.nameAmharic!,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      const Spacer(),
+                      // Rating
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            location.rating.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          if (location.reviewCount != null)
+                            Text(
+                              '(${location.reviewCount})',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLocationListItem(LocationModel location) {
+    final imagePath = _photoMapping[location.id] ?? 'Photos/New Logo.png';
+    
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LocationDetailScreenEnhanced(
+              locationId: location.id,
+            ),
+          ),
+        );
+      },
+      onLongPress: () {
+        _showFullScreenImage(context, location, imagePath);
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
         ),
         child: Row(
           children: [
-            // Real Ethiopian Historical Site Image
-            ClipRRect(
-              borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(16),
-              ),
-              child: Image.asset(
-                imagePath,
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          _getCategoryColor(location.category),
-                          _getCategoryColor(location.category).withValues(alpha: 0.6),
-                        ],
-                      ),
-                    ),
-                    child: Icon(
-                      _getCategoryIcon(location.category),
-                      color: LocationsColors.pureWhite,
-                      size: 40,
-                    ),
-                  );
-                },
+            // Image
+            Hero(
+              tag: 'location_${location.id}',
+              child: ClipRRect(
+                borderRadius: const BorderRadius.horizontal(left: Radius.circular(12.0)),
+                child: Image.asset(
+                  imagePath,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 120,
+                      height: 120,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image_not_supported, size: 40),
+                    );
+                  },
+                ),
               ),
             ),
-            // Content
+            // Details
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Title
                     Text(
                       location.name,
                       style: const TextStyle(
-                        color: LocationsColors.pureWhite,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -707,75 +796,79 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen>
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      location.description,
-                      style: const TextStyle(
-                        color: LocationsColors.mediumGray,
-                        fontSize: 12,
+                    // Amharic Name
+                    if (location.nameAmharic != null)
+                      Text(
+                        location.nameAmharic!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    const SizedBox(height: 8),
+                    // Category
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        location.category,
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 8),
+                    // Rating and Reviews
                     Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _getCategoryColor(location.category).withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            location.category,
-                            style: TextStyle(
-                              color: _getCategoryColor(location.category),
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Icon(
-                          Icons.star_rounded,
-                          color: LocationsColors.brightYellow,
-                          size: 16,
-                        ),
+                        const Icon(Icons.star, color: Colors.amber, size: 16),
                         const SizedBox(width: 4),
                         Text(
-                          location.rating.toString(),
+                          location.rating.toStringAsFixed(1),
                           style: const TextStyle(
-                            color: LocationsColors.pureWhite,
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(width: 8),
+                        if (location.reviewCount != null)
+                          Text(
+                            '${location.reviewCount} reviews',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey[600],
+                            ),
+                          ),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(12),
+            // Arrow Icon
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
               child: Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: LocationsColors.turquoise,
+                Icons.arrow_forward_ios,
                 size: 20,
+                color: Colors.grey[400],
               ),
             ),
           ],
         ),
-      ).animate().fadeIn(delay: (50 * index).ms).slideX(begin: 0.3, end: 0),
+      ),
     );
   }
 
-  // Full-screen image viewer
-  void _showFullScreenImage(BuildContext context, dynamic location, String imagePath) {
-    Navigator.push(
-      context,
+  void _showFullScreenImage(BuildContext context, LocationModel location, String imagePath) {
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FullScreenImageViewer(
           location: location,
@@ -784,94 +877,11 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen>
       ),
     );
   }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.search_off_rounded,
-            size: 80,
-            color: LocationsColors.mediumGray.withValues(alpha: 0.5),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'No Ethiopian sites found',
-            style: TextStyle(
-              color: LocationsColors.lightGray,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Try adjusting your search or filters',
-            style: TextStyle(
-              color: LocationsColors.mediumGray,
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFloatingActions() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const TourGuidesScreen(),
-              ),
-            );
-          },
-          backgroundColor: LocationsColors.turquoise,
-          icon: const Icon(Icons.tour_rounded),
-          label: const Text(
-            'Imaginative Tour',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ).animate().fadeIn(delay: 400.ms).scale(),
-      ],
-    );
-  }
-
-  IconData _getCategoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'historical':
-        return Icons.account_balance_rounded;
-      case 'nature':
-        return Icons.landscape_rounded;
-      case 'cultural':
-        return Icons.theater_comedy_rounded;
-      case 'religious':
-        return Icons.temple_buddhist_rounded;
-      case 'adventure':
-        return Icons.terrain_rounded;
-      default:
-        return Icons.place_rounded;
-    }
-  }
-
-  String _getLocationCity(dynamic location) {
-    if (location.city != null && location.city.isNotEmpty) {
-      return location.city;
-    }
-    if (location.address != null && location.address.isNotEmpty) {
-      return location.address.split(',').first;
-    }
-    return 'Ethiopia';
-  }
 }
 
-// Full-screen image viewer widget
+/// Full Screen Image Viewer with InteractiveViewer for zoom/pan
 class FullScreenImageViewer extends StatelessWidget {
-  final dynamic location;
+  final LocationModel location;
   final String imagePath;
 
   const FullScreenImageViewer({
@@ -883,78 +893,139 @@ class FullScreenImageViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black.withValues(alpha: 0.5),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
+          icon: const Icon(Icons.close, color: Colors.white, size: 30),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          location.name,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline_rounded, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LocationDetailScreen(locationId: location.id),
-                ),
-              );
-            },
-          ),
-        ],
       ),
-      body: Center(
-        child: InteractiveViewer(
-          minScale: 0.5,
-          maxScale: 4.0,
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.image_not_supported_rounded,
-                      color: Colors.white,
-                      size: 80,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Image not available',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Full Screen Image with Zoom/Pan
+          InteractiveViewer(
+            minScale: 0.5,
+            maxScale: 4.0,
+            child: Hero(
+              tag: 'location_${location.id}',
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.contain,
+                width: double.infinity,
+                height: double.infinity,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[900],
+                    child: const Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        size: 100,
+                        color: Colors.white54,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                  );
+                },
+              ),
+            ),
+          ),
+          // Bottom Details Overlay
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.9),
+                  ],
+                ),
+              ),
+              child: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
                       location.name,
                       style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    if (location.nameAmharic != null)
+                      Text(
+                        location.nameAmharic!,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 16,
+                        ),
+                      ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        const Icon(Icons.star, color: Colors.amber, size: 20),
+                        const SizedBox(width: 4),
+                        Text(
+                          location.rating.toStringAsFixed(1),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        if (location.reviewCount != null)
+                          Text(
+                            '(${location.reviewCount} reviews)',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => LocationDetailScreenEnhanced(
+                              locationId: location.id,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.info_outline),
+                      label: const Text('View Full Details'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              );
-            },
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
+
+

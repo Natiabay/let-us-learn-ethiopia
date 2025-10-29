@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tourist_assistive_app/features/subscription/models/subscription_model.dart';
 import 'package:tourist_assistive_app/features/subscription/services/trial_counter_service.dart';
 
@@ -8,7 +9,6 @@ class SubscriptionService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TrialCounterService _trialCounter = TrialCounterService();
 
-  static const int _trialDurationDays = 1;
 
   /// Get subscription status for current user
   Future<SubscriptionModel?> getCurrentUserSubscription() async {
@@ -26,7 +26,7 @@ class SubscriptionService {
       }
       return null;
     } catch (e) {
-      print('Error getting subscription: $e');
+      debugPrint('Error getting subscription: $e');
       return null;
     }
   }
@@ -53,7 +53,7 @@ class SubscriptionService {
     // Start monitoring trial countdown
     _trialCounter.startTrialMonitoring();
 
-    print('✅ Free trial started for user $userId until $trialEnd (exactly 24 hours)');
+    debugPrint('✅ Free trial started for user $userId until $trialEnd (exactly 24 hours)');
     return subscription;
   }
 
@@ -74,7 +74,7 @@ class SubscriptionService {
           .doc(subscription.userId)
           .update({'status': SubscriptionStatus.trialExpired.name});
 
-      print('⏰ Trial expired for user ${subscription.userId}');
+      debugPrint('⏰ Trial expired for user ${subscription.userId}');
     }
   }
 
@@ -100,7 +100,7 @@ class SubscriptionService {
         .doc(userId)
         .update(updates);
 
-    print('✅ Premium subscription activated for user $userId until $paidUntil');
+    debugPrint('✅ Premium subscription activated for user $userId until $paidUntil');
   }
 
   /// Get subscription status with real-time updates
@@ -167,6 +167,6 @@ class SubscriptionService {
         .doc(user.uid)
         .update({'status': SubscriptionStatus.cancelled.name});
 
-    print('❌ Subscription cancelled for user ${user.uid}');
+    debugPrint('❌ Subscription cancelled for user ${user.uid}');
   }
 }

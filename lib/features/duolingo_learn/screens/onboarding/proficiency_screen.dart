@@ -1,41 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tourist_assistive_app/features/duolingo_learn/models/onboarding_model.dart';
-import 'package:tourist_assistive_app/features/duolingo_learn/providers/onboarding_provider.dart';
 
-/// Proficiency Level Screen - Choose current Amharic level
-class ProficiencyScreen extends ConsumerWidget {
+/// Proficiency Level Screen for Language Learning Setup
+/// Allows users to select their current proficiency level
+class ProficiencyScreen extends StatefulWidget {
   const ProficiencyScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedLevel = ref.watch(onboardingProvider).proficiencyLevel;
+  State<ProficiencyScreen> createState() => _ProficiencyScreenState();
+}
 
+class _ProficiencyScreenState extends State<ProficiencyScreen> {
+  String? _selectedLevel;
+
+  final List<Map<String, dynamic>> _levels = [
+    {
+      'id': 'beginner',
+      'name': 'Beginner',
+      'description': 'I\'m just starting out',
+      'icon': Icons.rocket_launch_rounded,
+      'color': const Color(0xFF58CC02),
+    },
+    {
+      'id': 'elementary',
+      'name': 'Elementary',
+      'description': 'I know a few words',
+      'icon': Icons.school_rounded,
+      'color': const Color(0xFF1CB0F6),
+    },
+    {
+      'id': 'intermediate',
+      'name': 'Intermediate',
+      'description': 'I can have basic conversations',
+      'icon': Icons.trending_up_rounded,
+      'color': const Color(0xFFFF9600),
+    },
+    {
+      'id': 'advanced',
+      'name': 'Advanced',
+      'description': 'I\'m quite fluent',
+      'icon': Icons.star_rounded,
+      'color': const Color(0xFF9C27B0),
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => context.pop(),
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.push('/duolingo/onboarding/goals');
-            },
-            child: const Text(
-              'SKIP',
-              style: TextStyle(
-                color: Color(0xFF58CC02),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+        title: const Text(
+          'Your Level',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -45,80 +69,89 @@ class ProficiencyScreen extends ConsumerWidget {
             children: [
               // Header
               const Text(
-                'How much Amharic\ndo you know?',
+                'What\'s your current level?',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 32,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  height: 1.2,
                 ),
-              ).animate().fadeIn().slideY(begin: -0.3, end: 0),
-              
+              ).animate()
+                .fadeIn(delay: 200.ms, duration: 600.ms)
+                .slideX(begin: -0.3, end: 0, delay: 200.ms),
+
               const SizedBox(height: 8),
-              
+
               Text(
-                'This helps us personalize your learning path',
+                'This helps us personalize your learning experience',
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 16,
                 ),
-              ).animate().fadeIn(delay: 100.ms),
+              ).animate()
+                .fadeIn(delay: 400.ms, duration: 600.ms)
+                .slideX(begin: -0.3, end: 0, delay: 400.ms),
 
-              const SizedBox(height: 48),
+              const SizedBox(height: 32),
 
-              // Proficiency levels
+              // Level Options
               Expanded(
                 child: ListView.builder(
-                  itemCount: ProficiencyLevel.all.length,
+                  itemCount: _levels.length,
                   itemBuilder: (context, index) {
-                    final level = ProficiencyLevel.all[index];
-                    final isSelected = selectedLevel == level.id;
+                    final level = _levels[index];
+                    final isSelected = _selectedLevel == level['id'];
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: _buildLevelCard(
-                        context: context,
-                        ref: ref,
                         level: level,
                         isSelected: isSelected,
-                        delay: index * 100,
+                        onTap: () {
+                          setState(() {
+                            _selectedLevel = level['id'];
+                          });
+                        },
+                        delay: (index + 1) * 100,
                       ),
                     );
                   },
                 ),
               ),
 
-              // Continue button
+              const SizedBox(height: 24),
+
+              // Continue Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: selectedLevel.isNotEmpty
+                  onPressed: _selectedLevel != null
                       ? () {
-                          context.push('/duolingo/onboarding/goals');
+                          // Navigate to learning goals screen
+                          context.push('/language/setup/goals');
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF58CC02),
+                    backgroundColor: _selectedLevel != null
+                        ? const Color(0xFF58CC02)
+                        : Colors.grey.withValues(alpha: 0.3),
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey,
+                    elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 0,
                   ),
                   child: const Text(
-                    'CONTINUE',
+                    'Continue',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
-              ).animate().fadeIn(delay: 400.ms),
-
-              const SizedBox(height: 16),
+              ).animate()
+                .fadeIn(delay: 1000.ms, duration: 600.ms)
+                .slideY(begin: 0.3, end: 0, delay: 1000.ms),
             ],
           ),
         ),
@@ -127,102 +160,87 @@ class ProficiencyScreen extends ConsumerWidget {
   }
 
   Widget _buildLevelCard({
-    required BuildContext context,
-    required WidgetRef ref,
-    required ProficiencyLevel level,
+    required Map<String, dynamic> level,
     required bool isSelected,
+    required VoidCallback onTap,
     required int delay,
   }) {
-    // Icon based on level
-    IconData icon;
-    Color iconColor;
-    
-    switch (level.id) {
-      case 'beginner':
-        icon = Icons.emoji_people_rounded;
-        iconColor = const Color(0xFF58CC02);
-        break;
-      case 'intermediate':
-        icon = Icons.school_rounded;
-        iconColor = const Color(0xFF1CB0F6);
-        break;
-      case 'advanced':
-        icon = Icons.emoji_events_rounded;
-        iconColor = const Color(0xFFFFD43B);
-        break;
-      default:
-        icon = Icons.help_outline_rounded;
-        iconColor = Colors.grey;
-    }
+    final color = level['color'] as Color;
 
     return InkWell(
-      onTap: () {
-        ref.read(onboardingProvider.notifier).setProficiencyLevel(level.id);
-      },
+      onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF58CC02).withValues(alpha: 0.2)
+              ? color.withValues(alpha: 0.1)
               : const Color(0xFF2A2A2A),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xFF58CC02)
-                : Colors.transparent,
+            color: isSelected ? color : Colors.transparent,
             width: 2,
           ),
-          borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           children: [
+            // Icon
             Container(
-              width: 56,
-              height: 56,
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.2),
+                color: isSelected
+                    ? color.withValues(alpha: 0.2)
+                    : color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
-                icon,
-                color: iconColor,
-                size: 28,
+                level['icon'],
+                color: isSelected ? color : color.withValues(alpha: 0.6),
+                size: 24,
               ),
             ),
             const SizedBox(width: 16),
+
+            // Level Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    level.name,
+                    level['name'],
                     style: TextStyle(
-                      color: isSelected ? const Color(0xFF58CC02) : Colors.white,
+                      color: isSelected ? color : Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    level.description,
+                    level['description'],
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
+                      color: isSelected
+                          ? color.withValues(alpha: 0.8)
+                          : Colors.white70,
                       fontSize: 14,
                     ),
                   ),
                 ],
               ),
             ),
+
+            // Selection Indicator
             if (isSelected)
-              const Icon(
+              Icon(
                 Icons.check_circle_rounded,
-                color: Color(0xFF58CC02),
-                size: 28,
+                color: color,
+                size: 24,
               ),
           ],
         ),
       ),
-    ).animate().fadeIn(delay: delay.ms).slideX(begin: -0.3, end: 0);
+    ).animate()
+      .fadeIn(delay: delay.ms, duration: 600.ms)
+      .slideX(begin: -0.3, end: 0, delay: delay.ms);
   }
 }
-

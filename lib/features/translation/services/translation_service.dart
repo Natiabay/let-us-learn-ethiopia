@@ -1,6 +1,7 @@
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 class TranslationService {
   final FlutterTts _flutterTts = FlutterTts();
@@ -216,14 +217,14 @@ class TranslationService {
       final recognizedText = await _recognizeSpeech(audioBase64, language);
       return recognizedText;
     } catch (e) {
-      print('Speech recognition error: $e');
+      debugPrint('Speech recognition error: $e');
       return null;
     }
   }
 
   Future<void> stopListening() async {
     // In a real implementation, this would stop audio recording
-    print('Stopped listening');
+    debugPrint('Stopped listening');
   }
 
   bool get isListening => false; // In real implementation, track recording state
@@ -267,10 +268,10 @@ class TranslationService {
         }
       }
       
-      print('Speech recognition API error: ${response.statusCode} - ${response.body}');
+      debugPrint('Speech recognition API error: ${response.statusCode} - ${response.body}');
       return null;
     } catch (e) {
-      print('Speech recognition API exception: $e');
+      debugPrint('Speech recognition API exception: $e');
       return null;
     }
   }
@@ -481,6 +482,7 @@ class TranslationService {
     _flutterTts.stop();
   }
 }
+
 
 
 

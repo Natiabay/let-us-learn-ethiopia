@@ -190,7 +190,7 @@ class PictureLearningService {
         tags: ['restaurant', 'food', 'dining'],
       ),
       'Market': PictureData(
-        imagePath: 'assets/images/Logo.png',
+        imagePath: 'Photos/New Logo.png',
         source: PictureSource.asset,
         timestamp: DateTime.now(),
         description: 'Local market',
@@ -300,7 +300,7 @@ class PictureLearningService {
           tags: ['restaurant', 'food', 'dining'],
         ),
         PictureData(
-          imagePath: 'assets/images/Logo.png',
+          imagePath: 'Photos/New Logo.png',
           source: PictureSource.asset,
           timestamp: DateTime.now(),
           description: 'Local market',

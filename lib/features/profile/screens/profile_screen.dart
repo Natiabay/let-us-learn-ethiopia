@@ -169,10 +169,10 @@ class ProfileScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: _turquoise.withOpacity(0.3)),
+        border: Border.all(color: _turquoise.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -186,7 +186,7 @@ class ProfileScreen extends ConsumerWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: _turquoise.withOpacity(0.4),
+                  color: _turquoise.withValues(alpha: 0.4),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -247,7 +247,7 @@ class ProfileScreen extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: _turquoise.withOpacity(0.3),
+                  color: _turquoise.withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -318,10 +318,10 @@ class ProfileScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -412,7 +412,22 @@ class ProfileScreen extends ConsumerWidget {
           title: 'Sign Out',
           subtitle: 'Logout from your account',
           color: _red,
-          onTap: () => ref.read(authProvider.notifier).signOut(),
+          onTap: () async {
+            try {
+              await ref.read(authProvider.notifier).signOut();
+              context.go('/auth');
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Failed to sign out: ${e.toString()}'),
+                  backgroundColor: Colors.red,
+                  behavior: SnackBarBehavior.floating,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                  margin: const EdgeInsets.all(16),
+                ),
+              );
+            }
+          },
         ),
       ],
     );
@@ -430,10 +445,10 @@ class ProfileScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: _navyCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -451,7 +466,7 @@ class ProfileScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.2),
+                    color: color.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(icon, color: color, size: 24),

@@ -99,11 +99,11 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
         color: LocationsColors.navyCard,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: LocationsColors.turquoise.withOpacity(0.2),
+          color: LocationsColors.turquoise.withValues(alpha: 0.2),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -120,8 +120,8 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  LocationsColors.turquoise.withOpacity(0.3),
-                  LocationsColors.brightBlue.withOpacity(0.3),
+                  LocationsColors.turquoise.withValues(alpha: 0.3),
+                  LocationsColors.brightBlue.withValues(alpha: 0.3),
                 ],
               ),
               borderRadius: const BorderRadius.vertical(
@@ -164,7 +164,7 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: _getDifficultyColor(package.difficulty).withOpacity(0.2),
+                              color: _getDifficultyColor(package.difficulty).withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: _getDifficultyColor(package.difficulty),
@@ -305,9 +305,9 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,7 +333,7 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
               child: Text(
                 '• $item',
                 style: TextStyle(
-                  color: color.withOpacity(0.8),
+                  color: color.withValues(alpha: 0.8),
                   fontSize: 11,
                 ),
                 maxLines: 1,
@@ -372,7 +372,7 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: LocationsColors.brightYellow.withOpacity(0.2),
+                      color: LocationsColors.brightYellow.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
@@ -412,10 +412,10 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: LocationsColors.turquoise.withOpacity(0.2),
+                    color: LocationsColors.turquoise.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: LocationsColors.turquoise.withOpacity(0.3),
+                      color: LocationsColors.turquoise.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Row(
@@ -470,7 +470,7 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                   border: Border.all(
                     color: isSelected
                         ? LocationsColors.turquoise
-                        : LocationsColors.turquoise.withOpacity(0.2),
+                        : LocationsColors.turquoise.withValues(alpha: 0.2),
                     width: isSelected ? 2 : 1,
                   ),
                 ),
@@ -488,7 +488,7 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: LocationsColors.turquoise.withOpacity(0.2),
+                            color: LocationsColors.turquoise.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(
@@ -519,7 +519,7 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: _getCategoryColor(location.category).withOpacity(0.2),
+                          color: _getCategoryColor(location.category).withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -625,7 +625,7 @@ class _ItineraryPlannerScreenState extends State<ItineraryPlannerScreen>
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: LocationsColors.turquoise.withOpacity(0.2),
+                        color: LocationsColors.turquoise.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
