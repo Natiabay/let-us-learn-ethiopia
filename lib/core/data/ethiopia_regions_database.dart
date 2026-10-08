@@ -466,17 +466,17 @@ Surrounds Addis Ababa, diverse landscapes, coffee heartland, Bale Mountains.
       'economy': 'Agriculture (coffee, cereals), livestock, trade'
     },
 
-    'Southern Nations': {
-      'capital': 'Hawassa',
-      'population': '20 million',
-      'area': '105,887 km²',
-      'description': '''**Southern Nations, Nationalities, and Peoples Region**
+    'South Ethiopia': {
+      'capital': 'Wolaita Sodo',
+      'population': '7.6 million (2024)',
+      'area': '45,209 km²',
+      'description': '''**South Ethiopia Region**
 
-Most ethnically diverse region, Omo Valley tribes, Rift Valley lakes.
+Formed in August 2023, when the Southern Nations, Nationalities, and Peoples' Region (SNNPR) was dissolved. Omo Valley tribes, Rift Valley lakes.
 
 **Omo Valley:**
 
-**Ethnic Groups (80+ ethnicities):**
+**Ethnic Groups:**
 
 **Mursi People:**
 - Famous for lip plates
@@ -530,13 +530,6 @@ Most ethnically diverse region, Omo Valley tribes, Rift Valley lakes.
 - Best: Dry season (Oct-March)
 
 **Rift Valley Lakes:**
-
-**Lake Hawassa:**
-- Town center
-- Fish market spectacular
-- Hippos visible
-- Birds abundant
-- Easy access
 
 **Lake Langano:**
 - Swimming safe
@@ -612,8 +605,43 @@ Most ethnically diverse region, Omo Valley tribes, Rift Valley lakes.
 - Cultural sensitivity paramount
 - Photography permissions''',
       'attractions': ['Omo Valley tribes', 'Rift Valley lakes', 'Konso terraces', 'Dorze villages'],
-      'diversity': '80+ ethnic groups, most diverse region in Ethiopia',
+      'diversity': 'Many ethnic groups, including the peoples of the Omo Valley',
       'language': 'Multiple languages (Amharic, Oromo, tribal languages)'
+    },
+
+    'Sidama': {
+      'capital': 'Hawassa',
+      'population': '5.3 million (2024)',
+      'area': '12,000 km²',
+      'description': '''**Sidama Region**
+
+Split from the Southern Nations, Nationalities, and Peoples' Region (SNNPR) in June 2020. Its capital, Hawassa, lies on Lake Hawassa.
+
+**Lake Hawassa:**
+- Town center
+- Fish market spectacular
+- Hippos visible
+- Birds abundant
+- Easy access''',
+      'attractions': ['Lake Hawassa', 'Hawassa fish market']
+    },
+
+    'Central Ethiopia': {
+      'capital': 'Hosaina',
+      'population': '10.6 million (2024)',
+      'area': '15,099 km²',
+      'description': '''**Central Ethiopia Region**
+
+Formed in August 2023 from part of the dissolved Southern Nations, Nationalities, and Peoples' Region (SNNPR).'''
+    },
+
+    'South West Ethiopia Peoples\'': {
+      'capital': 'Bonga',
+      'population': '4.2 million (2024)',
+      'area': '39,400 km²',
+      'description': '''**South West Ethiopia Peoples' Region**
+
+Split from the Southern Nations, Nationalities, and Peoples' Region (SNNPR) in November 2021.'''
     }
   };
 
@@ -629,14 +657,18 @@ Most ethnically diverse region, Omo Valley tribes, Rift Valley lakes.
     
     // Search by attractions
     if (lowerQuery.contains('omo') || lowerQuery.contains('tribe') || lowerQuery.contains('mursi')) {
-      return regions['Southern Nations'] ?? {};
+      return regions['South Ethiopia'] ?? {};
     }
     
     if (lowerQuery.contains('lake tana') || lowerQuery.contains('blue nile') || lowerQuery.contains('gondar')) {
       return regions['Amhara'] ?? {};
     }
     
-    if (lowerQuery.contains('bale') || lowerQuery.contains('hawassa') || lowerQuery.contains('coffee')) {
+    if (lowerQuery.contains('hawassa')) {
+      return regions['Sidama'] ?? {};
+    }
+    
+    if (lowerQuery.contains('bale') || lowerQuery.contains('coffee')) {
       return regions['Oromia'] ?? {};
     }
     
